@@ -1,5 +1,17 @@
 #include "Book.h"
 
+//namespace std
+//{
+//	template<> struct  less<Book>
+//	{
+//		bool operator() (const Book& lhs, const Book& rhs) const
+//		{
+//			return lhs.get_date() < rhs.get_date();
+//		}
+//	};
+//
+//}
+
 Book::Book(const std::string& name, const std::set<std::string>& authors,
 	const std::string& date, const std::uint32_t pages, const std::string& annotation)
 	: name(name),authors(authors),date(date),pages(pages),annotation(annotation) {}
@@ -32,7 +44,7 @@ void Book::set_date(const std::string& date)
 	this->date = date;
 }
 
-void Book::set_pages(const std::size_t pages)
+void Book::set_pages(const std::uint32_t pages)
 {
 	this->pages = pages;
 }
@@ -41,6 +53,16 @@ void Book::set_annotation(const std::string& annotation)
 {
 	this->annotation = annotation;
 }
+
+/*void Book::set_characters(const std::set<BookCharacter> characters)
+{
+	this->characters = characters;
+}
+
+void Book::set_characters(const std::vector<BookCharacter> characters)
+{
+	this->characters = std::set<BookCharacter>(characters.begin(), characters.end());
+}*/
 
 std::string Book::get_name() const
 {
@@ -92,9 +114,22 @@ std::string& Book::get_annotation()
 	return this->annotation;
 }
 
+/*std::set<BookCharacter> Book::get_characters() const
+{
+	return this->characters;
+}*/
+
+/*std::set<BookCharacter>& Book::get_characters()
+{
+	return this->characters;
+}*/
+
 void Book::add_author(const std::string& new_author)
 {
 	this->authors.insert(new_author);
+	std::set<Book>s;
+	std::map<Book, int>m;
+	//m[Book()] = 2;
 }
 
 void Book::add_authors(std::set<std::string>& new_authors)
@@ -186,3 +221,23 @@ void Book::erase_text_from_annotation(const std::size_t begin_character, const s
 		//throw
 	}
 }
+
+//void Book::add_character(const BookCharacter& character){
+//	this->characters.insert(character);
+//}
+
+void Book::add_characters(std::set<std::string>& characters)
+{
+	//this->characters.insert(characters.begin(),characters.end());
+}
+
+void Book::add_characters(std::vector<std::string>& characters)
+{
+	//this->characters.insert(characters.begin(), characters.end());
+}
+
+bool operator<(const Book& lhs, const Book& rhs)
+{
+	return lhs.get_date() < rhs.get_date();
+}
+
