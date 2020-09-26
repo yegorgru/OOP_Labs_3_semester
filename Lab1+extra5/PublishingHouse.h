@@ -4,57 +4,72 @@
 #include "BookCharacter.h"
 #include "Date.h"
 
-#include <iterator>
+/*#include <iterator>
 #include <set>
 #include <cstdint>
-#include <utility>
+#include <utility>*/
+
+#include <list>
+#include <map>
+#include <algorithm>
+
+//https://stackoverflow.com/questions/1102392/how-can-i-use-stdmaps-with-user-defined-types-as-key
+
+using book_id = std::list<Book>::iterator;
+using character_id = std::list<BookCharacter<book_id>>::iterator;
+
+namespace std
+{
+	template<> struct  less<book_id>
+	{
+		bool operator() (const book_id& lhs, const book_id& rhs) const
+		{
+			return *lhs < *rhs;
+		}
+	};
+}
+
+namespace std
+{
+	template<> struct  less<character_id>
+	{
+		bool operator() (const character_id& lhs, const character_id& rhs) const
+		{
+			return *lhs < *rhs;
+		}
+	};
+}
 
 class PublishingHouse
 {
 public:
 	PublishingHouse();
-
-	Date release_book(const std::string& name, const std::set<std::string>& authors,
-		const std::uint32_t pages, const std::string& annotation,
-		const int number, std::set<std::pair<size_t, uint16_t>>characters);
 	
-	size_t add_character(const std::string& name);
-	size_t add_character(const std::string& default_name,const std::set<std::string>& names);
+	book_id add_book(const Book& book);
+	character_id add_character(const BookCharacter<book_id>& character);
 
-	void sell_books(const Date& id, uint32_t number = 1);
+	void ban_book(book_id&);
+	void ban_character(character_id&);
 
-	Book get_book(const Date& id) const;
-	BookCharacter get_character(const size_t id) const;
+	std::vector<std::vector<Book>>get_series();
 
-	std::vector<std::vector<Book>>get_series() const;
-
-	void update_book_name(const Date& id, const std::string& name);
-	void update_book_authors(const Date& id, const std::set<std::string>& authors);
-	void update_book_pages(const Date& id, const uint32_t pages);
-	void update_book_annotation(const Date& id, const std::string& annotation);
-
-	void update_character_default_name(size_t id,const std::string& name);
-	void update_character_names(size_t id,const std::set<std::string>& names);
-
-	void ban_book(const Date& date);
-
-	void erase_character_from_series(size_t character, size_t series);
+	void add_character_in_book(character_id id_character, book_id id_book, Role role);
 private:
-	void insert_character_in_series(size_t character, size_t series);
+	std::map<book_id, std::set<character_id>>books_characters;
+	std::map<book_id, std::set<character_id>>books_important_characters;
 
+	std::set<character_id>valid_characters;
 
-	std::map<size_t, BookCharacter>id_characters;
-	std::map<size_t, std::map<size_t,uint32_t>>characters_series;
-
-	std::map<Date, Book>id_books;
-	std::map<Date, uint32_t>books_number;
-	std::map<Date, std::set<size_t>>books_important_characters;
-
-	std::map<size_t, std::set<Date>>id_series;
-	std::map<size_t, std::set<size_t>>series_characters;
-
-	Date cur_date;
-
-	size_t max_character_id;
-	size_t max_series_id;
+	std::list<Book>books;
+	std::list<BookCharacter<book_id>>characters;
 };
+
+template<typename T>
+bool is_subset(std::set<T> lesser, std::set<T> bigger) {
+	for (const auto& i : lesser) {
+		if (bigger.find(i) == end(bigger)) {
+			return false;
+		}
+	}
+	return true;
+}

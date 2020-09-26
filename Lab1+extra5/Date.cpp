@@ -32,6 +32,12 @@ bool operator<(const Date& lhs, const Date& rhs)
 			lhs.get_month() == rhs.get_month() && lhs.get_day() == rhs.get_day();
 }
 
+std::ostream& operator<<(std::ostream& os, const Date& date)
+{
+	os << date.get_day() << '.' << date.get_month() << '.' << date.get_year();
+	return os;
+}
+
 const Date& operator++(Date& date)
 {
 	date.day++;

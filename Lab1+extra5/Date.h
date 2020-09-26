@@ -1,6 +1,7 @@
 #pragma once
 
 #include <cstdint>
+#include <iostream>
 
 class Date
 {
@@ -16,6 +17,7 @@ public:
 
 	std::uint16_t get_year() const;
 
+	bool is_valid() const;
 private:
 	std::uint16_t day;
 	std::uint16_t month;
@@ -29,4 +31,5 @@ private:
 
 bool operator==(const Date& lhs, const Date& rhs);
 bool operator<(const Date& lhs, const Date& rhs);
+std::ostream& operator << (std::ostream& os, const Date& date);
 const Date& operator++(Date& date);

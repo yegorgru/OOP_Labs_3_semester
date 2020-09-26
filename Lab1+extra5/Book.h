@@ -5,16 +5,9 @@
 #include <cstdint>
 #include <vector>
 #include <map>
+#include <iostream>
 
 #include "Date.h"
-
-enum class BookFields{
-	name,
-	authors,
-	date,
-	pages,
-	annotation
-};
 
 class Book
 {
@@ -49,20 +42,18 @@ private:
 	std::string annotation;			//Maybe max number of characters
 };
 
+bool operator<(const Book& lhs, const Book& rhs);
+bool operator==(const Book& lhs, const Book& rhs);
+std::ostream& operator << (std::ostream& os, const Book& book);
 //https://stackoverflow.com/questions/1102392/how-can-i-use-stdmaps-with-user-defined-types-as-key
 
-namespace std
+/*namespace std
 {
 	template<> struct  less<Book>
 	{
 		bool operator() (const Book& lhs, const Book& rhs) const
 		{
-			if (lhs.get_date() == rhs.get_date()) {
-				return lhs.get_name() < rhs.get_name();
-			}
-			else {
-				return lhs.get_date() < rhs.get_date();
-			}
+			return lhs<rhs;
 		}
 	};
-}
+}*/

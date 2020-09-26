@@ -65,9 +65,6 @@ std::string Book::get_annotation() const
 void Book::add_author(const std::string& new_author)
 {
 	this->authors.insert(new_author);
-	std::set<Book>s;
-	std::map<Book, int>m;
-	//m[Book()] = 2;
 }
 
 void Book::erase_author(const std::string& author)
@@ -77,6 +74,46 @@ void Book::erase_author(const std::string& author)
 
 bool operator<(const Book& lhs, const Book& rhs)
 {
-	return lhs.get_date() < rhs.get_date();
+	if (lhs.get_name() == rhs.get_name()) {
+		if (lhs.get_authors() == rhs.get_authors()) {
+			if (lhs.get_date() == rhs.get_date()) {
+				if (lhs.get_pages() == rhs.get_pages()) {
+					return lhs.get_annotation() < rhs.get_annotation();
+				}
+				else {
+					return lhs.get_pages() < rhs.get_pages();
+				}
+			}
+			else {
+				return lhs.get_date() < rhs.get_date();
+			}
+		}
+		else {
+			return lhs.get_authors() < rhs.get_authors();
+		}
+	}
+	else {
+		return lhs.get_name() == rhs.get_name();
+	}
 }
 
+bool operator==(const Book& lhs, const Book& rhs) {
+	return lhs.get_name() == rhs.get_name() &&
+		lhs.get_authors() == rhs.get_authors() &&
+		lhs.get_annotation() == rhs.get_annotation() &&
+		lhs.get_date() == rhs.get_date() &&
+		lhs.get_pages() == rhs.get_pages();
+}
+
+std::ostream& operator<<(std::ostream& os, const Book& book)
+{
+	os << "Name: "<<book.get_name()<<"\n";
+	os << "Authors: ";
+	for (const std::string& author : book.get_authors()) {
+		os << author << " ";
+	}
+	os << "\nDate: " << book.get_date() << "\n";
+	os << "Pages: " << book.get_pages()<<"\n";
+	os << "Annotation: " << book.get_annotation();
+	return os;
+}
