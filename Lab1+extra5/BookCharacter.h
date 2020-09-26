@@ -13,9 +13,13 @@
 class BookCharacter
 {
 public:
-		BookCharacter(const std::string name);
+		BookCharacter(const std::string& name);
+		BookCharacter(const std::string& default_name,
+			const std::set<std::string>& names);
+
+		//BookCharacter& operator=(const BookCharacter& another);
 	
-		BookCharacter& operator=(BookCharacter& another);
+		BookCharacter& operator=(const BookCharacter& another);
 	
 		void promote(const Book& book);
 		void decrease(const Book& book);
@@ -24,12 +28,14 @@ public:
 	
 		void erase_book(const Book& book);
 	
-		std::string get_default_name() const;
-	
 		bool check_availability(const Book& book) const;
 	
+		std::string get_default_name() const;
 		std::set<Book> get_all_books() const;
 		std::set<std::string> get_all_names() const;
+
+		void set_default_name(const std::string& name);
+		void set_names(const std::set<std::string>& names);
 private:
 
 	std::map<Book, uint16_t>books_and_roles;

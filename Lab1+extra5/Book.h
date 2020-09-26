@@ -8,6 +8,14 @@
 
 #include "Date.h"
 
+enum class BookFields{
+	name,
+	authors,
+	date,
+	pages,
+	annotation
+};
+
 class Book
 {
 public:
@@ -17,10 +25,8 @@ public:
 	Book(const std::string& name, const std::string& author,
 		const Date& date, const std::uint32_t pages, const std::string& annotation);
 
-
-	//void set_name(const std::string& name);
-	void set_author(const std::string author);
-	void set_authors(std::set<std::string>& authors);
+	void set_name(const std::string& name);
+	void set_authors(const std::set<std::string>& authors);
 	void set_date(const Date& date);
 	void set_pages(const std::uint32_t pages);
 	void set_annotation(const std::string& annotation);
@@ -35,20 +41,11 @@ public:
 
 	void erase_author(const std::string& author);
 
-	//If date - class, methods for date
-
-	void add_pages(std::uint32_t new_pages_number);
-	void erase_pages(std::uint32_t erased_pages_number);
-
-	void insert_text_to_annotation(const std::string& text, size_t pos);
-	void erase_text_from_annotation(const std::size_t begin_character,
-		const std::size_t end_character);
-
 private:
 	std::string name;
 	std::set<std::string> authors;
 	Date date;				
-	std::uint32_t pages;
+	uint32_t pages;
 	std::string annotation;			//Maybe max number of characters
 };
 

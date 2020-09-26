@@ -1,9 +1,13 @@
 #include "BookCharacter.h"
 
-BookCharacter::BookCharacter(const std::string name)
+BookCharacter::BookCharacter(const std::string& name)
 	: default_name(name) {}
 
-BookCharacter& BookCharacter::operator=(BookCharacter& another)
+BookCharacter::BookCharacter(const std::string& default_name,
+	const std::set<std::string>& names)
+	: default_name(default_name),names(names) {}
+
+BookCharacter& BookCharacter::operator=(const BookCharacter& another)
 {
 	this->default_name = another.default_name;
 	this->books_and_roles = another.books_and_roles;
@@ -39,6 +43,16 @@ std::set<Book> BookCharacter::get_all_books() const
 std::set<std::string> BookCharacter::get_all_names() const
 {
 	return this->names;
+}
+
+void BookCharacter::set_default_name(const std::string& name)
+{
+	this->default_name = name;
+}
+
+void BookCharacter::set_names(const std::set<std::string>& names)
+{
+	this->names = names;
 }
 
 bool BookCharacter::check_availability(const Book& book) const
