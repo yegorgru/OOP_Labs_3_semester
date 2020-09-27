@@ -15,10 +15,10 @@
 
 //https://stackoverflow.com/questions/1102392/how-can-i-use-stdmaps-with-user-defined-types-as-key
 
-using book_id = std::list<Book>::iterator;
-using character_id = std::list<BookCharacter<book_id>>::iterator;
+using book_id = std::string;
+using character_id = std::string;
 
-namespace std
+/*namespace std
 {
 	template<> struct  less<book_id>
 	{
@@ -38,7 +38,7 @@ namespace std
 			return *lhs < *rhs;
 		}
 	};
-}
+}*/
 
 class PublishingHouse
 {
@@ -58,10 +58,8 @@ private:
 	std::map<book_id, std::set<character_id>>books_characters;
 	std::map<book_id, std::set<character_id>>books_important_characters;
 
-	std::set<character_id>valid_characters;
-
-	std::list<Book>books;
-	std::list<BookCharacter<book_id>>characters;
+	std::map<book_id, Book>books;
+	std::map<character_id, BookCharacter<book_id>>characters;
 };
 
 template<typename T>

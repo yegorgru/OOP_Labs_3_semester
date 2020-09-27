@@ -21,26 +21,27 @@ template <typename id>
 class BookCharacter
 {
 public:
-		BookCharacter(const std::string& name);
-		BookCharacter(const std::string& default_name,
-			const std::set<std::string>& names);
+	BookCharacter();
+	BookCharacter(const std::string& name);
+	BookCharacter(const std::string& default_name,
+		const std::set<std::string>& names);
 
-		//BookCharacter& operator=(const BookCharacter& another);
+	//BookCharacter& operator=(const BookCharacter& another);
 	
-		//BookCharacter& operator=(const BookCharacter& another);
+	//BookCharacter& operator=(const BookCharacter& another);
 	
-		void promote(const id& book);
-		void decrease(const id& book);
+	void promote(const id& book);
+	void decrease(const id& book);
 
-		void update_role(const id& book, const Role role);
+	void update_role(const id& book, const Role role);
 	
-		void erase_book(const id& book);
+	void erase_book(const id& book);
 	
-		std::string get_default_name() const;
-		std::set<id> get_all_books() const;
-		std::set<std::string> get_all_names() const;
+	std::string get_default_name() const;
+	std::set<id> get_all_books() const;
+	std::set<std::string> get_all_names() const;
 
-		void set_names(const std::set<std::string>& names);
+	void set_names(const std::set<std::string>& names);
 private:
 
 	std::map<id, Role>books_and_roles;
@@ -59,6 +60,11 @@ bool operator==(const BookCharacter<id>& lhs, const BookCharacter<id>& rhs) {
 template <typename id>
 bool operator<(const BookCharacter<id>& lhs, const BookCharacter<id>& rhs) {
 	return lhs.get_default_name() < rhs.get_default_name();
+}
+
+template<typename id>
+inline BookCharacter<id>::BookCharacter()
+{
 }
 
 template <typename id>
