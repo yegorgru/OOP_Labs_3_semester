@@ -70,26 +70,57 @@ void TestCharacter() {
 }
 
 void TestBook() {
+	Book book("Chamber of Secrets", { "J. K. Rowling" },
+		Date(1, 1, 1, 1, 1, 2005), 400,
+		"second book about Harry Potter, small wizard");
+	ASSERT_EQUAL("Chamber of Secrets", book.get_name());
+	ASSERT_EQUAL(std::set<std::string>{ "J. K. Rowling" }, book.get_authors());
+	ASSERT_EQUAL(Date(1, 1, 1, 1, 1, 2005), book.get_date());
+	ASSERT_EQUAL(400, book.get_pages());
+	ASSERT_EQUAL("second book about Harry Potter, small wizard",
+		book.get_annotation());
 
+	book.erase_author("J. K. Rowling");
+	ASSERT_EQUAL(std::set<std::string>{}, book.get_authors());
+
+	book.add_author("T. Shevchenko");
+	ASSERT_EQUAL(std::set<std::string>{"T. Shevchenko"}, book.get_authors());
+
+	std::set<std::string> authors{ "J. K. Rowling" ,"Baron Munchausen" };
+	book.set_authors(authors);
+	ASSERT_EQUAL(authors, book.get_authors());
+
+	Date new_date(2, 2, 2, 2, 2, 2020);
+	book.set_date(new_date);
+	ASSERT_EQUAL(new_date, book.get_date());
+
+	book.set_pages(200);
+	ASSERT_EQUAL(200, book.get_pages());
+
+	book.set_annotation("small annotation");
+	ASSERT_EQUAL("small annotation", book.get_annotation());
 }
 
 void TestHouse() {
 	PublishingHouse PHouse;
-	Book first_book("Book", "", Date(1, 1, 1,1, 1,1), 10, "");
+	Book first_book("Book", { "" }, Date(1, 1, 1, 1, 1, 1), 10, "");
 	auto id = PHouse.add_book(first_book);
 	auto series = PHouse.get_series();
 	AssertEqual(series, std::vector<std::vector<Book>> { {first_book} });
-	Book second_book("Book2", "", Date(1, 1, 1,1, 0, 1), 10, "");
-	Book third_book("Book3", "", Date(1,1,1,0, 1, 1), 10, "");
+	Book second_book("Book2", { "" }, Date(1, 1, 1,1, 0, 1), 10, "");
+	Book third_book("Book3", { "" }, Date(1,1,1,0, 1, 1), 10, "");
 	PHouse.add_book(second_book);
 	PHouse.add_book(third_book);
 	AssertEqual(PHouse.get_series(),
 		std::vector<std::vector<Book>> { {second_book,third_book,first_book} });
+
+
 }
 
 
 int main() {
 	TestRunner tr;
 	RUN_TEST(tr, TestCharacter);
+	RUN_TEST(tr, TestBook);
 	RUN_TEST(tr, TestHouse);
 }

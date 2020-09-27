@@ -15,8 +15,6 @@ public:
 	Book();
 	Book(const std::string& name, const std::set<std::string>& authors, 
 		const Date& date, const std::uint32_t pages, const std::string& annotation);
-	Book(const std::string& name, const std::string& author,
-		const Date& date, const std::uint32_t pages, const std::string& annotation);
 
 	void set_authors(const std::set<std::string>& authors);
 	void set_date(const Date& date);
