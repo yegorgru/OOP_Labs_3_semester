@@ -97,10 +97,10 @@ private:
     int fail_count = 0;
 };
 
-#define ASSERT_EQUAL(x, y) {            \
+#define ASSERT_EQUAL(x, y) {                     \
   ostringstream osequalmmmn;                     \
   osequalmmmn << #x << " != " << #y << ", "      \
-    << __FILE__ << ":" << __LINE__;     \
+    << __FILE__ << ":" << __LINE__;              \
   AssertEqual(x, y, osequalmmmn.str());          \
 }
 

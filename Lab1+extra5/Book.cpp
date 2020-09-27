@@ -11,12 +11,6 @@ Book::Book(const std::string& name, const std::string& author,
 	const Date& date, const std::uint32_t pages, const std::string& annotation)
 	: name(name), authors({ author }), date(date), pages(pages), annotation(annotation) {}
 
-
-void Book::set_name(const std::string& name)
-{
-	this->name = name;
-}
-
 void Book::set_authors(const std::set<std::string>& authors)
 {
 	this->authors = authors;

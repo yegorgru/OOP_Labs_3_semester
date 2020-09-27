@@ -17,6 +17,8 @@ enum class Role {
 	episodic
 };
 
+std::ostream& operator << (std::ostream& os, const Role& role);
+
 template <typename id>
 class BookCharacter
 {
@@ -40,8 +42,11 @@ public:
 	std::string get_default_name() const;
 	std::set<id> get_all_books() const;
 	std::set<std::string> get_all_names() const;
+	Role get_role(const id& book);
 
 	void set_names(const std::set<std::string>& names);
+	void add_name(const std::string& name);
+	void erase_name(const std::string& name);
 private:
 
 	std::map<id, Role>books_and_roles;
@@ -54,7 +59,6 @@ private:
 template <typename id>
 bool operator==(const BookCharacter<id>& lhs, const BookCharacter<id>& rhs) {
 	return lhs.get_default_name() == rhs.get_default_name();
-
 }
 
 template <typename id>
@@ -63,48 +67,47 @@ bool operator<(const BookCharacter<id>& lhs, const BookCharacter<id>& rhs) {
 }
 
 template<typename id>
-inline BookCharacter<id>::BookCharacter()
-{
-}
+inline BookCharacter<id>::BookCharacter() {}
 
 template <typename id>
 BookCharacter<id>::BookCharacter(const std::string& name)
-	: default_name(name) {}
+	: default_name(name), names({name}) {}
 
 template <typename book_id>
 BookCharacter<book_id>::BookCharacter(const std::string& default_name,
 	const std::set<std::string>& names)
 	: default_name(default_name), names(names) {}
 
-/*BookCharacter& BookCharacter::operator=(const BookCharacter& another)
-{
-	this->default_name = another.default_name;
-	this->books_and_roles = another.books_and_roles;
-	return *this;
-}*/
-
 template <typename id>
 void BookCharacter<id>::promote(const id& book)
 {
-	Role& role = books_and_roles.at(book);
-	if (role == Role::episodic) {
-		role = Role::secondary;
+	try
+	{
+		Role& role = books_and_roles.at(book);
+		if (role == Role::episodic) {
+			role = Role::secondary;
+		}
+		else if (role == Role::secondary) {
+			role = Role::main;
+		}
 	}
-	else if (role == Role::secondary) {
-		role = Role::main;
-	}
+	catch (const std::exception&) {}
 }
 
 template <typename id>
 void BookCharacter<id>::decrease(const id& book)
 {
-	Role& role = books_and_roles.at(book);
-	if (role == Role::main) {
-		role = Role::secondary;
+	try
+	{
+		Role& role = books_and_roles.at(book);
+		if (role == Role::main) {
+			role = Role::secondary;
+		}
+		else if (role == Role::secondary) {
+			role = Role::episodic;
+		}
 	}
-	else if (role == Role::secondary) {
-		role = Role::episodic;
-	}
+	catch (const std::exception&) {}
 }
 
 template <typename id>
@@ -129,11 +132,29 @@ std::set<std::string> BookCharacter<id>::get_all_names() const
 	return this->names;
 }
 
+template<typename id>
+inline Role BookCharacter<id>::get_role(const id& book)
+{
+	return books_and_roles.at(book);
+}
+
 template <typename id>
 void BookCharacter<id>::set_names(const std::set<std::string>& names)
 {
 	this->names = names;
 	this->names.insert(default_name);
+}
+
+template<typename id>
+inline void BookCharacter<id>::add_name(const std::string& name)
+{
+	this->names.insert(name);
+}
+
+template<typename id>
+inline void BookCharacter<id>::erase_name(const std::string& name)
+{
+	this->names.erase(name);
 }
 
 template <typename id>

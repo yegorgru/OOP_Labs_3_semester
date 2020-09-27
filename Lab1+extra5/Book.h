@@ -18,7 +18,6 @@ public:
 	Book(const std::string& name, const std::string& author,
 		const Date& date, const std::uint32_t pages, const std::string& annotation);
 
-	void set_name(const std::string& name);
 	void set_authors(const std::set<std::string>& authors);
 	void set_date(const Date& date);
 	void set_pages(const std::uint32_t pages);
@@ -47,7 +46,7 @@ bool operator==(const Book& lhs, const Book& rhs);
 std::ostream& operator << (std::ostream& os, const Book& book);
 //https://stackoverflow.com/questions/1102392/how-can-i-use-stdmaps-with-user-defined-types-as-key
 
-/*namespace std
+namespace std
 {
 	template<> struct  less<Book>
 	{
@@ -56,4 +55,4 @@ std::ostream& operator << (std::ostream& os, const Book& book);
 			return lhs<rhs;
 		}
 	};
-}*/
+}

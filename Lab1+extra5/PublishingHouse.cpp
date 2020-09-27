@@ -70,14 +70,13 @@ std::vector<std::vector<Book>> PublishingHouse::get_series()
 	}
 	else {
 		auto cur_book = books.begin();
-		/*answer.push_back({ *cur_book });
-		series_characters[0] = books_important_characters[cur_book];
-		cur_book++;*/
 		while (cur_book != books.end()) {
 			bool is_unique = true;
 			for (size_t i = 0; i != answer.size();i++) {
 				if(is_subset(books_important_characters[cur_book->first], series_characters[i])) {
 					is_unique = false;
+					answer[i].push_back(cur_book->second);
+					break;
 				}
 				for (auto character : books_important_characters[cur_book->first]) {
 					if (series_characters[i].find(character) != end(series_characters[i])) {
@@ -94,6 +93,27 @@ std::vector<std::vector<Book>> PublishingHouse::get_series()
 			cur_book++;
 		}
 	}
+
+	std::sort(begin(answer), end(answer), [](std::vector<Book>& lhs,
+		std::vector <Book>& rhs) {
+		return lhs.size() < rhs.size();
+		});
+
+	auto series = answer.begin();
+	while (series != answer.end()) {
+		bool was_erased = false;
+		for (auto cur = series+1; cur != end(answer); cur++) {
+			if (is_subvector(*series, *cur)) {
+				series = answer.erase(series);
+				was_erased = true;
+				break;
+			}
+		}
+		if (!was_erased) {
+			++series;
+		}
+	}
+
 	for (auto& cur_series : answer) {
 		std::sort(begin(cur_series), end(cur_series), [](Book& lhs,Book& rhs) {
 				return lhs.get_date() < rhs.get_date();
@@ -125,6 +145,16 @@ void PublishingHouse::add_character_in_book(character_id id_character, book_id i
 	else {
 		//throw
 	}
+}
+
+BookCharacter<book_id>& PublishingHouse::get_character(character_id id)
+{
+	return characters.at(id);
+}
+
+Book& PublishingHouse::get_book(book_id id)
+{
+	return books.at(id);
 }
 
 

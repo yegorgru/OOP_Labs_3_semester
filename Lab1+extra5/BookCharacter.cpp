@@ -1,3 +1,4 @@
+#include "BookCharacter.h"
 //#include "BookCharacter.h"
 //
 //template <typename id>
@@ -70,3 +71,17 @@
 //{
 //	return this->default_name;
 //}
+
+std::ostream& operator<<(std::ostream& os, const Role& role)
+{
+    if (role == Role::main) {
+        os << "main";
+    }
+    else if (role == Role::secondary) {
+        os << "secondary";
+    }
+    else if (role == Role::episodic) {
+        os << "episodic";
+    }
+    return os;
+}
