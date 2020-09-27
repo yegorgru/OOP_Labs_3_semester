@@ -75,16 +75,16 @@ void TestBook() {
 
 void TestHouse() {
 	PublishingHouse PHouse;
-	Book first_book("Book", "", Date(1, 1, 1), 10, "");
+	Book first_book("Book", "", Date(1, 1, 1,1, 1,1), 10, "");
 	auto id = PHouse.add_book(first_book);
 	auto series = PHouse.get_series();
 	AssertEqual(series, std::vector<std::vector<Book>> { {first_book} });
-	Book second_book("Book2", "", Date(1, 0, 1), 10, "");
-	Book third_book("Book3", "", Date(0, 1, 1), 10, "");
+	Book second_book("Book2", "", Date(1, 1, 1,1, 0, 1), 10, "");
+	Book third_book("Book3", "", Date(1,1,1,0, 1, 1), 10, "");
 	PHouse.add_book(second_book);
 	PHouse.add_book(third_book);
 	AssertEqual(PHouse.get_series(),
-		std::vector<std::vector<Book>> { {third_book,second_book,first_book} });
+		std::vector<std::vector<Book>> { {second_book,third_book,first_book} });
 }
 
 
