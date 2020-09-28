@@ -99,7 +99,7 @@ int32_t Date::difference(const Date& another, MeasureTime measure) const
 			}
 			else if (measure == MeasureTime::days) {
 				answer = difference(another, MeasureTime::years) * 365;
-				answer += count_leap_years(another.get_year());
+				answer += count_29_february(another);
 				answer += get_number_in_year();
 				answer -= another.get_number_in_year();
 			}
@@ -126,74 +126,6 @@ int32_t Date::difference(const Date& another, MeasureTime measure) const
 	}
 }
 
-void Date::promote(uint16_t number, MeasureTime measure)
-{
-	if (measure == MeasureTime::years) {
-		this->year += number;
-	}
-	else if (measure == MeasureTime::months) {
-		this->year += number/12;
-		this->month += number % 12;
-		promote_month(number);
-	}
-	if (measure == MeasureTime::days) {
-		promote(number / 30, MeasureTime::months);
-		number %= 30;
-		promote_day(number);
-	}
-	if (measure == MeasureTime::hours) {
-		promote(number / 24, MeasureTime::days);
-		number %= 24;
-		promote_hour(number);
-	}
-	if (measure == MeasureTime::minutes) {
-		promote(number / 60, MeasureTime::hours);
-		number %= 60;
-		promote_minute(number);
-	}
-	if (measure == MeasureTime::seconds) {
-		promote(number / 60, MeasureTime::minutes);
-		number %= 60;
-		promote_second(number);
-	}
-}
-
-void Date::decrease(uint16_t number, MeasureTime measure)
-{
-	if (measure == MeasureTime::years) {
-		this->year -= number;
-	}
-	else if (measure == MeasureTime::months) {
-		this->year -= number / 12;
-		number = number % 12;
-		decrease_month(number);
-		if (this->day > days_in_monthes[this->month]) {
-			int32_t dif = this->day - days_in_monthes[this->month];
-			this->day = days_in_monthes[this->month] - dif;
-		}
-	}
-	if (measure == MeasureTime::days) {
-		decrease(number / 30, MeasureTime::months);
-		number %= 30;
-		decrease_day(number);
-	}
-	if (measure == MeasureTime::hours) {
-		decrease(number / 24, MeasureTime::days);
-		number %= 24;
-		decrease_hour(number);
-	}
-	if (measure == MeasureTime::minutes) {
-		decrease(number / 60, MeasureTime::hours);
-		number %= 60;
-		decrease_minute(number);
-	}
-	if (measure == MeasureTime::seconds) {
-		decrease(number / 60, MeasureTime::minutes);
-		number %= 60;
-		decrease_second(number);
-	}
-}
-
 bool Date::is_valid() const
 {
 	if (seconds > 59 || minutes > 59 || hours > 23 || month > 12 ||
@@ -216,22 +148,35 @@ bool Date::is_leap() const
 	}
 }
 
-int32_t Date::count_leap_years(int32_t another_year) const
+int32_t Date::count_29_february(const Date& another_date) const
 {
-	if (another_year < this->year) {
-		int32_t answer = (this->year - another_year)/4;
-		if (another_year % 4 > this->year % 4) {
+	if (*this == another_date) {
+		return 0;
+	}
+	else if (*this < another_date) {
+		int32_t answer = (another_date.get_year() - this->year)/4;
+		if (another_date.get_year() % 4 < this->year % 4) {
 			answer++;
 		}
-		answer -= (this->year - another_year) / 100;
-		if (another_year % 100 > this->year % 100) {
+		answer -= (another_date.get_year() - this->year) / 100;
+		if (another_date.get_year() % 100 < this->year % 100) {
 			answer--;
 		}
-		answer += (this->year - another_year) / 400;
-		if (another_year % 400 > this->year % 400) {
+		answer += (another_date.get_year() - this->year) / 400;
+		if (another_date.get_year() % 400 < this->year % 400) {
 			answer++;
 		}
+		if (*this < Date(1, 1, 1, 29, 2, this->year) &&
+			is_leap()) {
+			answer++;
+		}
+		if (another_date.is_leap() && another_date < Date(1, 1, 1, 1, 3, another_date.get_year())) {
+			answer--;
+		}
 		return answer;
+	}
+	else {
+		return -another_date.count_29_february(*this);
 	}
 }
 
@@ -255,11 +200,18 @@ int32_t Date::get_number_in_year() const
 
 int32_t Date::get_reverse_number_in_year() const
 {
-	int32_t answer = 365 - get_number_in_year();
-	if (is_leap()) {
-		answer++;
+	try
+	{
+		int32_t answer = 366 - get_number_in_year();
+		if (is_leap()) {
+			answer++;
+		}
+		return answer;
 	}
-	return answer;
+	catch (const std::exception&)
+	{
+		//throw
+	}
 }
 
 Day Date::get_day_of_week()
@@ -322,35 +274,157 @@ Day Date::get_day_of_week()
 	}
 }
 
-void Date::promote_month(uint16_t number)
+void Date::promote(uint16_t number, MeasureTime measure)
 {
-	if (this->month > 12) {
-		this->month = month % 12;
-		this->year++;
+	if (measure == MeasureTime::years) {
+		save_promote_year(number);
 	}
-	if (this->day > days_in_monthes[this->month]) {
-		int32_t dif = this->day - days_in_monthes[this->month];
-		this->day = days_in_monthes[this->month];
-		promote(dif, MeasureTime::days);
+	else if (measure == MeasureTime::months) {
+		save_promote_month(number);
+	}
+	if (measure == MeasureTime::days) {
+		promote(number / 30, MeasureTime::months);
+		number %= 30;
+		save_promote_day(number);
+	}
+	if (measure == MeasureTime::hours) {
+		promote(number / 24, MeasureTime::days);
+		number %= 24;
+		save_promote_hour(number);
+	}
+	if (measure == MeasureTime::minutes) {
+		promote(number / 60, MeasureTime::hours);
+		number %= 60;
+		save_promote_minute(number);
+	}
+	if (measure == MeasureTime::seconds) {
+		promote(number / 60, MeasureTime::minutes);
+		number %= 60;
+		save_promote_second(number);
 	}
 }
 
-void Date::promote_day(uint16_t number)
+void Date::decrease(uint16_t number, MeasureTime measure)
+{
+	if (measure == MeasureTime::years) {
+		save_decrease_year(number);
+	}
+	else if (measure == MeasureTime::months) {
+		save_decrease_year(number / 12);
+		number = number % 12;
+		save_decrease_month(number);
+		if (this->day > days_in_monthes[this->month]) {
+			int32_t dif = this->day - days_in_monthes[this->month];
+			this->day = days_in_monthes[this->month] - dif;
+		}
+	}
+	if (measure == MeasureTime::days) {
+		decrease(number / 30, MeasureTime::months);
+		number %= 30;
+		save_decrease_day(number);
+	}
+	if (measure == MeasureTime::hours) {
+		decrease(number / 24, MeasureTime::days);
+		number %= 24;
+		save_decrease_hour(number);
+	}
+	if (measure == MeasureTime::minutes) {
+		decrease(number / 60, MeasureTime::hours);
+		number %= 60;
+		save_decrease_minute(number);
+	}
+	if (measure == MeasureTime::seconds) {
+		decrease(number / 60, MeasureTime::minutes);
+		number %= 60;
+		save_decrease_second(number);
+	}
+}
+
+void Date::save_promote_year(uint16_t number)
+{
+	this->year += number;
+	if (this->month == 2 && this->day == 29 && !is_leap()) {
+		this->month = 3;
+		this->day = 1;
+	}
+}
+
+void Date::save_decrease_year(uint16_t number)
+{
+	this->year -= number;
+	if (this->month == 2 && this->day == 29 && !is_leap()) {
+		this->month = 3;
+		this->day = 1;
+	}
+}
+
+void Date::save_promote_month(uint16_t number)
+{
+	save_promote_year(number / 12);
+	number %= 12;
+	if (this->month + number > 12) {
+		this->year++;
+		this->month = this->month + number-12;
+	}
+	else {
+		this->month += number;
+	}
+	if (this->day > 28 && this->month == 2 && !is_leap()) {
+		uint16_t dif = this->day - 28;
+		this->day = dif;
+		this->month = 3;
+	}
+	else if (this->day > days_in_monthes[this->month]) {
+		uint16_t dif = this->day-days_in_monthes[this->month];
+		this->day = dif;
+		if (this->month == 13) {
+			this->year++;
+			this->month = 1;
+		}
+	}
+}
+
+void Date::save_decrease_month(uint16_t number)
+{
+	save_decrease_year(number / 12);
+	number %= 12;
+	if (this->month <= number) {
+		this->year--;
+		this->month = 12 - number + this->month;
+	}
+	else {
+		this->month -= number;
+	}
+	if (this->day > 28 && this->month == 2 && !is_leap()) {
+		uint16_t dif = this->day-28 ;
+		this->day = 29-dif;
+	}
+	else if (this->day > days_in_monthes[this->month]) {
+		uint16_t dif = this->day-days_in_monthes[this->month];
+		this->day = days_in_monthes[this->month]+1-dif;
+		if (this->month == 0) {
+			this->year--;
+			this->month = 12;
+		}
+	}
+}
+
+void Date::save_promote_day(uint16_t number)
 {
 	if (this->day + number > days_in_monthes[this->month]) {
 		number -= days_in_monthes[this->month] - this->day;
 		this->day = number;
-		promote_month(1);
+		save_promote_month(1);
 	}
 	else {
 		this->day += number;
 	}
 }
 
-void Date::promote_hour(uint16_t number)
+void Date::save_promote_hour(uint16_t number)
 {
 	if (number + this->hours > 23) {
-		promote_day(1);
+		save_promote_day(1);
 		this->hours = (number + this->hours) % 24;
 	}
 	else {
@@ -358,10 +432,10 @@ void Date::promote_hour(uint16_t number)
 	}
 }
 
-void Date::promote_minute(uint16_t number)
+void Date::save_promote_minute(uint16_t number)
 {
 	if (number + this->minutes > 59) {
-		promote_hour(1);
+		save_promote_hour(1);
 		this->minutes = (number + this->minutes) % 60;
 	}
 	else {
@@ -369,10 +443,10 @@ void Date::promote_minute(uint16_t number)
 	}
 }
 
-void Date::promote_second(uint16_t number)
+void Date::save_promote_second(uint16_t number)
 {
 	if (number + this->seconds > 59) {
-		promote_minute(1);
+		save_promote_minute(1);
 		this->seconds = (number + this->seconds) % 60;
 	}
 	else {
@@ -380,17 +454,7 @@ void Date::promote_second(uint16_t number)
 	}
 }
 
-void Date::decrease_month(uint16_t number)
-{
-	if (this->month > number) {
-		this->month -= number;
-	}
-	else {
-		this->month = 12 - number % 12 + this->month;
-	}
-}
-
-void Date::decrease_day(uint16_t number)
+void Date::save_decrease_day(uint16_t number)
 {
 	if (this->day > number) {
 		this->day -= number;
@@ -409,37 +473,37 @@ void Date::decrease_day(uint16_t number)
 	}
 }
 
-void Date::decrease_hour(uint16_t number)
+void Date::save_decrease_hour(uint16_t number)
 {
 	if (number < this->hours) {
 		this->hours -= number;
 	}
 	else {
-		decrease_day(1);
+		save_decrease_day(1);
 		number -= this->hours;
 		this->hours = 24 - number;
 	}
 }
 
-void Date::decrease_minute(uint16_t number)
+void Date::save_decrease_minute(uint16_t number)
 {
 	if (number < this->minutes) {
 		this->minutes -= number;
 	}
 	else {
-		decrease_hour(1);
+		save_decrease_hour(1);
 		number -= this->minutes;
 		this->minutes = 60 - number;
 	}
 }
 
-void Date::decrease_second(uint16_t number)
+void Date::save_decrease_second(uint16_t number)
 {
 	if (number < this->seconds) {
 		this->seconds -= number;
 	}
 	else {
-		decrease_hour(1);
+		save_decrease_minute(1);
 		number -= this->seconds;
 		this->seconds = 60 - number;
 	}

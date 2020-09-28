@@ -50,32 +50,34 @@ public:
 	std::uint16_t get_seconds() const;
 	void set_seconds(uint16_t seconds);
 
-	int32_t difference(const Date& another,MeasureTime measure) const;
+	bool is_valid() const;
+	bool is_leap() const;
+	int32_t count_29_february(const Date& another_date) const;
+
+	int32_t get_number_in_year() const;
+	int32_t get_reverse_number_in_year() const;
+
+	int32_t difference(const Date& another, MeasureTime measure) const;
 	void promote(uint16_t number, MeasureTime measure);
 	void decrease(uint16_t number, MeasureTime measure);
 
-	bool is_valid() const;
+	void save_promote_year(uint16_t number);
+	void save_promote_month(uint16_t number);
+	void save_promote_day(uint16_t number);
+	void save_promote_hour(uint16_t number);
+	void save_promote_minute(uint16_t number);
+	void save_promote_second(uint16_t number);
 
-	bool is_leap() const;
-	int32_t count_leap_years(int32_t another_year) const;
-	int32_t get_number_in_year() const;
-	int32_t get_reverse_number_in_year() const;
+	void save_decrease_year(uint16_t number);
+	void save_decrease_month(uint16_t number);
+	void save_decrease_day(uint16_t number);
+	void save_decrease_hour(uint16_t number);
+	void save_decrease_minute(uint16_t number);
+	void save_decrease_second(uint16_t number);
 
 	Day get_day_of_week();
 private:
 	const uint16_t days_in_monthes[13] = { 0,31,29,31,30,31,30,31,31,30,31,30,31 };
-
-	void promote_month(uint16_t number);
-	void promote_day(uint16_t number);
-	void promote_hour(uint16_t number);
-	void promote_minute(uint16_t number);
-	void promote_second(uint16_t number);
-
-	void decrease_month(uint16_t number);
-	void decrease_day(uint16_t number);
-	void decrease_hour(uint16_t number);
-	void decrease_minute(uint16_t number);
-	void decrease_second(uint16_t number);
 
 	uint16_t day;
 	uint16_t month;

@@ -442,6 +442,365 @@ void TestHouseNotSeries() {
 	}
 }
 
+void TestDateBasic() {
+	Date date(1, 2, 3, 4, 5, 6);
+	ASSERT_EQUAL(date.get_year(), 6);
+	date.set_year(7);
+	ASSERT_EQUAL(date.get_year(), 7);
+	ASSERT_EQUAL(date.get_month(), 5);
+	date.set_month(6);
+	ASSERT_EQUAL(date.get_month(), 6);
+	ASSERT_EQUAL(date.get_day(), 4);
+	date.set_day(5);
+	ASSERT_EQUAL(date.get_day(), 5);
+	ASSERT_EQUAL(date.get_hours(), 3);
+	date.set_hours(4);
+	ASSERT_EQUAL(date.get_hours(), 4);
+	ASSERT_EQUAL(date.get_minutes(), 2);
+	date.set_minutes(3);
+	ASSERT_EQUAL(date.get_minutes(), 3);
+	ASSERT_EQUAL(date.get_seconds(), 1);
+	date.set_seconds(2);
+	ASSERT_EQUAL(date.get_seconds(), 2);
+
+	Date another = date;
+	ASSERT_EQUAL(another.get_year(), 7);
+	ASSERT_EQUAL(another.get_month(), 6);
+	ASSERT_EQUAL(another.get_day(), 5);
+	ASSERT_EQUAL(another.get_hours(), 4);
+	ASSERT_EQUAL(another.get_minutes(), 3);
+	ASSERT_EQUAL(another.get_seconds(), 2);
+}
+
+void TestDateLeap() {
+	ASSERT(Date(1, 1, 1, 1, 1, 2020).is_leap());
+	ASSERT(Date(1, 1, 1, 1, 1, 2024).is_leap());
+	ASSERT(Date(1, 1, 1, 1, 1, 2000).is_leap());
+	ASSERT(Date(1, 1, 1, 1, 1, 2096).is_leap());
+	ASSERT(Date(1, 1, 1, 1, 1, 4).is_leap());
+	ASSERT(!(Date(1, 1, 1, 1, 1, 3).is_leap()));
+	ASSERT(!(Date(1, 1, 1, 1, 1, 2100).is_leap()));
+	ASSERT(!(Date(1, 1, 1, 1, 1, 2200).is_leap()));
+	ASSERT(!(Date(1, 1, 1, 1, 1, 2300).is_leap()));
+	ASSERT(!(Date(1, 1, 1, 1, 1, 2021).is_leap()));
+
+	{
+		Date basis(1, 1, 1, 1, 1, 2020);
+		ASSERT_EQUAL(0, basis.count_29_february(Date(1, 1, 1, 1, 1, 2020)));
+		ASSERT_EQUAL(0, basis.count_29_february(Date(1, 1, 1, 29, 2, 2020)));
+		ASSERT_EQUAL(1, basis.count_29_february(Date(1, 1, 1, 1, 3, 2020)));
+		ASSERT_EQUAL(1, basis.count_29_february(Date(1, 1, 1, 1, 1, 2021)));
+		ASSERT_EQUAL(1, basis.count_29_february(Date(1, 1, 1, 1, 1, 2022)));
+		ASSERT_EQUAL(1, basis.count_29_february(Date(1, 1, 1, 1, 1, 2023)));
+		ASSERT_EQUAL(1, basis.count_29_february(Date(1, 1, 1, 1, 1, 2024)));
+		ASSERT_EQUAL(1, basis.count_29_february(Date(1, 1, 1, 29, 2, 2024)));
+		ASSERT_EQUAL(2, basis.count_29_february(Date(1, 1, 1, 1, 3, 2024)));
+		ASSERT_EQUAL(2, basis.count_29_february(Date(1, 1, 1, 1, 1, 2025)));
+		ASSERT_EQUAL(7, basis.count_29_february(Date(1, 1, 1, 1, 1, 2045)));
+	}
+	{
+		Date basis(1, 1, 1, 1, 1, 2000);
+		ASSERT_EQUAL(0, basis.count_29_february(Date(1, 1, 1, 28, 2, 2000)));
+		ASSERT_EQUAL(1, basis.count_29_february(Date(1, 1, 1, 1, 3, 2000)));
+		ASSERT_EQUAL(2, basis.count_29_february(Date(1, 1, 1, 1, 1, 2005)));
+	}
+	{
+		Date basis(1, 1, 1, 1, 1, 2100);
+		ASSERT_EQUAL(0, basis.count_29_february(Date(1, 1, 1, 28, 2, 2100)));
+		ASSERT_EQUAL(0, basis.count_29_february(Date(1, 1, 1, 1, 3, 2100)));
+		ASSERT_EQUAL(1, basis.count_29_february(Date(1, 1, 1, 1, 1, 2105)));
+	}
+	{
+		Date basis(1, 1, 1, 1, 1, 2400);
+		ASSERT_EQUAL(0, basis.count_29_february(Date(1, 1, 1, 28, 2, 2400)));
+		ASSERT_EQUAL(1, basis.count_29_february(Date(1, 1, 1, 1, 3, 2400)));
+		ASSERT_EQUAL(2, basis.count_29_february(Date(1, 1, 1, 1, 1, 2405)));
+	}
+	{
+		Date basis(1, 1, 1, 1, 1, 2000);
+		ASSERT_EQUAL(25, basis.count_29_february(Date(1, 1, 1, 1, 1, 2100)));
+		ASSERT_EQUAL(25, basis.count_29_february(Date(1, 1, 1, 1, 3, 2100)));
+		ASSERT_EQUAL(49, basis.count_29_february(Date(1, 1, 1, 1, 1, 2200)));
+		ASSERT_EQUAL(49, basis.count_29_february(Date(1, 1, 1, 1, 3, 2200)));
+		ASSERT_EQUAL(73, basis.count_29_february(Date(1, 1, 1, 1, 1, 2300)));
+		ASSERT_EQUAL(73, basis.count_29_february(Date(1, 1, 1, 1, 3, 2300)));
+		ASSERT_EQUAL(97, basis.count_29_february(Date(1, 1, 1, 1, 1, 2400)));
+		ASSERT_EQUAL(98, basis.count_29_february(Date(1, 1, 1, 1, 3, 2400)));
+		ASSERT_EQUAL(122, basis.count_29_february(Date(1, 1, 1, 1, 1, 2500)));
+		ASSERT_EQUAL(122, basis.count_29_february(Date(1, 1, 1, 1, 3, 2500)));
+	}
+	{
+		Date basis(1, 1, 1, 31, 12, 2019);
+		ASSERT_EQUAL(0, basis.count_29_february(Date(1, 1, 1, 1, 1, 2020)));
+		ASSERT_EQUAL(0, basis.count_29_february(Date(1, 1, 1, 29, 2, 2020)));
+		ASSERT_EQUAL(1, basis.count_29_february(Date(1, 1, 1, 1, 3, 2020)));
+		ASSERT_EQUAL(1, basis.count_29_february(Date(1, 1, 1, 1, 1, 2021)));
+		ASSERT_EQUAL(1, basis.count_29_february(Date(1, 1, 1, 1, 1, 2022)));
+		ASSERT_EQUAL(1, basis.count_29_february(Date(1, 1, 1, 1, 1, 2023)));
+		ASSERT_EQUAL(1, basis.count_29_february(Date(1, 1, 1, 1, 1, 2024)));
+		ASSERT_EQUAL(1, basis.count_29_february(Date(1, 1, 1, 29, 2, 2024)));
+		ASSERT_EQUAL(2, basis.count_29_february(Date(1, 1, 1, 1, 3, 2024)));
+		ASSERT_EQUAL(2, basis.count_29_february(Date(1, 1, 1, 1, 1, 2025)));
+		ASSERT_EQUAL(7, basis.count_29_february(Date(1, 1, 1, 1, 1, 2045)));
+	}
+	{
+		Date basis(1, 1, 1, 31, 12, 1999);
+		ASSERT_EQUAL(0, basis.count_29_february(Date(1, 1, 1, 28, 2, 2000)));
+		ASSERT_EQUAL(1, basis.count_29_february(Date(1, 1, 1, 1, 3, 2000)));
+		ASSERT_EQUAL(2, basis.count_29_february(Date(1, 1, 1, 1, 1, 2005)));
+
+		ASSERT_EQUAL(25, basis.count_29_february(Date(1, 1, 1, 1, 1, 2100)));
+		ASSERT_EQUAL(25, basis.count_29_february(Date(1, 1, 1, 1, 3, 2100)));
+		ASSERT_EQUAL(49, basis.count_29_february(Date(1, 1, 1, 1, 1, 2200)));
+		ASSERT_EQUAL(49, basis.count_29_february(Date(1, 1, 1, 1, 3, 2200)));
+		ASSERT_EQUAL(73, basis.count_29_february(Date(1, 1, 1, 1, 1, 2300)));
+		ASSERT_EQUAL(73, basis.count_29_february(Date(1, 1, 1, 1, 3, 2300)));
+		ASSERT_EQUAL(97, basis.count_29_february(Date(1, 1, 1, 1, 1, 2400)));
+		ASSERT_EQUAL(98, basis.count_29_february(Date(1, 1, 1, 1, 3, 2400)));
+		ASSERT_EQUAL(122, basis.count_29_february(Date(1, 1, 1, 1, 1, 2500)));
+		ASSERT_EQUAL(122, basis.count_29_february(Date(1, 1, 1, 1, 3, 2500)));
+	}
+	{
+		Date basis(1, 1, 1, 31, 12, 2099);
+		ASSERT_EQUAL(0, basis.count_29_february(Date(1, 1, 1, 28, 2, 2100)));
+		ASSERT_EQUAL(0, basis.count_29_february(Date(1, 1, 1, 1, 3, 2100)));
+		ASSERT_EQUAL(1, basis.count_29_february(Date(1, 1, 1, 1, 1, 2105)));
+	}
+
+	{
+		Date basis(1, 1, 1, 1, 1, 2019);
+		ASSERT_EQUAL(0, basis.count_29_february(Date(1, 1, 1, 1, 1, 2020)));
+		ASSERT_EQUAL(0, basis.count_29_february(Date(1, 1, 1, 29, 2, 2020)));
+		ASSERT_EQUAL(1, basis.count_29_february(Date(1, 1, 1, 1, 3, 2020)));
+		ASSERT_EQUAL(1, basis.count_29_february(Date(1, 1, 1, 1, 1, 2021)));
+		ASSERT_EQUAL(1, basis.count_29_february(Date(1, 1, 1, 1, 1, 2022)));
+		ASSERT_EQUAL(1, basis.count_29_february(Date(1, 1, 1, 1, 1, 2023)));
+		ASSERT_EQUAL(1, basis.count_29_february(Date(1, 1, 1, 1, 1, 2024)));
+		ASSERT_EQUAL(1, basis.count_29_february(Date(1, 1, 1, 29, 2, 2024)));
+		ASSERT_EQUAL(2, basis.count_29_february(Date(1, 1, 1, 1, 3, 2024)));
+		ASSERT_EQUAL(2, basis.count_29_february(Date(1, 1, 1, 1, 1, 2025)));
+		ASSERT_EQUAL(7, basis.count_29_february(Date(1, 1, 1, 1, 1, 2045)));
+	}
+	{
+		Date basis(1, 1, 1, 1, 1, 1999);
+		ASSERT_EQUAL(0, basis.count_29_february(Date(1, 1, 1, 28, 2, 2000)));
+		ASSERT_EQUAL(1, basis.count_29_february(Date(1, 1, 1, 1, 3, 2000)));
+		ASSERT_EQUAL(2, basis.count_29_february(Date(1, 1, 1, 1, 1, 2005)));
+
+		ASSERT_EQUAL(25, basis.count_29_february(Date(1, 1, 1, 1, 1, 2100)));
+		ASSERT_EQUAL(25, basis.count_29_february(Date(1, 1, 1, 1, 3, 2100)));
+		ASSERT_EQUAL(49, basis.count_29_february(Date(1, 1, 1, 1, 1, 2200)));
+		ASSERT_EQUAL(49, basis.count_29_february(Date(1, 1, 1, 1, 3, 2200)));
+		ASSERT_EQUAL(73, basis.count_29_february(Date(1, 1, 1, 1, 1, 2300)));
+		ASSERT_EQUAL(73, basis.count_29_february(Date(1, 1, 1, 1, 3, 2300)));
+		ASSERT_EQUAL(97, basis.count_29_february(Date(1, 1, 1, 1, 1, 2400)));
+		ASSERT_EQUAL(98, basis.count_29_february(Date(1, 1, 1, 1, 3, 2400)));
+		ASSERT_EQUAL(122, basis.count_29_february(Date(1, 1, 1, 1, 1, 2500)));
+		ASSERT_EQUAL(122, basis.count_29_february(Date(1, 1, 1, 1, 3, 2500)));
+	}
+	{
+		Date basis(1, 1, 1, 1, 1, 2099);
+		ASSERT_EQUAL(0, basis.count_29_february(Date(1, 1, 1, 28, 2, 2100)));
+		ASSERT_EQUAL(0, basis.count_29_february(Date(1, 1, 1, 1, 3, 2100)));
+		ASSERT_EQUAL(1, basis.count_29_february(Date(1, 1, 1, 1, 1, 2105)));
+	}
+	{
+		Date basis(1, 1, 1, 1, 3, 2020);
+		ASSERT_EQUAL(-1, basis.count_29_february(Date(1, 1, 1, 28, 2, 2020)));
+		ASSERT_EQUAL(0, basis.count_29_february(Date(1, 1, 1, 2, 3, 2020)));
+		ASSERT_EQUAL(0, basis.count_29_february(Date(1, 1, 1, 29, 2, 2024)));
+		ASSERT_EQUAL(1, basis.count_29_february(Date(1, 1, 1, 1, 3, 2024)));
+	}
+}
+
+void TestDateIsValid() {
+	ASSERT(Date(1, 1, 1, 28, 9, 2020).is_valid());
+
+	ASSERT(!(Date(1, 1, 1, 0, 1, 2020).is_valid()));
+	ASSERT(Date(1, 1, 1, 1, 1, 2020).is_valid());
+	ASSERT(Date(1, 1, 1, 31, 1, 2020).is_valid());
+	ASSERT(!(Date(1, 1, 1, 32, 1, 2020).is_valid()));
+
+	ASSERT(!(Date(1, 1, 1, 0, 2, 2020).is_valid()));
+	ASSERT(Date(1, 1, 1, 1, 2, 2020).is_valid());
+	ASSERT(Date(1, 1, 1, 29, 2, 2020).is_valid());
+	ASSERT(!(Date(1, 1, 1, 30, 2, 2020).is_valid()));
+
+	ASSERT(!(Date(1, 1, 1, 0, 2, 2021).is_valid()));
+	ASSERT(Date(1, 1, 1, 1, 2, 2021).is_valid());
+	ASSERT(Date(1, 1, 1, 28, 2, 2021).is_valid());
+	ASSERT(!(Date(1, 1, 1, 29, 2, 2021).is_valid()));
+
+	ASSERT(!(Date(1, 1, 1, 0, 3, 2020).is_valid()));
+	ASSERT(Date(1, 1, 1, 1, 3, 2020).is_valid());
+	ASSERT(Date(1, 1, 1, 31, 3, 2020).is_valid());
+	ASSERT(!(Date(1, 1, 1, 32, 3, 2020).is_valid()));
+
+	ASSERT(!(Date(1, 1, 1, 0, 4, 2020).is_valid()));
+	ASSERT(Date(1, 1, 1, 1, 4, 2020).is_valid());
+	ASSERT(Date(1, 1, 1, 30, 4, 2020).is_valid());
+	ASSERT(!(Date(1, 1, 1, 31, 4, 2020).is_valid()));
+
+	ASSERT(!(Date(1, 1, 1, 0, 5, 2020).is_valid()));
+	ASSERT(Date(1, 1, 1, 1, 5, 2020).is_valid());
+	ASSERT(Date(1, 1, 1, 31, 5, 2020).is_valid());
+	ASSERT(!(Date(1, 1, 1, 32, 5, 2020).is_valid()));
+
+	ASSERT(!(Date(1, 1, 1, 0, 6, 2020).is_valid()));
+	ASSERT(Date(1, 1, 1, 1, 6, 2020).is_valid());
+	ASSERT(Date(1, 1, 1, 30, 6, 2020).is_valid());
+	ASSERT(!(Date(1, 1, 1, 31, 6, 2020).is_valid()));
+
+	ASSERT(!(Date(1, 1, 1, 0, 7, 2020).is_valid()));
+	ASSERT(Date(1, 1, 1, 1, 7, 2020).is_valid());
+	ASSERT(Date(1, 1, 1, 31, 7, 2020).is_valid());
+	ASSERT(!(Date(1, 1, 1, 32, 7, 2020).is_valid()));
+
+	ASSERT(!(Date(1, 1, 1, 0, 8, 2020).is_valid()));
+	ASSERT(Date(1, 1, 1, 1, 8, 2020).is_valid());
+	ASSERT(Date(1, 1, 1, 31, 8, 2020).is_valid());
+	ASSERT(!(Date(1, 1, 1, 32, 8, 2020).is_valid()));
+
+	ASSERT(!(Date(1, 1, 1, 0, 9, 2020).is_valid()));
+	ASSERT(Date(1, 1, 1, 1, 9, 2020).is_valid());
+	ASSERT(Date(1, 1, 1, 30, 9, 2020).is_valid());
+	ASSERT(!(Date(1, 1, 1, 31, 9, 2020).is_valid()));
+
+	ASSERT(!(Date(1, 1, 1, 0, 10, 2020).is_valid()));
+	ASSERT(Date(1, 1, 1, 1, 10, 2020).is_valid());
+	ASSERT(Date(1, 1, 1, 31, 10, 2020).is_valid());
+	ASSERT(!(Date(1, 1, 1, 32, 10, 2020).is_valid()));
+
+	ASSERT(!(Date(1, 1, 1, 0, 11, 2020).is_valid()));
+	ASSERT(Date(1, 1, 1, 1, 11, 2020).is_valid());
+	ASSERT(Date(1, 1, 1, 30, 11, 2020).is_valid());
+	ASSERT(!(Date(1, 1, 1, 31, 11, 2020).is_valid()));
+
+	ASSERT(!(Date(1, 1, 1, 0, 12, 2020).is_valid()));
+	ASSERT(Date(1, 1, 1, 1, 12, 2020).is_valid());
+	ASSERT(Date(1, 1, 1, 31, 12, 2020).is_valid());
+	ASSERT(!(Date(1, 1, 1, 32, 12, 2020).is_valid()));
+
+	ASSERT(!(Date(-1, 1, 1, 1, 12, 2020).is_valid()));
+	ASSERT(!(Date(1, -1, 1, 1, 12, 2020).is_valid()));
+	ASSERT(!(Date(1, 1, -1, 1, 12, 2020).is_valid()));
+	
+	ASSERT(!(Date(60, 1, 1, 1, 12, 2020).is_valid()));
+	ASSERT(!(Date(1, 60, 1, 1, 12, 2020).is_valid()));
+	ASSERT(!(Date(1, 1, 24, 1, 12, 2020).is_valid()));
+
+	ASSERT(Date(0, 1, 1, 1, 12, 2020).is_valid());
+	ASSERT(Date(1, 0, 1, 31, 12, 2020).is_valid());
+	ASSERT(Date(1, 1, 0, 1, 12, 2020).is_valid());
+
+	ASSERT(Date(59, 1, 1, 31, 12, 2020).is_valid());
+	ASSERT(Date(1, 59, 1, 31, 12, 2020).is_valid());
+	ASSERT(Date(1, 1, 23, 31, 12, 2020).is_valid());
+}
+
+void TestDateNumberInYear() {
+	ASSERT_EQUAL(Date(1, 1, 1, 1, 1, 2019).get_number_in_year(), 1);
+	ASSERT_EQUAL(Date(1, 1, 1, 1, 1, 2019).get_reverse_number_in_year(), 365);
+
+	ASSERT_EQUAL(Date(1, 1, 1, 28, 2, 2019).get_number_in_year(), 59);
+	ASSERT_EQUAL(Date(1, 1, 1, 28, 2, 2019).get_reverse_number_in_year(), 366-59);
+
+	ASSERT_EQUAL(Date(1, 1, 1, 1, 3, 2019).get_number_in_year(), 60);
+	ASSERT_EQUAL(Date(1, 1, 1, 1, 3, 2019).get_reverse_number_in_year(), 366 - 60);
+
+	ASSERT_EQUAL(Date(1, 1, 1, 28, 2, 2020).get_number_in_year(), 59);
+	ASSERT_EQUAL(Date(1, 1, 1, 28, 2, 2020).get_reverse_number_in_year(), 367 - 59);
+
+	ASSERT_EQUAL(Date(1, 1, 1, 29, 2, 2020).get_number_in_year(), 60);
+	ASSERT_EQUAL(Date(1, 1, 1, 29, 2, 2020).get_reverse_number_in_year(), 307);
+
+	ASSERT_EQUAL(Date(1, 1, 1, 1, 3, 2020).get_number_in_year(), 61);
+	ASSERT_EQUAL(Date(1, 1, 1, 1, 3, 2020).get_reverse_number_in_year(), 367 - 61);
+
+	ASSERT_EQUAL(Date(1, 1, 1, 1, 12, 2019).get_number_in_year(), 335);
+	ASSERT_EQUAL(Date(1, 1, 1, 1, 12, 2019).get_reverse_number_in_year(), 31);
+
+	ASSERT_EQUAL(Date(1, 1, 1, 1, 12, 2020).get_number_in_year(), 336);
+	ASSERT_EQUAL(Date(1, 1, 1, 1, 12, 2020).get_reverse_number_in_year(), 31);
+
+	ASSERT_EQUAL(Date(1, 1, 1, 31, 12, 2019).get_number_in_year(), 365);
+	ASSERT_EQUAL(Date(1, 1, 1, 31, 12, 2019).get_reverse_number_in_year(), 1);
+
+	ASSERT_EQUAL(Date(1, 1, 1, 31, 12, 2020).get_number_in_year(), 366);
+	ASSERT_EQUAL(Date(1, 1, 1, 31, 12, 2020).get_reverse_number_in_year(), 1);
+}
+
+void TestDateSavePromoteDecrease() {
+	{
+		Date date(1, 1, 1, 1, 1, 2020);
+		date.save_promote_year(20);
+		ASSERT_EQUAL(date, Date(1, 1, 1, 1, 1, 2040));
+		date.save_decrease_year(20);
+		ASSERT_EQUAL(date, Date(1, 1, 1, 1, 1, 2020));
+	}
+	{
+		Date date(1, 1, 1, 29, 2, 2020);
+		date.save_promote_year(1);
+		ASSERT_EQUAL(date, Date(1, 1, 1, 1, 3, 2021));
+	}
+	{
+		Date date(1, 1, 1, 29, 2, 2020);
+		date.save_decrease_year(1);
+		ASSERT_EQUAL(date, Date(1, 1, 1, 1, 3, 2019));
+	}
+
+	{
+		Date date(1, 1, 1, 1, 1, 2020);
+		date.save_promote_month(5);
+		ASSERT_EQUAL(date, Date(1, 1, 1, 1, 6, 2020));
+		date.save_decrease_month(5);
+		ASSERT_EQUAL(date, Date(1, 1, 1, 1, 1, 2020));
+		date.save_promote_month(12);
+		ASSERT_EQUAL(date, Date(1, 1, 1, 1, 1, 2021));
+		date.save_decrease_month(12);
+		ASSERT_EQUAL(date, Date(1, 1, 1, 1, 1, 2020));
+		date.save_decrease_month(1);
+		ASSERT_EQUAL(date, Date(1, 1, 1, 1, 12, 2019));
+		date.save_promote_month(1);
+		ASSERT_EQUAL(date, Date(1, 1, 1, 1, 1, 2020));
+	}
+	{
+		Date date(1, 1, 1, 29, 1, 2019);
+		date.save_promote_month(1);
+		ASSERT_EQUAL(date, Date(1, 1, 1, 1, 3, 2019));
+	}
+	{
+		Date date(1, 1, 1, 29, 3, 2019);
+		date.save_decrease_month(1);
+		ASSERT_EQUAL(date, Date(1, 1, 1, 28, 2, 2019));
+	}
+	{
+		Date date(1, 1, 1, 29, 1, 2020);
+		date.save_promote_month(1);
+		ASSERT_EQUAL(date, Date(1, 1, 1, 29, 2, 2020));
+	}
+	{
+		Date date(1, 1, 1, 29, 3, 2020);
+		date.save_decrease_month(1);
+		ASSERT_EQUAL(date, Date(1, 1, 1, 29, 2, 2020));
+	}
+	{
+		Date date(1, 1, 1, 29, 1, 2019);
+		date.save_promote_month(1);
+		ASSERT_EQUAL(date, Date(1, 1, 1, 1, 3, 2019));
+	}
+	{
+		Date date(1, 1, 1, 31, 10, 2019);
+		date.save_decrease_month(1);
+		ASSERT_EQUAL(date, Date(1, 1, 1, 30, 9, 2019));
+	}
+	{
+		Date date(1, 1, 1, 31, 10, 2019);
+		date.save_promote_month(1);
+		ASSERT_EQUAL(date, Date(1, 1, 1, 1, 11, 2019));
+	}
+}
+
 int main() {
 	TestRunner tr;
 	RUN_TEST(tr, TestCharacter<std::string>);
@@ -449,4 +808,9 @@ int main() {
 	RUN_TEST(tr, TestBook);
 	RUN_TEST(tr, TestHouseSeries);
 	RUN_TEST(tr, TestHouseNotSeries);
+	RUN_TEST(tr, TestDateBasic);
+	RUN_TEST(tr, TestDateLeap);
+	RUN_TEST(tr, TestDateIsValid);
+	RUN_TEST(tr, TestDateNumberInYear);
+	RUN_TEST(tr, TestDateSavePromoteDecrease);
 }
