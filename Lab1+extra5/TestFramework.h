@@ -12,16 +12,16 @@ using namespace std;
 
 template <class T>
 ostream& operator << (ostream& os, const vector<T>& s) {
-    os << "{";
+    os << "{"<<endl;
     bool first = true;
     for (const auto& x : s) {
         if (!first) {
-            os << ", ";
+            os << endl;
         }
         first = false;
         os << x;
     }
-    return os << "}";
+    return os << "}" << endl;
 }
 
 template <class T>

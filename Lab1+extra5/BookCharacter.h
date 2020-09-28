@@ -10,6 +10,7 @@
 #include <algorithm>
 #include <vector>
 #include <list>
+#include <iostream>
 
 enum class Role {
 	main,
@@ -42,7 +43,7 @@ public:
 	std::string get_default_name() const;
 	std::set<id> get_all_books() const;
 	std::set<std::string> get_all_names() const;
-	Role get_role(const id& book);
+	Role get_role(const id& book) const;
 
 	void set_names(const std::set<std::string>& names);
 	void add_name(const std::string& name);
@@ -54,7 +55,22 @@ private:
 	std::string default_name;
 
 	std::set<std::string>names;
+
+	//friend std::ostream& operator<<(std::ostream& os, const BookCharacter<id>& character);
 };
+
+template <typename id>
+std::ostream& operator<<(std::ostream& os, const BookCharacter<id>& character) {
+	os << "Default name: "<<character.get_default_name() << std::endl<<"All names: ";
+	for (const auto& i : character.get_all_names()) {
+		os << i<<" ";
+	}
+	os << std::endl<<"All roles:"<<std::endl;
+	for (const auto& i : character.get_all_books()) {
+		os<<"Book:" << i << " Role:"<<character.get_role(i)<<std::endl;
+	}
+	return os;
+}
 
 template <typename id>
 bool operator==(const BookCharacter<id>& lhs, const BookCharacter<id>& rhs) {
@@ -133,7 +149,7 @@ std::set<std::string> BookCharacter<id>::get_all_names() const
 }
 
 template<typename id>
-inline Role BookCharacter<id>::get_role(const id& book)
+inline Role BookCharacter<id>::get_role(const id& book) const
 {
 	return books_and_roles.at(book);
 }

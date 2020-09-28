@@ -22,7 +22,7 @@ character_id PublishingHouse::add_character(const BookCharacter<book_id>& charac
 {
 	character_id id = character.get_default_name();
 	if (id==character_id() || characters.find(id) != end(characters)) {
-		//
+		
 	}
 	else {
 		characters[id] = character;
@@ -30,7 +30,7 @@ character_id PublishingHouse::add_character(const BookCharacter<book_id>& charac
 	}
 }
 
-void PublishingHouse::ban_book(book_id& id)
+void PublishingHouse::ban_book(const book_id& id)
 {
 	if (id != book_id()) {
 		for (auto cur_character : books_characters.at(id)) {
@@ -39,14 +39,13 @@ void PublishingHouse::ban_book(book_id& id)
 		books_characters.erase(id);
 		books_important_characters.erase(id);
 		books.erase(id);
-		id = book_id();
 	}
 	else {
 		//throw
 	}
 }
 
-void PublishingHouse::ban_character(character_id& id)
+void PublishingHouse::ban_character(const character_id& id)
 {
 	if (id != character_id()) {
 		for (auto book_id : characters[id].get_all_books()) {
@@ -54,7 +53,6 @@ void PublishingHouse::ban_character(character_id& id)
 			books_important_characters[book_id].erase(id);
 		}
 		characters.erase(id);
-		id = character_id();
 	}
 	else {
 		//throw
@@ -81,8 +79,24 @@ std::vector<std::vector<Book>> PublishingHouse::get_series()
 				for (auto character : books_important_characters[cur_book->first]) {
 					if (series_characters[i].find(character) != end(series_characters[i])) {
 						answer[i].push_back(cur_book->second);
-						series_characters[i].insert(books_important_characters[cur_book->first].begin(),
-							books_important_characters[cur_book->first].end());
+						for (auto important_character : books_important_characters[cur_book->first]) {
+							for (size_t j = 0; j != i; j++) {
+								if (series_characters[j].find(important_character) != end(series_characters[j])) {
+									answer[i].insert(answer[i].end(), answer[j].begin(), answer[j].end());
+									series_characters[j].insert(series_characters[i].begin(),
+										series_characters[i].end());
+								}
+							}
+							series_characters[i].insert(important_character);
+							for (size_t j = i+1; j < answer.size(); j++) {
+								if (series_characters[j].find(important_character) != end(series_characters[j])) {
+									answer[i].insert(answer[i].end(), answer[j].begin(), answer[j].end());
+									series_characters[j].insert(series_characters[i].begin(),
+										series_characters[i].end());
+								}
+							}
+						}
+						break;
 					}
 				}
 			}
@@ -96,9 +110,13 @@ std::vector<std::vector<Book>> PublishingHouse::get_series()
 
 	std::sort(begin(answer), end(answer), [](std::vector<Book>& lhs,
 		std::vector <Book>& rhs) {
-		return lhs.size() < rhs.size();
+			if (lhs.size() == rhs.size()) {
+				return lhs[0].get_name() < rhs[0].get_name();
+			}
+			else {
+				return lhs.size() < rhs.size();
+			}
 		});
-
 	auto series = answer.begin();
 	while (series != answer.end()) {
 		bool was_erased = false;
@@ -118,11 +136,13 @@ std::vector<std::vector<Book>> PublishingHouse::get_series()
 		std::sort(begin(cur_series), end(cur_series), [](Book& lhs,Book& rhs) {
 				return lhs.get_date() < rhs.get_date();
 			});
+		auto it = std::unique(begin(cur_series), end(cur_series));
+		cur_series.erase(it, end(cur_series));
 	}
 	return answer;
 }
 
-void PublishingHouse::add_character_in_book(character_id id_character, book_id id_book, Role role)
+void PublishingHouse::add_character_in_book(const character_id& id_character, const book_id& id_book, Role role)
 {
 	if (id_character != character_id() && id_book != book_id()) {
 		if (characters.find(id_character) == end(characters)) {
@@ -131,6 +151,7 @@ void PublishingHouse::add_character_in_book(character_id id_character, book_id i
 		else {
 			try
 			{
+				characters[id_character].update_role(id_book,role);
 				books_characters.at(id_book).insert(id_character);
 				if (role != Role::episodic) {
 					books_important_characters.at(id_book).insert(id_character);
@@ -147,14 +168,139 @@ void PublishingHouse::add_character_in_book(character_id id_character, book_id i
 	}
 }
 
-BookCharacter<book_id>& PublishingHouse::get_character(character_id id)
+void PublishingHouse::erase_character_from_book(const character_id& id_character, const book_id& id_book)
+{
+	if (id_character != character_id() && id_book != book_id()) {
+		if (characters.find(id_character) == end(characters)) {
+			//throw
+		}
+		else {
+			try
+			{
+				characters[id_character].erase_book(id_book);
+				books_characters.at(id_book).erase(id_character);
+				books_important_characters.at(id_book).erase(id_character);
+			}
+			catch (const std::exception&)
+			{
+				//throw
+			}
+		}
+	}
+	else {
+		//throw
+	}
+}
+
+BookCharacter<book_id> PublishingHouse::get_character(const character_id& id)
 {
 	return characters.at(id);
 }
 
-Book& PublishingHouse::get_book(book_id id)
+Book PublishingHouse::get_book(const book_id& id)
 {
 	return books.at(id);
+}
+
+void PublishingHouse::promote_role(const character_id& id_character, 
+	const book_id& id_book)
+{
+	if (id_character != character_id() && id_book != book_id()) {
+		if (characters.find(id_character) == end(characters)) {
+			//throw
+		}
+		else {
+			try
+			{
+				characters[id_character].promote(id_book);
+				if (characters[id_character].get_role(id_book) != Role::episodic) {
+					books_important_characters.at(id_book).insert(id_character);
+				}
+			}
+			catch (const std::exception&)
+			{
+				//throw
+			}
+		}
+	}
+	else {
+		//throw
+	}
+}
+
+void PublishingHouse::decrease_role(const character_id& id_character,
+	const book_id& id_book)
+{
+	if (id_character != character_id() && id_book != book_id()) {
+		if (characters.find(id_character) == end(characters)) {
+			//throw
+		}
+		else {
+			try
+			{
+				characters[id_character].decrease(id_book);
+				if (characters[id_character].get_role(id_book) == Role::episodic) {
+					books_important_characters.at(id_book).erase(id_character);
+				}
+			}
+			catch (const std::exception&)
+			{
+				//throw
+			}
+		}
+	}
+	else {
+		//throw
+	}
+}
+
+Role PublishingHouse::get_role(const character_id& id_character, const book_id& id_book)
+{
+
+	try
+	{
+		return characters.at(id_character).get_role(id_book);
+	}
+	catch (const std::exception&)
+	{
+
+	}
+}
+
+std::set<character_id> PublishingHouse::get_characters(const book_id& id_book)
+{
+	try
+	{
+		return books_characters.at(id_book);
+	}
+	catch (const std::exception&)
+	{
+
+	}
+}
+
+std::set<character_id> PublishingHouse::get_important_characters(const book_id& id_book)
+{
+	try
+	{
+		return books_important_characters.at(id_book);
+	}
+	catch (const std::exception&)
+	{
+
+	}
+}
+
+std::set<book_id> PublishingHouse::get_books(const character_id& id)
+{
+	try
+	{
+		return characters.at(id).get_all_books();
+	}
+	catch (const std::exception&)
+	{
+
+	}
 }
 
 

@@ -66,7 +66,7 @@ void Date::set_minutes(uint16_t minutes)
 
 std::uint16_t Date::get_seconds() const
 {
-	return std::uint16_t();
+	return this->seconds;
 }
 
 void Date::set_seconds(uint16_t seconds)
