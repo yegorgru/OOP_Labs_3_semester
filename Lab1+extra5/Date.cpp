@@ -1,7 +1,17 @@
 #include "Date.h"
 
+Date::Date(uint16_t seconds, uint16_t minutes, uint16_t hours, uint16_t day,
+	uint16_t month, uint16_t year)
+	:seconds(seconds), minutes(minutes), hours(hours),
+	day(day), month(month), year(year), time_zone(0) {}
+
 Date::Date()
-	: seconds(0),minutes(0),hours(0),day(0),month(0),year(0) {}
+	: seconds(0),minutes(0),hours(0),day(0),month(0),year(0),time_zone(0) {}
+
+Date::Date(uint16_t seconds, uint16_t minutes, uint16_t hours, uint16_t day,
+	uint16_t month, uint16_t year, int16_t time_zone)
+	: seconds(seconds), minutes(minutes), hours(hours),
+	day(day), month(month), year(year), time_zone(time_zone) {}
 
 Date& Date::operator=(const Date& date)
 {
@@ -74,49 +84,137 @@ void Date::set_seconds(uint16_t seconds)
 	this->seconds = seconds;
 }
 
+std::int16_t Date::get_time_zone() const
+{
+	return this->time_zone;
+}
+
+void Date::set_time_zone(int16_t zone)
+{
+	this->time_zone = zone;
+}
+
 int32_t Date::difference(const Date& another, MeasureTime measure) const
 {
 	if (is_valid() && another.is_valid()) {
 		if (*this == another) {
 			return 0;
 		}
-		else if (*this < another) {
+		else if (another<*this) {
 			return -another.difference(*this,measure);
 		}
 		else {
 			int32_t answer=0;
 			if (measure == MeasureTime::years) {
-				answer = this->year - another.get_year();
+				answer = another.get_year()-this->year;
+				if (another<Date(this->seconds, this->minutes, this->hours, this->day, this->month,
+					another.get_year(), this->time_zone)) {
+					answer--;
+				}
 			}
 			else if (measure == MeasureTime::months) {
 				answer = difference(another, MeasureTime::years) * 12;
 				if (this->month > another.get_month()) {
-					answer += this->month - another.get_month();
+					answer += 12-this->month;
+					answer+=another.get_month();
 				}
 				else {
-					answer -= another.get_month() - this->month;
+					answer -= -another.get_month() + this->month;
+				}
+				if (another < Date(this->seconds, this->minutes, this->hours, this->day, another.get_month(),
+					another.get_year(), this->time_zone)) {
+					answer--;
 				}
 			}
 			else if (measure == MeasureTime::days) {
+				if (this->day == 29 && this->month == 2 && is_leap()) {
+					Date tmp(this->seconds, this->minutes, this->hours, 1, 3, this->year, this->time_zone);
+					if (another < tmp) {
+						return 0;
+					}
+					else {
+						return tmp.difference(another, MeasureTime::days) + 1;
+					}
+				}
+
 				answer = difference(another, MeasureTime::years) * 365;
 				answer += count_29_february(another);
-				answer += get_number_in_year();
-				answer -= another.get_number_in_year();
+
+				if (another< Date(this->seconds, this->minutes, this->hours, this->day,
+					this->month, another.get_year(), this->time_zone)) {
+					answer += get_reverse_number_in_year() - 1;
+					answer += another.get_number_in_year();
+					if (another.is_leap() && Date(0, 0, 0, 29, 2, another.get_year(),
+						another.get_time_zone()) < another) {
+						answer--;
+					}
+					if (is_leap() && *this < Date(0, 0, 0, 29, 2, this->year,
+						this->time_zone)) {
+						answer--;
+					}
+				}
+				else {
+					answer -= get_number_in_year();
+					answer += another.get_number_in_year();
+
+					if (another.is_leap() && Date(59, 59, 23, 29, 2, another.get_year(),
+						another.get_time_zone()) < another) {
+						answer--;
+					}
+					
+					if (is_leap() && Date(0, 0, 0, 29, 2, get_year(),
+						get_time_zone()) < *this) {
+						answer++;
+					}
+				}
+				
+				if (another < Date(this->seconds, this->minutes, this->hours,
+					another.get_day(), another.get_month(), another.get_year(), this->time_zone)) {
+					answer--;
+				}
 			}
 			else if (measure == MeasureTime::hours) {
 				answer = difference(another, MeasureTime::days) * 24;
-				answer += this->hours;
-				answer -= another.get_hours();
+				if (another < Date(this->seconds, this->minutes, this->hours,
+					another.get_day(), another.get_month(), another.get_year(), this->time_zone)) {
+					answer += 24 - this->hours + another.get_hours();
+				}
+				else {
+					answer -= this->hours;
+					answer += another.get_hours();
+				}
+
+				if (another < Date(this->seconds, this->minutes, another.get_hours(),
+					another.get_day(), another.get_month(), another.get_year(), this->time_zone)) {
+					answer--;
+				}
 			}
 			else if (measure == MeasureTime::minutes) {
 				answer = difference(another, MeasureTime::hours) * 60;
-				answer += this->minutes;
-				answer -= another.get_minutes();
+				if (another < Date(this->seconds, this->minutes, another.get_hours(),
+					another.get_day(), another.get_month(), another.get_year(), this->time_zone)) {
+					answer += 60 - this->minutes + another.get_minutes();
+				}
+				else {
+					answer -= this->minutes;
+					answer += another.get_minutes();
+				}
+
+				if (another < Date(this->seconds, another.get_minutes(), another.get_hours(),
+					another.get_day(), another.get_month(), another.get_year(), this->time_zone)) {
+					answer--;
+				}
 			}
 			else if (measure == MeasureTime::seconds) {
 				answer = difference(another, MeasureTime::minutes) * 60;
-				answer += this->seconds;
-				answer -= another.get_seconds();
+				if (another < Date(this->seconds, another.get_minutes(), another.get_hours(),
+					another.get_day(), another.get_month(), another.get_year(), this->time_zone)) {
+					answer += 60 - this->seconds + another.get_seconds();
+				}
+				else {
+					answer -= this->seconds;
+					answer += another.get_seconds();
+				}
 			}
 			return answer;
 		}
@@ -133,6 +231,9 @@ bool Date::is_valid() const
 		return false;
 	}
 	if (day == 29 && month == 2 && !is_leap()) {
+		return false;
+	}
+	if (time_zone < -12 || time_zone > 12) {
 		return false;
 	}
 	return true;
@@ -166,12 +267,19 @@ int32_t Date::count_29_february(const Date& another_date) const
 		if (another_date.get_year() % 400 < this->year % 400) {
 			answer++;
 		}
-		if (*this < Date(1, 1, 1, 29, 2, this->year) &&
+		if (*this < Date(0, 0, 0, 29, 2, this->year) &&
 			is_leap()) {
 			answer++;
 		}
-		if (another_date.is_leap() && another_date < Date(1, 1, 1, 1, 3, another_date.get_year())) {
+		if (another_date.is_leap() &&
+			another_date < Date(0, 0, 0, 1, 3, another_date.get_year())) {
 			answer--;
+		}
+		if (*this < Date(0, 0, 0, 1, 3, this->year, this->time_zone) &&
+			Date(59, 59, 23, 28, 2, this->year, this->time_zone) < *this &&
+			another_date < Date(0, 0, 0, 1, 3, another_date.get_year(), another_date.get_time_zone()) &&
+			Date(59, 59, 23, 28, 2, another_date.get_year(), another_date.get_time_zone()) < another_date) {
+			return 0;
 		}
 		return answer;
 	}
@@ -222,7 +330,7 @@ Day Date::get_day_of_week()
 	if (*this == basis) {
 		return Day::Sunday;
 	}
-	else if (*this < basis) {
+	else if (basis< *this) {
 		dif = basis.difference(*this, MeasureTime::days);
 		day = dif % 7;
 		if (day == 0) {
@@ -283,23 +391,15 @@ void Date::promote(uint16_t number, MeasureTime measure)
 		save_promote_month(number);
 	}
 	if (measure == MeasureTime::days) {
-		promote(number / 30, MeasureTime::months);
-		number %= 30;
 		save_promote_day(number);
 	}
 	if (measure == MeasureTime::hours) {
-		promote(number / 24, MeasureTime::days);
-		number %= 24;
 		save_promote_hour(number);
 	}
 	if (measure == MeasureTime::minutes) {
-		promote(number / 60, MeasureTime::hours);
-		number %= 60;
 		save_promote_minute(number);
 	}
 	if (measure == MeasureTime::seconds) {
-		promote(number / 60, MeasureTime::minutes);
-		number %= 60;
 		save_promote_second(number);
 	}
 }
@@ -310,32 +410,18 @@ void Date::decrease(uint16_t number, MeasureTime measure)
 		save_decrease_year(number);
 	}
 	else if (measure == MeasureTime::months) {
-		save_decrease_year(number / 12);
-		number = number % 12;
 		save_decrease_month(number);
-		if (this->day > days_in_monthes[this->month]) {
-			int32_t dif = this->day - days_in_monthes[this->month];
-			this->day = days_in_monthes[this->month] - dif;
-		}
 	}
 	if (measure == MeasureTime::days) {
-		decrease(number / 30, MeasureTime::months);
-		number %= 30;
 		save_decrease_day(number);
 	}
 	if (measure == MeasureTime::hours) {
-		decrease(number / 24, MeasureTime::days);
-		number %= 24;
 		save_decrease_hour(number);
 	}
 	if (measure == MeasureTime::minutes) {
-		decrease(number / 60, MeasureTime::hours);
-		number %= 60;
 		save_decrease_minute(number);
 	}
 	if (measure == MeasureTime::seconds) {
-		decrease(number / 60, MeasureTime::minutes);
-		number %= 60;
 		save_decrease_second(number);
 	}
 }
@@ -412,17 +498,47 @@ void Date::save_decrease_month(uint16_t number)
 void Date::save_promote_day(uint16_t number)
 {
 	if (this->day + number > days_in_monthes[this->month]) {
-		number -= days_in_monthes[this->month] - this->day;
-		this->day = number;
+		number -= days_in_monthes[this->month]-this->day+1;
+		if (this->month == 2 && !is_leap()) {
+			number++;
+		}
 		save_promote_month(1);
+		this->day = 1;
+		save_promote_day(number);
 	}
 	else {
 		this->day += number;
+	}
+	if (this->month == 2 && this->day == 29 && !is_leap()) {
+		this->month = 3;
+		this->day = 1;
+	}
+}
+
+void Date::save_decrease_day(uint16_t number)
+{
+	if (this->day <= number) {
+		number -= this->day;
+		save_decrease_month(1);
+		this->day = days_in_monthes[this->month];
+		
+		if (this->day == 29 && this->month == 2 && !is_leap()) {
+			this->day--;
+		}
+		save_decrease_day(number);
+	}
+	else {
+		this->day -= number;
+	}
+	if (this->month == 2 && this->day == 29 && !is_leap()) {
+		this->day = 28;
 	}
 }
 
 void Date::save_promote_hour(uint16_t number)
 {
+	save_promote_day(number / 24);
+	number %= 24;
 	if (number + this->hours > 23) {
 		save_promote_day(1);
 		this->hours = (number + this->hours) % 24;
@@ -432,50 +548,11 @@ void Date::save_promote_hour(uint16_t number)
 	}
 }
 
-void Date::save_promote_minute(uint16_t number)
-{
-	if (number + this->minutes > 59) {
-		save_promote_hour(1);
-		this->minutes = (number + this->minutes) % 60;
-	}
-	else {
-		this->minutes += number;
-	}
-}
-
-void Date::save_promote_second(uint16_t number)
-{
-	if (number + this->seconds > 59) {
-		save_promote_minute(1);
-		this->seconds = (number + this->seconds) % 60;
-	}
-	else {
-		this->seconds += number;
-	}
-}
-
-void Date::save_decrease_day(uint16_t number)
-{
-	if (this->day > number) {
-		this->day -= number;
-	}
-	else {
-		if (this->month == 1) {
-			this->year--;
-			this->month = 12;
-		}
-		else {
-			this->month--;
-		}
-		number -= this->day;
-		this->day = days_in_monthes[this->month];
-		this->day -= number;
-	}
-}
-
 void Date::save_decrease_hour(uint16_t number)
 {
-	if (number < this->hours) {
+	save_decrease_day(number / 24);
+	number %= 24;
+	if (number <= this->hours) {
 		this->hours -= number;
 	}
 	else {
@@ -485,9 +562,24 @@ void Date::save_decrease_hour(uint16_t number)
 	}
 }
 
+void Date::save_promote_minute(uint16_t number)
+{
+	save_promote_hour(number / 60);
+	number %= 60;
+	if (number + this->minutes > 59) {
+		save_promote_hour(1);
+		this->minutes = (number + this->minutes) % 60;
+	}
+	else {
+		this->minutes += number;
+	}
+}
+
 void Date::save_decrease_minute(uint16_t number)
 {
-	if (number < this->minutes) {
+	save_decrease_hour(number / 60);
+	number %= 60;
+	if (number <= this->minutes) {
 		this->minutes -= number;
 	}
 	else {
@@ -497,9 +589,24 @@ void Date::save_decrease_minute(uint16_t number)
 	}
 }
 
+void Date::save_promote_second(uint16_t number)
+{
+	save_promote_minute(number / 60);
+	number %= 60;
+	if (number + this->seconds > 59) {
+		save_promote_minute(1);
+		this->seconds = (number + this->seconds) % 60;
+	}
+	else {
+		this->seconds += number;
+	}
+}
+
 void Date::save_decrease_second(uint16_t number)
 {
-	if (number < this->seconds) {
+	save_decrease_minute(number / 60);
+	number %= 60;
+	if (number <= this->seconds) {
 		this->seconds -= number;
 	}
 	else {
@@ -509,11 +616,38 @@ void Date::save_decrease_second(uint16_t number)
 	}
 }
 
+std::ostream& operator<<(std::ostream& os, const Day& day)
+{
+	if (day == Day::Friday) {
+		os << "Friday";
+	}
+	else if (day == Day::Monday) {
+		os << "Monday";
+	}
+	else if (day == Day::Saturday) {
+		os << "Saturday";
+	}
+	else if (day == Day::Sunday) {
+		os << "Sunday";
+	}
+	else if (day == Day::Thursday) {
+		os << "Thursday";
+	}
+	else if (day == Day::Tuesday) {
+		os << "Tuesday";
+	}
+	else if (day == Day::Wednesday) {
+		os << "Wednesday";
+	}
+	return os;
+}
+
 bool operator==(const Date& lhs, const Date& rhs)
 {
 	return lhs.get_day() == rhs.get_day() && lhs.get_month() == rhs.get_month() &&
-		lhs.get_year() == rhs.get_year() && lhs.get_seconds() == rhs.get_seconds()&&
-		lhs.get_minutes() == rhs.get_minutes() && lhs.get_hours() == rhs.get_hours();
+		lhs.get_year() == rhs.get_year() && lhs.get_seconds() == rhs.get_seconds() &&
+		lhs.get_minutes() == rhs.get_minutes() && lhs.get_hours() - lhs.get_time_zone()
+		== rhs.get_hours() - rhs.get_time_zone();
 }
 
 bool operator<(const Date& lhs, const Date& rhs)
@@ -521,14 +655,15 @@ bool operator<(const Date& lhs, const Date& rhs)
 	if (lhs.get_year() == rhs.get_year()) {
 		if (lhs.get_month() == rhs.get_month()) {
 			if (lhs.get_day() == rhs.get_day()) {
-				if (lhs.get_hours() == rhs.get_hours()) {
+				if (lhs.get_hours()-lhs.get_time_zone() == rhs.get_hours() - rhs.get_time_zone()) {
 					if (lhs.get_minutes() == rhs.get_minutes()) {
 						return lhs.get_seconds() < rhs.get_seconds();
 					}
 					return lhs.get_minutes() < rhs.get_minutes();
 				}
 				else {
-					return lhs.get_hours() < rhs.get_hours();
+					return lhs.get_hours() - lhs.get_time_zone() <
+						rhs.get_hours() - rhs.get_time_zone();
 				}
 			}
 			else {

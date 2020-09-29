@@ -443,7 +443,7 @@ void TestHouseNotSeries() {
 }
 
 void TestDateBasic() {
-	Date date(1, 2, 3, 4, 5, 6);
+	Date date(1, 2, 3, 4, 5, 6,0);
 	ASSERT_EQUAL(date.get_year(), 6);
 	date.set_year(7);
 	ASSERT_EQUAL(date.get_year(), 7);
@@ -462,6 +462,9 @@ void TestDateBasic() {
 	ASSERT_EQUAL(date.get_seconds(), 1);
 	date.set_seconds(2);
 	ASSERT_EQUAL(date.get_seconds(), 2);
+	ASSERT_EQUAL(date.get_time_zone(), 0);
+	date.set_time_zone(1);
+	ASSERT_EQUAL(date.get_time_zone(), 1);
 
 	Date another = date;
 	ASSERT_EQUAL(another.get_year(), 7);
@@ -611,6 +614,12 @@ void TestDateLeap() {
 		ASSERT_EQUAL(0, basis.count_29_february(Date(1, 1, 1, 29, 2, 2024)));
 		ASSERT_EQUAL(1, basis.count_29_february(Date(1, 1, 1, 1, 3, 2024)));
 	}
+	{
+		Date basis(59, 59, 23, 28, 2, 2020);
+		ASSERT_EQUAL(1, basis.count_29_february(Date(0, 0, 0, 1, 3, 2020)));
+		ASSERT_EQUAL(0, basis.count_29_february(Date(59, 59, 23, 29, 2, 2020)));
+		ASSERT_EQUAL(Date(0, 0, 0, 29, 2, 2020).count_29_february(Date(59, 59, 23, 29, 2, 2020)), 0);
+	}
 }
 
 void TestDateIsValid() {
@@ -655,6 +664,11 @@ void TestDateIsValid() {
 	ASSERT(Date(1, 1, 1, 1, 7, 2020).is_valid());
 	ASSERT(Date(1, 1, 1, 31, 7, 2020).is_valid());
 	ASSERT(!(Date(1, 1, 1, 32, 7, 2020).is_valid()));
+
+	ASSERT(!(Date(1, 1, 1, 1, 7, 2020,-13).is_valid()));
+	ASSERT(Date(1, 1, 1, 1, 7, 2020,-12).is_valid());
+	ASSERT(Date(1, 1, 1, 1, 7, 2020,12).is_valid());
+	ASSERT(!(Date(1, 1, 1, 1, 7, 2020,13).is_valid()));
 
 	ASSERT(!(Date(1, 1, 1, 0, 8, 2020).is_valid()));
 	ASSERT(Date(1, 1, 1, 1, 8, 2020).is_valid());
@@ -730,7 +744,7 @@ void TestDateNumberInYear() {
 	ASSERT_EQUAL(Date(1, 1, 1, 31, 12, 2020).get_reverse_number_in_year(), 1);
 }
 
-void TestDateSavePromoteDecrease() {
+void TestDatePromoteDecrease() {
 	{
 		Date date(1, 1, 1, 1, 1, 2020);
 		date.save_promote_year(20);
@@ -799,6 +813,566 @@ void TestDateSavePromoteDecrease() {
 		date.save_promote_month(1);
 		ASSERT_EQUAL(date, Date(1, 1, 1, 1, 11, 2019));
 	}
+	{
+		Date date(1, 1, 1, 1, 1, 2019);
+		date.save_decrease_day(1);
+		ASSERT_EQUAL(date, Date(1, 1, 1, 31, 12, 2018));
+		date.save_promote_day(1);
+		ASSERT_EQUAL(date, Date(1, 1, 1, 1, 1, 2019));
+	}
+	{
+		Date date(1, 1, 1, 1, 1, 2019);
+		date.save_promote_day(30);
+		ASSERT_EQUAL(date, Date(1, 1, 1, 31, 1, 2019));
+		date.save_decrease_day(30);
+		ASSERT_EQUAL(date, Date(1, 1, 1, 1, 1, 2019));
+	}
+	{
+		Date date(1, 1, 1, 1, 1, 2019);
+		date.save_promote_day(31);
+		ASSERT_EQUAL(date, Date(1, 1, 1, 1, 2, 2019));
+		date.save_decrease_day(31);
+		ASSERT_EQUAL(date, Date(1, 1, 1, 1, 1, 2019));
+	}
+	{
+		Date date(1, 1, 1, 1, 2, 2019);
+		date.save_promote_day(28);
+		ASSERT_EQUAL(date, Date(1, 1, 1, 1, 3, 2019));
+		date.save_decrease_day(28);
+		ASSERT_EQUAL(date, Date(1, 1, 1, 1, 2, 2019));
+	}
+	{
+		Date date(1, 1, 1, 1, 2, 2019);
+		date.save_promote_day(59);
+		ASSERT_EQUAL(date, Date(1, 1, 1, 1, 4, 2019));
+		date.save_decrease_day(59);
+		ASSERT_EQUAL(date, Date(1, 1, 1, 1, 2, 2019));
+	}
+	{
+		Date date(1, 1, 1, 1, 2, 2019);
+		date.save_promote_day(58);
+		ASSERT_EQUAL(date, Date(1, 1, 1, 31, 3, 2019));
+		date.save_decrease_day(58);
+		ASSERT_EQUAL(date, Date(1, 1, 1, 1, 2, 2019));
+	}
+	{
+		Date date(1, 1, 1, 1, 3, 2019);
+		date.save_promote_day(31);
+		ASSERT_EQUAL(date, Date(1, 1, 1, 1, 4, 2019));
+		date.save_decrease_day(31);
+		ASSERT_EQUAL(date, Date(1, 1, 1, 1, 3, 2019));
+	}
+	{
+		Date date(1, 1, 1, 12, 6, 2019);
+		date.save_promote_day(366);
+		ASSERT_EQUAL(date, Date(1, 1, 1, 12, 6, 2020));
+		date.save_decrease_day(366);
+		ASSERT_EQUAL(date, Date(1, 1, 1, 12, 6, 2019));
+	}
+	{
+		Date date(1, 1, 1, 12, 6, 2020);
+		date.save_promote_day(365);
+		ASSERT_EQUAL(date, Date(1, 1, 1, 12, 6, 2021));
+		date.save_decrease_day(365);
+		ASSERT_EQUAL(date, Date(1, 1, 1, 12, 6, 2020));
+	}
+
+	{
+		Date date(1, 1, 0, 1, 1, 2020);
+		date.save_decrease_hour(1);
+		ASSERT_EQUAL(date, Date(1, 1, 23, 31, 12, 2019));
+		date.save_promote_hour(1);
+		ASSERT_EQUAL(date, Date(1, 1, 0, 1, 1, 2020));
+	}
+	{
+		Date date(1, 1, 0, 1, 1, 2020);
+		date.save_promote_hour(23);
+		ASSERT_EQUAL(date, Date(1, 1, 23, 1, 1, 2020));
+		date.save_decrease_hour(23);
+		ASSERT_EQUAL(date, Date(1, 1, 0, 1, 1, 2020));
+	}
+	{
+		Date date(1, 1, 0, 1, 1, 2020);
+		date.save_promote_hour(24);
+		ASSERT_EQUAL(date, Date(1, 1, 0, 2, 1, 2020));
+		date.save_decrease_hour(24);
+		ASSERT_EQUAL(date, Date(1, 1, 0, 1, 1, 2020));
+	}
+	{
+		Date date(1, 1, 22, 1, 1, 2020);
+		date.save_promote_hour(3);
+		ASSERT_EQUAL(date, Date(1, 1, 1, 2, 1, 2020));
+		date.save_decrease_hour(3);
+		ASSERT_EQUAL(date, Date(1, 1,22, 1, 1, 2020));
+	}
+	{
+		Date date(1, 1, 23, 28, 2, 2019);
+		date.save_promote_hour(2);
+		ASSERT_EQUAL(date, Date(1, 1, 1, 1, 3, 2019));
+		date.save_decrease_hour(2);
+		ASSERT_EQUAL(date, Date(1, 1, 23, 28, 2, 2019));
+	}
+	{
+		Date date(1, 1, 23, 28, 2, 2020);
+		date.save_promote_hour(2);
+		ASSERT_EQUAL(date, Date(1, 1, 1, 29, 2, 2020));
+		date.save_decrease_hour(2);
+		ASSERT_EQUAL(date, Date(1, 1, 23, 28, 2, 2020));
+	}
+	{
+		Date date(1, 1, 23, 28, 2, 2020);
+		date.save_promote_hour(26);
+		ASSERT_EQUAL(date, Date(1, 1, 1, 1, 3, 2020));
+		date.save_decrease_hour(26);
+		ASSERT_EQUAL(date, Date(1, 1, 23, 28, 2, 2020));
+	}
+
+	{
+		Date date(1, 0, 0, 1, 1, 2020);
+		date.save_decrease_minute(1);
+		ASSERT_EQUAL(date, Date(1, 59, 23, 31, 12, 2019));
+		date.save_promote_minute(1);
+		ASSERT_EQUAL(date, Date(1, 0, 0, 1, 1, 2020));
+	}
+	{
+		Date date(1, 0, 23, 1, 1, 2020);
+		date.save_promote_minute(59);
+		ASSERT_EQUAL(date, Date(1, 59, 23, 1, 1, 2020));
+		date.save_decrease_minute(59);
+		ASSERT_EQUAL(date, Date(1, 0, 23, 1, 1, 2020));
+	}
+	{
+		Date date(1, 0, 23, 1, 1, 2020);
+		date.save_promote_minute(60);
+		ASSERT_EQUAL(date, Date(1, 0, 0, 2, 1, 2020));
+		date.save_promote_minute(60);
+		ASSERT_EQUAL(date, Date(1, 0, 1, 2, 1, 2020));
+		date.save_decrease_minute(60);
+		ASSERT_EQUAL(date, Date(1, 0, 0, 2, 1, 2020));
+		date.save_decrease_minute(60);
+		ASSERT_EQUAL(date, Date(1, 0, 23, 1, 1, 2020));
+	}
+	{
+		Date date(1, 58, 23, 28, 2, 2019);
+		date.save_promote_minute(1);
+		ASSERT_EQUAL(date, Date(1, 59, 23, 28, 2, 2019));
+		date.save_promote_minute(1);
+		ASSERT_EQUAL(date, Date(1, 0, 0, 1, 3, 2019));
+		date.save_decrease_minute(2);
+		ASSERT_EQUAL(date, Date(1, 58, 23, 28, 2, 2019));
+	}
+	{
+		Date date(1, 58, 23, 28, 2, 2020);
+		date.save_promote_minute(1);
+		ASSERT_EQUAL(date, Date(1, 59, 23, 28, 2, 2020));
+		date.save_promote_minute(1);
+		ASSERT_EQUAL(date, Date(1, 0, 0, 29, 2, 2020));
+		date.save_decrease_minute(2);
+		ASSERT_EQUAL(date, Date(1, 58, 23, 28, 2, 2020));
+	}
+	{
+		Date date(1, 58, 23, 29, 2, 2020);
+		date.save_promote_minute(1);
+		ASSERT_EQUAL(date, Date(1, 59, 23, 29, 2, 2020));
+		date.save_promote_minute(1);
+		ASSERT_EQUAL(date, Date(1, 0, 0, 1, 3, 2020));
+		date.save_decrease_minute(2);
+		ASSERT_EQUAL(date, Date(1, 58, 23, 29, 2, 2020));
+	}
+
+	{
+		Date date(0, 0, 0, 1, 1, 2020);
+		date.save_decrease_second(1);
+		ASSERT_EQUAL(date, Date(59, 59, 23, 31, 12, 2019));
+		date.save_promote_second(1);
+		ASSERT_EQUAL(date, Date(0, 0, 0, 1, 1, 2020));
+	}
+	{
+		Date date(0, 0, 23, 1, 1, 2020);
+		date.save_promote_second(59);
+		ASSERT_EQUAL(date, Date(59, 0, 23, 1, 1, 2020));
+		date.save_decrease_second(59);
+		ASSERT_EQUAL(date, Date(0, 0, 23, 1, 1, 2020));
+	}
+	{
+		Date date(0, 59, 23, 1, 1, 2020);
+		date.save_promote_second(59);
+		ASSERT_EQUAL(date, Date(59, 59, 23, 1, 1, 2020));
+		date.save_promote_second(1);
+		ASSERT_EQUAL(date, Date(0, 0, 0, 2, 1, 2020));
+		date.save_promote_second(60);
+		ASSERT_EQUAL(date, Date(0, 1, 0, 2, 1, 2020));
+		date.save_decrease_second(60);
+		ASSERT_EQUAL(date, Date(0, 0, 0, 2, 1, 2020));
+		date.save_decrease_second(1);
+		ASSERT_EQUAL(date, Date(59, 59, 23, 1, 1, 2020));
+		date.save_decrease_second(59);
+		ASSERT_EQUAL(date, Date(0, 59, 23, 1, 1, 2020));
+	}
+	{
+		Date date(58, 59, 23, 28, 2, 2019);
+		date.save_promote_second(1);
+		ASSERT_EQUAL(date, Date(59, 59, 23, 28, 2, 2019));
+		date.save_promote_second(1);
+		ASSERT_EQUAL(date, Date(0, 0, 0, 1, 3, 2019));
+		date.save_decrease_second(2);
+		ASSERT_EQUAL(date, Date(58, 59, 23, 28, 2, 2019));
+	}
+	{
+		Date date(58, 59, 23, 28, 2, 2020);
+		date.save_promote_second(1);
+		ASSERT_EQUAL(date, Date(59, 59, 23, 28, 2, 2020));
+		date.save_promote_second(1);
+		ASSERT_EQUAL(date, Date(0, 0, 0, 29, 2, 2020));
+		date.save_decrease_second(2);
+		ASSERT_EQUAL(date, Date(58, 59, 23, 28, 2, 2020));
+	}
+	{
+		Date date(58, 59, 23, 29, 2, 2020);
+		date.save_promote_second(1);
+		ASSERT_EQUAL(date, Date(59, 59, 23, 29, 2, 2020));
+		date.save_promote_second(1);
+		ASSERT_EQUAL(date, Date(0, 0, 0, 1, 3, 2020));
+		date.save_decrease_second(2);
+		ASSERT_EQUAL(date, Date(58, 59, 23, 29, 2, 2020));
+	}
+}
+
+void TestDateDifference() {
+	{
+		ASSERT_EQUAL(Date(59, 59, 23, 31, 12, 2019).difference(Date(0, 0, 0, 1, 1, 2020),
+			MeasureTime::years), 0);
+		ASSERT_EQUAL(Date(0, 0, 0, 1, 1, 2020).difference(Date(59, 59, 23, 31, 12, 2019),
+			MeasureTime::years), 0);
+
+
+		ASSERT_EQUAL(Date(1, 1, 1, 12, 6, 2019).difference(Date(1, 1, 1, 11, 6, 2020),
+			MeasureTime::years), 0);
+		ASSERT_EQUAL(Date(1, 1, 1, 12, 6, 2019).difference(Date(1, 1, 1, 12, 6, 2020),
+			MeasureTime::years), 1);
+		ASSERT_EQUAL(Date(1, 1, 3, 12, 6, 2019,2).difference(Date(1, 1, 3, 12, 6, 2020,1),
+			MeasureTime::years), 1);
+		ASSERT_EQUAL(Date(1, 1, 3, 12, 6, 2019, 1).difference(Date(1, 1, 3, 12, 6, 2020, 2),
+			MeasureTime::years), 0);
+		ASSERT_EQUAL(Date(1, 1, 1, 12, 6, 2019).difference(Date(1, 1, 1, 11, 6, 2020),
+			MeasureTime::years), 0);
+		ASSERT_EQUAL(Date(1, 1, 1, 1, 1, 2000).difference(Date(1, 1, 1, 1, 1, 2100),
+			MeasureTime::years), 100);
+		ASSERT_EQUAL(Date(1, 1, 1, 1, 1, 2000).difference(Date(0, 1, 1, 1, 1, 2100),
+			MeasureTime::years), 99);
+		ASSERT_EQUAL(Date(1, 1, 1, 1, 1, 2000).difference(Date(2, 1, 1, 1, 1, 2100),
+			MeasureTime::years), 100);
+
+		ASSERT_EQUAL(Date(1, 1, 1, 11, 6, 2020).difference(Date(1, 1, 1, 12, 6, 2019),
+			MeasureTime::years), 0);
+		ASSERT_EQUAL(Date(1, 1, 1, 12, 6, 2020).difference(Date(1, 1, 1, 12, 6, 2019),
+			MeasureTime::years), -1);
+		ASSERT_EQUAL(Date(1, 1, 3, 12, 6, 2020, 1).difference(Date(1, 1, 3, 12, 6, 2019, 2),
+			MeasureTime::years), -1);
+		ASSERT_EQUAL(Date(1, 1, 3, 12, 6, 2020, 2).difference(Date(1, 1, 3, 12, 6, 2019, 1),
+			MeasureTime::years), 0);
+		ASSERT_EQUAL(Date(1, 1, 1, 11, 6, 2020).difference(Date(1, 1, 1, 12, 6, 2019),
+			MeasureTime::years), 0);
+		ASSERT_EQUAL(Date(1, 1, 1, 1, 1, 2100).difference(Date(1, 1, 1, 1, 1, 2000),
+			MeasureTime::years), -100);
+		ASSERT_EQUAL(Date(0, 1, 1, 1, 1, 2100).difference(Date(1, 1, 1, 1, 1, 2000),
+			MeasureTime::years), -99);
+		ASSERT_EQUAL(Date(2, 1, 1, 1, 1, 2100).difference(Date(1, 1, 1, 1, 1, 2000),
+			MeasureTime::years), -100);
+	}
+	{
+		ASSERT_EQUAL(Date(59, 59, 23, 31, 12, 2019).difference(Date(0, 0, 0, 1, 1, 2020),
+			MeasureTime::months), 0);
+		ASSERT_EQUAL(Date(0, 0, 0, 1, 1, 2020).difference(Date(59, 59, 23, 31, 12, 2019),
+			MeasureTime::months), 0);
+
+		ASSERT_EQUAL(Date(1, 1, 1, 12, 6, 2019).difference(Date(1, 1, 1, 11, 7, 2019),
+			MeasureTime::months), 0);
+		ASSERT_EQUAL(Date(1, 1, 1, 12, 6, 2019).difference(Date(1, 1, 1, 12, 7, 2019),
+			MeasureTime::months), 1);
+		ASSERT_EQUAL(Date(1, 1, 1, 12, 6, 2019).difference(Date(1, 1, 1, 11, 9, 2019),
+			MeasureTime::months), 2);
+		ASSERT_EQUAL(Date(1, 1, 1, 12, 6, 2019).difference(Date(1, 1, 1, 12, 9, 2019),
+			MeasureTime::months), 3);
+		ASSERT_EQUAL(Date(1, 1, 1, 12, 6, 2019).difference(Date(1, 1, 1, 11, 11, 2019),
+			MeasureTime::months), 4);
+		ASSERT_EQUAL(Date(1, 1, 1, 12, 6, 2019).difference(Date(1, 1, 1, 12, 11, 2019),
+			MeasureTime::months), 5);
+		ASSERT_EQUAL(Date(1, 1, 1, 12, 6, 2019).difference(Date(1, 1, 1, 11,1, 2020),
+			MeasureTime::months), 6);
+		ASSERT_EQUAL(Date(1, 1, 1, 12, 6, 2019).difference(Date(1, 1, 1, 12, 1, 2020),
+			MeasureTime::months), 7);
+		ASSERT_EQUAL(Date(1, 1, 1, 12, 6, 2019).difference(Date(1, 1, 1, 11, 3, 2020),
+			MeasureTime::months), 8);
+		ASSERT_EQUAL(Date(1, 1, 1, 12, 6, 2019).difference(Date(1, 1, 1, 12, 3, 2020),
+			MeasureTime::months), 9);
+		ASSERT_EQUAL(Date(1, 1, 1, 12, 6, 2019).difference(Date(1, 1, 1, 11, 5, 2020),
+			MeasureTime::months), 10);
+		ASSERT_EQUAL(Date(1, 1, 1, 12, 6, 2019).difference(Date(1, 1, 1, 12, 5, 2020),
+			MeasureTime::months), 11);
+		ASSERT_EQUAL(Date(1, 1, 1, 12, 6, 2019).difference(Date(1, 1, 1, 11, 7, 2020),
+			MeasureTime::months), 12);
+		ASSERT_EQUAL(Date(1, 1, 1, 12, 6, 2019).difference(Date(1, 1, 1, 12, 7, 2020),
+			MeasureTime::months), 13);
+
+		ASSERT_EQUAL(Date(1, 1, 1, 11, 7, 2019).difference(Date(1, 1, 1, 12, 6, 2019),
+			MeasureTime::months), 0);
+		ASSERT_EQUAL(Date(1, 1, 1, 12, 7, 2019).difference(Date(1, 1, 1, 12, 6, 2019),
+			MeasureTime::months), -1);
+		ASSERT_EQUAL(Date(1, 1, 1, 11, 9, 2019).difference(Date(1, 1, 1, 12, 6, 2019),
+			MeasureTime::months), -2);
+		ASSERT_EQUAL(Date(1, 1, 1, 12, 9, 2019).difference(Date(1, 1, 1, 12, 6, 2019),
+			MeasureTime::months), -3);
+		ASSERT_EQUAL(Date(1, 1, 1, 11, 11, 2019).difference(Date(1, 1, 1, 12, 6, 2019),
+			MeasureTime::months), -4);
+		ASSERT_EQUAL(Date(1, 1, 1, 12, 11, 2019).difference(Date(1, 1, 1, 12, 6, 2019),
+			MeasureTime::months), -5);
+		ASSERT_EQUAL(Date(1, 1, 1, 11, 1, 2020).difference(Date(1, 1, 1, 12, 6, 2019),
+			MeasureTime::months), -6);
+		ASSERT_EQUAL(Date(1, 1, 1, 12, 1, 2020).difference(Date(1, 1, 1, 12, 6, 2019),
+			MeasureTime::months), -7);
+		ASSERT_EQUAL(Date(1, 1, 1, 11, 3, 2020).difference(Date(1, 1, 1, 12, 6, 2019),
+			MeasureTime::months), -8);
+		ASSERT_EQUAL(Date(1, 1, 1, 12, 3, 2020).difference(Date(1, 1, 1, 12, 6, 2019),
+			MeasureTime::months), -9);
+		ASSERT_EQUAL(Date(1, 1, 1, 11, 5, 2020).difference(Date(1, 1, 1, 12, 6, 2019),
+			MeasureTime::months), -10);
+		ASSERT_EQUAL(Date(1, 1, 1, 12, 5, 2020).difference(Date(1, 1, 1, 12, 6, 2019),
+			MeasureTime::months), -11);
+		ASSERT_EQUAL(Date(1, 1, 1, 11, 7, 2020).difference(Date(1, 1, 1, 12, 6, 2019),
+			MeasureTime::months), -12);
+		ASSERT_EQUAL(Date(1, 1, 1, 12, 7, 2020).difference(Date(1, 1, 1, 12, 6, 2019),
+			MeasureTime::months), -13);
+	}
+	{
+		ASSERT_EQUAL(Date(59, 59, 23, 31, 12, 2019).difference(Date(0, 0, 0, 1, 1, 2020),
+			MeasureTime::days), 0);
+		ASSERT_EQUAL(Date(0, 0, 0, 1, 1, 2020).difference(Date(59, 59, 23, 31, 12, 2019),
+			MeasureTime::days), 0);
+
+		ASSERT_EQUAL(Date(0, 0, 0, 1, 1, 2019).difference(Date(59, 59, 23, 1, 1, 2019),
+			MeasureTime::days), 0);
+		ASSERT_EQUAL(Date(0, 0, 0, 1, 1, 2019).difference(Date(0, 0, 0, 2, 1, 2019),
+			MeasureTime::days), 1);
+		ASSERT_EQUAL(Date(0, 0, 0, 1, 1, 2019).difference(Date(0, 0, 0, 1, 1, 2020),
+			MeasureTime::days), 365);
+		ASSERT_EQUAL(Date(0, 0, 0, 1, 1, 2020).difference(Date(0, 0, 0, 1, 1, 2021),
+			MeasureTime::days), 366);
+		ASSERT_EQUAL(Date(2, 0, 0, 1, 1, 2018).difference(Date(2, 0, 0, 1, 1, 2020),
+			MeasureTime::days), 730);
+		ASSERT_EQUAL(Date(1, 0, 0, 1, 1, 2018).difference(Date(2, 0, 0, 1, 1, 2020),
+			MeasureTime::days), 730);
+		ASSERT_EQUAL(Date(1, 0, 0, 1, 1, 2018).difference(Date(0, 0, 0, 1, 1, 2020),
+			MeasureTime::days), 729);
+		ASSERT_EQUAL(Date(0, 0, 0, 1, 1, 2018).difference(Date(59, 59, 23, 31, 12, 2019),
+			MeasureTime::days), 729);
+		ASSERT_EQUAL(Date(2, 0, 0, 1, 1, 2019).difference(Date(2, 0, 0, 1, 1, 2021),
+			MeasureTime::days), 731);
+		ASSERT_EQUAL(Date(1, 0, 0, 1, 1, 2019).difference(Date(2, 0, 0, 1, 1, 2021),
+			MeasureTime::days), 731);
+		ASSERT_EQUAL(Date(1, 0, 0, 1, 1, 2019).difference(Date(0, 0, 0, 1, 1, 2021),
+			MeasureTime::days), 730);
+		ASSERT_EQUAL(Date(0, 0, 0, 1, 1, 2019).difference(Date(0, 0, 0, 31, 12, 2020),
+			MeasureTime::days), 730);
+		ASSERT_EQUAL(Date(0, 0, 0, 1, 1, 2019).difference(Date(59, 59, 23, 31, 12, 2020),
+			MeasureTime::days), 730);
+
+		ASSERT_EQUAL(Date(59, 59, 23, 1, 1, 2019).difference(Date(0, 0, 0, 1, 1, 2019),
+			MeasureTime::days), 0);
+		ASSERT_EQUAL(Date(0, 0, 0, 2, 1, 2019).difference(Date(0, 0, 0, 1, 1, 2019),
+			MeasureTime::days), -1);
+		ASSERT_EQUAL(Date(0, 0, 0, 1, 1, 2020).difference(Date(0, 0, 0, 1, 1, 2019),
+			MeasureTime::days), -365);
+		ASSERT_EQUAL(Date(0, 0, 0, 1, 1, 2021).difference(Date(0, 0, 0, 1, 1, 2020),
+			MeasureTime::days), -366);
+		ASSERT_EQUAL(Date(2, 0, 0, 1, 1, 2020).difference(Date(2, 0, 0, 1, 1, 2018),
+			MeasureTime::days), -730);
+		ASSERT_EQUAL(Date(2, 0, 0, 1, 1, 2020).difference(Date(1, 0, 0, 1, 1, 2018),
+			MeasureTime::days), -730);
+		ASSERT_EQUAL(Date(0, 0, 0, 1, 1, 2020).difference(Date(1, 0, 0, 1, 1, 2018),
+			MeasureTime::days), -729);
+		ASSERT_EQUAL(Date(59, 59, 23, 31, 12, 2019).difference(Date(0, 0, 0, 1, 1, 2018),
+			MeasureTime::days), -729);
+		ASSERT_EQUAL(Date(2, 0, 0, 1, 1, 2021).difference(Date(2, 0, 0, 1, 1, 2019),
+			MeasureTime::days), -731);
+		ASSERT_EQUAL(Date(2, 0, 0, 1, 1, 2021).difference(Date(1, 0, 0, 1, 1, 2019),
+			MeasureTime::days), -731);
+		ASSERT_EQUAL(Date(0, 0, 0, 1, 1, 2021).difference(Date(1, 0, 0, 1, 1, 2019),
+			MeasureTime::days), -730);
+		ASSERT_EQUAL(Date(59, 59, 23, 31, 12, 2020).difference(Date(0, 0, 0, 1, 1, 2019),
+			MeasureTime::days), -730);
+
+		ASSERT_EQUAL(Date(59, 59, 23, 28, 2, 2019).difference(Date(0, 0, 0, 1, 3, 2019),
+			MeasureTime::days), 0);
+		ASSERT_EQUAL(Date(59, 59, 23, 28, 2, 2020).difference(Date(0, 0, 0, 1, 3, 2020),
+			MeasureTime::days), 1);
+		ASSERT_EQUAL(Date(0, 0,0, 28, 2, 2019).difference(Date(0, 0, 0, 1, 3, 2019),
+			MeasureTime::days), 1);
+		ASSERT_EQUAL(Date(0, 0, 0, 28, 2, 2020).difference(Date(0, 0, 0, 29, 2, 2020),
+			MeasureTime::days), 1);
+		ASSERT_EQUAL(Date(0, 0, 0, 28, 2, 2020).difference(Date(0, 0, 0, 1, 3, 2020),
+			MeasureTime::days), 2);
+		ASSERT_EQUAL(Date(0, 0, 0, 29, 2, 2020).difference(Date(59, 59, 23, 29, 2, 2020),
+			MeasureTime::days), 0);
+
+
+		ASSERT_EQUAL(Date(59, 59, 23, 28, 2, 2019).difference(Date(0, 0, 0, 1, 3, 2019),
+			MeasureTime::days), 0);
+		ASSERT_EQUAL(Date(0, 0, 0, 28, 2, 2019).difference(Date(0, 0, 0, 1, 3, 2019),
+			MeasureTime::days), 1);
+		ASSERT_EQUAL(Date(0, 0, 0, 28, 2, 2020).difference(Date(0, 0, 0, 29, 2, 2020),
+			MeasureTime::days), 1);
+		ASSERT_EQUAL(Date(0, 0, 0, 28, 2, 2020).difference(Date(0, 0, 0, 1, 3, 2020),
+			MeasureTime::days), 2);
+
+		ASSERT_EQUAL(Date(59, 59, 23, 28, 2, 2020).difference(Date(0, 0, 0, 1, 3, 2020),
+			MeasureTime::days), 1);
+		ASSERT_EQUAL(Date(59, 59, 23, 29, 2, 2020).difference(Date(0, 0, 0, 1, 3, 2020),
+			MeasureTime::days), 0);
+		ASSERT_EQUAL(Date(0, 0, 0, 29, 2, 2020).difference(Date(0, 0, 0, 1, 3, 2020),
+			MeasureTime::days), 1);
+		ASSERT_EQUAL(Date(0, 0, 0, 28, 2, 2020).difference(Date(0, 0, 0, 1, 3, 2021),
+			MeasureTime::days), 367);
+		ASSERT_EQUAL(Date(0, 0, 0, 29, 2, 2020).difference(Date(0, 0, 0, 1, 3, 2021),
+			MeasureTime::days), 366);
+		ASSERT_EQUAL(Date(0, 0, 0, 29, 2, 2020).difference(Date(0, 0, 0, 1, 3, 2020),
+			MeasureTime::days), 1);
+
+		ASSERT_EQUAL(Date(0, 0, 0, 28, 2, 2020).difference(Date(0, 0, 0, 28, 2, 2021),
+			MeasureTime::days), 366);
+		ASSERT_EQUAL(Date(0, 0, 0, 29, 2, 2020).difference(Date(0, 0, 0, 28, 2, 2021),
+			MeasureTime::days), 365);
+
+		ASSERT_EQUAL(Date(0, 0, 0, 28, 2, 2019).difference(Date(0, 0, 0, 28, 2, 2020),
+			MeasureTime::days), 365);
+		ASSERT_EQUAL(Date(0, 0, 0, 28, 2, 2019).difference(Date(0, 0, 0, 29, 2, 2020),
+			MeasureTime::days), 366);
+		ASSERT_EQUAL(Date(0, 0, 0, 28, 2, 2019).difference(Date(0, 0, 0, 1, 3, 2020),
+			MeasureTime::days), 367);
+
+		ASSERT_EQUAL(Date(0, 0, 0, 1, 12, 2019).difference(Date(0, 0, 0, 1, 1, 2020),
+			MeasureTime::days), 31);
+		ASSERT_EQUAL(Date(0, 0, 0, 1, 12, 2020).difference(Date(0, 0, 0, 1, 1, 2021),
+			MeasureTime::days), 31);
+
+		ASSERT_EQUAL(Date(0, 0, 0, 1, 2, 2019).difference(Date(0, 0, 0, 1, 3, 2019),
+			MeasureTime::days), 28);
+		ASSERT_EQUAL(Date(0, 0, 0, 1, 2, 2020).difference(Date(0, 0, 0, 1, 3, 2020),
+			MeasureTime::days), 29);
+
+		ASSERT_EQUAL(Date(0, 0, 0, 1, 6, 2019).difference(Date(0, 0, 0, 1, 7, 2019),
+			MeasureTime::days), 30);
+		ASSERT_EQUAL(Date(0, 0, 0, 1, 6, 2020).difference(Date(0, 0, 0, 1, 7, 2020),
+			MeasureTime::days), 30);
+
+		ASSERT_EQUAL(Date(0, 0, 0, 1, 1, 2019).difference(Date(0, 0, 0, 1, 2, 2019),
+			MeasureTime::days), 31);
+		ASSERT_EQUAL(Date(0, 0, 0, 1, 1, 2020).difference(Date(0, 0, 0, 1, 2, 2020),
+			MeasureTime::days), 31);
+	}
+	
+	{
+		ASSERT_EQUAL(Date(0, 0, 0, 1, 1, 2020).difference(Date(0, 0, 10, 1, 1, 2020),
+			MeasureTime::hours), 10);
+		ASSERT_EQUAL(Date(0, 0, 0, 1, 1, 2020).difference(Date(59, 59, 9, 1, 1, 2020),
+			MeasureTime::hours), 9);
+		ASSERT_EQUAL(Date(0, 0, 23, 1, 1, 2020).difference(Date(0, 0, 1, 2, 1, 2020),
+			MeasureTime::hours), 2);
+		ASSERT_EQUAL(Date(0, 0, 23, 1, 1, 2020).difference(Date(0, 0, 0, 2, 1, 2020),
+			MeasureTime::hours), 1);
+		ASSERT_EQUAL(Date(59, 59, 23, 1, 1, 2020).difference(Date(0, 0, 1, 2, 1, 2020),
+			MeasureTime::hours), 1);
+		ASSERT_EQUAL(Date(59, 59, 23, 1, 1, 2020).difference(Date(0, 0, 0, 2, 1, 2020),
+			MeasureTime::hours), 0);
+
+		ASSERT_EQUAL(Date(59, 59, 23, 31, 12, 2019).difference(Date(0, 0, 0, 1, 1, 2020),
+			MeasureTime::hours), 0);
+		ASSERT_EQUAL(Date(0, 0, 0, 31, 12, 2019).difference(Date(0, 0, 0, 1, 1, 2020),
+			MeasureTime::hours), 24);
+		ASSERT_EQUAL(Date(1, 0, 0, 31, 12, 2019).difference(Date(0, 0, 0, 1, 1, 2020),
+			MeasureTime::hours), 23);
+
+		ASSERT_EQUAL(Date(59, 59, 4, 1, 1, 2019).difference(Date(0, 0, 5, 1, 1, 2019),
+			MeasureTime::hours), 0);
+		ASSERT_EQUAL(Date(59, 59, 3, 1, 1, 2019).difference(Date(0, 0, 5, 1, 1, 2019),
+			MeasureTime::hours), 1);
+		ASSERT_EQUAL(Date(1, 0, 3, 1, 1, 2019).difference(Date(0, 0, 5, 1, 1, 2019),
+			MeasureTime::hours), 1);
+		ASSERT_EQUAL(Date(0, 0, 3, 1, 1, 2019).difference(Date(0, 0, 5, 1, 1, 2019),
+			MeasureTime::hours), 2);
+
+		ASSERT_EQUAL(Date(0, 0, 23, 28, 2, 2019).difference(Date(0, 0, 0, 1, 3, 2019),
+			MeasureTime::hours), 1);
+		ASSERT_EQUAL(Date(0, 0, 23, 28, 2, 2020).difference(Date(0, 0, 0, 1, 3, 2020),
+			MeasureTime::hours), 25);
+		ASSERT_EQUAL(Date(0, 0, 23, 29, 2, 2020).difference(Date(0, 0, 0, 1, 3, 2020),
+			MeasureTime::hours), 1);
+	}
+
+	{
+		ASSERT_EQUAL(Date(0, 0, 0, 1, 1, 2020).difference(Date(0, 10, 0, 1, 1, 2020),
+			MeasureTime::minutes), 10);
+		ASSERT_EQUAL(Date(0, 0, 0, 1, 1, 2020).difference(Date(59, 9, 0, 1, 1, 2020),
+			MeasureTime::minutes), 9);
+		ASSERT_EQUAL(Date(0, 59, 23, 1, 1, 2020).difference(Date(0, 1, 0, 2, 1, 2020),
+			MeasureTime::minutes), 2);
+		ASSERT_EQUAL(Date(0, 59, 23, 1, 1, 2020).difference(Date(0, 0, 0, 2, 1, 2020),
+			MeasureTime::minutes), 1);
+		ASSERT_EQUAL(Date(59, 59, 23, 1, 1, 2020).difference(Date(0, 1, 0, 2, 1, 2020),
+			MeasureTime::minutes), 1);
+		ASSERT_EQUAL(Date(59, 59, 23, 1, 1, 2020).difference(Date(0, 0, 0, 2, 1, 2020),
+			MeasureTime::minutes), 0);
+
+		ASSERT_EQUAL(Date(59, 59, 23, 31, 12, 2019).difference(Date(0, 0, 0, 1, 1, 2020),
+			MeasureTime::minutes), 0);
+		ASSERT_EQUAL(Date(0, 0, 23, 31, 12, 2019).difference(Date(0, 0, 0, 1, 1, 2020),
+			MeasureTime::minutes), 60);
+		ASSERT_EQUAL(Date(1, 0, 23, 31, 12, 2019).difference(Date(0, 0, 0, 1, 1, 2020),
+			MeasureTime::minutes), 59);
+
+		ASSERT_EQUAL(Date(0, 59, 23, 28, 2, 2019).difference(Date(0, 0, 0, 1, 3, 2019),
+			MeasureTime::minutes), 1);
+		ASSERT_EQUAL(Date(0, 59, 23, 28, 2, 2020).difference(Date(0, 0, 0, 1, 3, 2020),
+			MeasureTime::minutes), 24*60+1);
+		ASSERT_EQUAL(Date(0, 59, 23, 29, 2, 2020).difference(Date(0, 0, 0, 1, 3, 2020),
+			MeasureTime::minutes), 1);
+	}
+
+	{
+		ASSERT_EQUAL(Date(0, 0, 0, 1, 1, 2020).difference(Date(10, 0, 0, 1, 1, 2020),
+			MeasureTime::seconds), 10);
+		ASSERT_EQUAL(Date(59, 59, 23, 1, 1, 2020).difference(Date(1, 0, 0, 2, 1, 2020),
+			MeasureTime::seconds), 2);
+		ASSERT_EQUAL(Date(59, 59, 23, 1, 1, 2020).difference(Date(0, 0, 0, 2, 1, 2020),
+			MeasureTime::seconds), 1);
+
+		ASSERT_EQUAL(Date(59, 59, 23, 31, 12, 2019).difference(Date(0, 0, 0, 1, 1, 2020),
+			MeasureTime::seconds), 1);
+		ASSERT_EQUAL(Date(0, 59, 23, 31, 12, 2019).difference(Date(0, 0, 0, 1, 1, 2020),
+			MeasureTime::seconds), 60);
+		ASSERT_EQUAL(Date(1, 59, 23, 31, 12, 2019).difference(Date(0, 0, 0, 1, 1, 2020),
+			MeasureTime::seconds), 59);
+
+		ASSERT_EQUAL(Date(59, 59, 23, 28, 2, 2019).difference(Date(0, 0, 0, 1, 3, 2019),
+			MeasureTime::seconds), 1);
+		ASSERT_EQUAL(Date(59, 59, 23, 28, 2, 2020).difference(Date(0, 0, 0, 1, 3, 2020),
+			MeasureTime::seconds), 24 * 3600 + 1);
+		ASSERT_EQUAL(Date(59, 59, 23, 29, 2, 2020).difference(Date(0, 0, 0, 1, 3, 2020),
+			MeasureTime::seconds), 1);
+	}
+}
+
+void TestDateDayOfWeek() {
+	ASSERT_EQUAL(Date(1, 1, 1, 29, 9, 2020).get_day_of_week(), Day::Thursday);
+	ASSERT_EQUAL(Date(1, 1, 1, 3, 6, 2020).get_day_of_week(), Day::Wednesday);
+	ASSERT_EQUAL(Date(1, 1, 1, 11, 3, 2021).get_day_of_week(), Day::Tuesday);
+	ASSERT_EQUAL(Date(1, 1, 1, 27, 9, 2020).get_day_of_week(), Day::Sunday);
+	ASSERT_EQUAL(Date(1, 1, 1, 28, 2, 2021).get_day_of_week(), Day::Sunday);
+	ASSERT_EQUAL(Date(1, 1, 1, 1, 3, 2021).get_day_of_week(), Day::Monday);
+	ASSERT_EQUAL(Date(1, 1, 1, 28, 2, 2020).get_day_of_week(), Day::Friday);
+	ASSERT_EQUAL(Date(1, 1, 1, 29, 2, 2020).get_day_of_week(), Day::Saturday);
+	ASSERT_EQUAL(Date(1, 1, 1, 1, 3, 2020).get_day_of_week(), Day::Sunday);
+	ASSERT_EQUAL(Date(1, 1, 1, 12, 6, 2021).get_day_of_week(), Day::Saturday);
 }
 
 int main() {
@@ -812,5 +1386,7 @@ int main() {
 	RUN_TEST(tr, TestDateLeap);
 	RUN_TEST(tr, TestDateIsValid);
 	RUN_TEST(tr, TestDateNumberInYear);
-	RUN_TEST(tr, TestDateSavePromoteDecrease);
+	RUN_TEST(tr, TestDatePromoteDecrease);
+	RUN_TEST(tr, TestDateDifference);
+	RUN_TEST(tr, TestDateDayOfWeek);
 }

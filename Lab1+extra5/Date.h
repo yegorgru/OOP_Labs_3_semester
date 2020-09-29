@@ -22,13 +22,16 @@ enum class Day{
 	Sunday
 };
 
+std::ostream& operator << (std::ostream& os, const Day& day);
+
 class Date
 {
 public:
-	Date(uint16_t seconds,uint16_t minutes, uint16_t hours,uint16_t day,uint16_t month, uint16_t year)
-		:seconds(seconds),minutes(minutes),hours(hours),day(day),month(month),year(year) {}
+	Date(uint16_t seconds, uint16_t minutes, uint16_t hours, uint16_t day, uint16_t month, uint16_t year);
 
 	Date();
+
+	Date(uint16_t seconds, uint16_t minutes, uint16_t hours, uint16_t day, uint16_t month, uint16_t year, int16_t time_zone);
 
 	Date& operator=(const Date& date);
 
@@ -50,6 +53,9 @@ public:
 	std::uint16_t get_seconds() const;
 	void set_seconds(uint16_t seconds);
 
+	std::int16_t get_time_zone() const;
+	void set_time_zone(int16_t zone);
+
 	bool is_valid() const;
 	bool is_leap() const;
 	int32_t count_29_february(const Date& another_date) const;
@@ -57,7 +63,6 @@ public:
 	int32_t get_number_in_year() const;
 	int32_t get_reverse_number_in_year() const;
 
-	int32_t difference(const Date& another, MeasureTime measure) const;
 	void promote(uint16_t number, MeasureTime measure);
 	void decrease(uint16_t number, MeasureTime measure);
 
@@ -75,6 +80,7 @@ public:
 	void save_decrease_minute(uint16_t number);
 	void save_decrease_second(uint16_t number);
 
+	int32_t difference(const Date& another, MeasureTime measure) const;
 	Day get_day_of_week();
 private:
 	const uint16_t days_in_monthes[13] = { 0,31,29,31,30,31,30,31,31,30,31,30,31 };
@@ -85,6 +91,8 @@ private:
 	uint16_t hours;
 	uint16_t minutes;
 	uint16_t seconds;
+
+	int16_t time_zone;
 
 	friend bool operator==(const Date& lhs, const Date& rhs);
 	friend bool operator<(const Date& lhs, const Date& rhs);
