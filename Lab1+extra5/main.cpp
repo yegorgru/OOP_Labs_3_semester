@@ -1363,9 +1363,9 @@ void TestDateDifference() {
 }
 
 void TestDateDayOfWeek() {
-	ASSERT_EQUAL(Date(1, 1, 1, 29, 9, 2020).get_day_of_week(), Day::Thursday);
+	ASSERT_EQUAL(Date(1, 1, 1, 29, 9, 2020).get_day_of_week(), Day::Tuesday);
 	ASSERT_EQUAL(Date(1, 1, 1, 3, 6, 2020).get_day_of_week(), Day::Wednesday);
-	ASSERT_EQUAL(Date(1, 1, 1, 11, 3, 2021).get_day_of_week(), Day::Tuesday);
+	ASSERT_EQUAL(Date(1, 1, 1, 11, 3, 2021).get_day_of_week(), Day::Thursday);
 	ASSERT_EQUAL(Date(1, 1, 1, 27, 9, 2020).get_day_of_week(), Day::Sunday);
 	ASSERT_EQUAL(Date(1, 1, 1, 28, 2, 2021).get_day_of_week(), Day::Sunday);
 	ASSERT_EQUAL(Date(1, 1, 1, 1, 3, 2021).get_day_of_week(), Day::Monday);
@@ -1373,6 +1373,101 @@ void TestDateDayOfWeek() {
 	ASSERT_EQUAL(Date(1, 1, 1, 29, 2, 2020).get_day_of_week(), Day::Saturday);
 	ASSERT_EQUAL(Date(1, 1, 1, 1, 3, 2020).get_day_of_week(), Day::Sunday);
 	ASSERT_EQUAL(Date(1, 1, 1, 12, 6, 2021).get_day_of_week(), Day::Saturday);
+	ASSERT_EQUAL(Date(0, 0, 0, 1, 1, 2021).get_day_of_week(), Day::Friday);
+
+	ASSERT_EQUAL(Date(0, 0, 0, 29, 9, 2020).get_day_of_week(), Day::Tuesday);
+	ASSERT_EQUAL(Date(0, 0, 0, 3, 6, 2020).get_day_of_week(), Day::Wednesday);
+	ASSERT_EQUAL(Date(0, 0, 0, 11, 3, 2021).get_day_of_week(), Day::Thursday);
+	ASSERT_EQUAL(Date(0, 0, 0, 27, 9, 2020).get_day_of_week(), Day::Sunday);
+	ASSERT_EQUAL(Date(0, 0, 0, 28, 2, 2021).get_day_of_week(), Day::Sunday);
+	ASSERT_EQUAL(Date(0, 0, 0, 1, 3, 2021).get_day_of_week(), Day::Monday);
+	ASSERT_EQUAL(Date(0, 0, 0, 28, 2, 2020).get_day_of_week(), Day::Friday);
+	ASSERT_EQUAL(Date(0, 0, 0, 29, 2, 2020).get_day_of_week(), Day::Saturday);
+	ASSERT_EQUAL(Date(0, 0, 0, 1, 3, 2020).get_day_of_week(), Day::Sunday);
+	ASSERT_EQUAL(Date(0, 0, 0, 12, 6, 2021).get_day_of_week(), Day::Saturday);
+	ASSERT_EQUAL(Date(0, 0, 0, 1, 1, 2021).get_day_of_week(), Day::Friday);
+
+	ASSERT_EQUAL(Date(59, 59, 23, 29, 9, 2020).get_day_of_week(), Day::Tuesday);
+	ASSERT_EQUAL(Date(59, 59, 23, 3, 6, 2020).get_day_of_week(), Day::Wednesday);
+	ASSERT_EQUAL(Date(59, 59, 23, 11, 3, 2021).get_day_of_week(), Day::Thursday);
+	ASSERT_EQUAL(Date(59, 59, 23, 27, 9, 2020).get_day_of_week(), Day::Sunday);
+	ASSERT_EQUAL(Date(59, 59, 23, 28, 2, 2021).get_day_of_week(), Day::Sunday);
+	ASSERT_EQUAL(Date(59, 59, 23, 1, 3, 2021).get_day_of_week(), Day::Monday);
+	ASSERT_EQUAL(Date(59, 59, 23, 28, 2, 2020).get_day_of_week(), Day::Friday);
+	ASSERT_EQUAL(Date(59, 59, 23, 29, 2, 2020).get_day_of_week(), Day::Saturday);
+	ASSERT_EQUAL(Date(59, 59, 23, 1, 3, 2020).get_day_of_week(), Day::Sunday);
+	ASSERT_EQUAL(Date(59, 59, 23, 12, 6, 2021).get_day_of_week(), Day::Saturday);
+	ASSERT_EQUAL(Date(59, 59, 23, 1, 1, 2021).get_day_of_week(), Day::Friday);
+}
+
+void TestDateAlternativeConstructor() {
+	ASSERT_EQUAL(Date(1, 1, 1, 30, 9, 2020), Date(1, 1, 1, Day::Wednesday, 1, 0, 9, 2020));
+	ASSERT_EQUAL(Date(1, 1, 1, 30, 9, 2020), Date(1, 1, 1, Day::Thursday, 0, 0, 9, 2020));
+	ASSERT_EQUAL(Date(1, 1, 1, 30, 9, 2020), Date(1, 1, 1, Day::Wednesday, 1, 0, 9, 2020));
+	ASSERT_EQUAL(Date(1, 1, 1, 30, 9, 2020), Date(1, 1, 1, Day::Wednesday, 5, 1, 9, 2020));
+	ASSERT_EQUAL(Date(1, 1, 1, 1, 9, 2020), Date(1, 1, 1, Day::Wednesday, 0, 1, 9, 2020));
+	ASSERT_EQUAL(Date(1, 1, 1, 28, 2, 2021), Date(1, 1, 1, Day::Sunday, 1, 0, 2, 2021));
+	ASSERT_EQUAL(Date(1, 1, 1, 27, 2, 2021), Date(1, 1, 1, Day::Saturday, 1, 0, 2, 2021));
+	ASSERT_EQUAL(Date(1, 1, 1, 29, 2, 2020), Date(1, 1, 1, Day::Saturday, 1, 0, 2, 2020));
+	ASSERT_EQUAL(Date(1, 1, 1, 28, 2, 2020), Date(1, 1, 1, Day::Friday, 1, 0, 2, 2020));
+	ASSERT_EQUAL(Date(1, 1, 1, 12, 6, 2021), Date(1, 1, 1, Day::Saturday, 2, 1, 6, 2021));
+	ASSERT_EQUAL(Date(1, 1, 1, 12, 6, 2021), Date(1, 1, 1, Day::Saturday, 3, 0, 6, 2021));
+}
+
+void TestDateNumberOfWeek() {
+	ASSERT_EQUAL(Date(1, 1, 1, 1, 9, 2020).get_number_of_week(1), 0);
+	ASSERT_EQUAL(Date(1, 1, 1, 2, 9, 2020).get_number_of_week(1), 0);
+	ASSERT_EQUAL(Date(1, 1, 1, 3, 9, 2020).get_number_of_week(1), 0);
+	ASSERT_EQUAL(Date(1, 1, 1, 4, 9, 2020).get_number_of_week(1), 0);
+	ASSERT_EQUAL(Date(1, 1, 1, 5, 9, 2020).get_number_of_week(1), 0);
+	ASSERT_EQUAL(Date(1, 1, 1, 6, 9, 2020).get_number_of_week(1), 0);
+	ASSERT_EQUAL(Date(1, 1, 1, 7, 9, 2020).get_number_of_week(1), 1);
+	ASSERT_EQUAL(Date(1, 1, 1, 30, 9, 2020).get_number_of_week(1), 4);
+	ASSERT_EQUAL(Date(1, 1, 1, 12, 6, 2021).get_number_of_week(1), 1);
+
+	ASSERT_EQUAL(Date(0, 0, 0, 1, 1, 2021).get_number_of_week(0), 0);
+	ASSERT_EQUAL(Date(0, 0, 0, 2, 1, 2021).get_number_of_week(0), 0);
+	ASSERT_EQUAL(Date(0, 0, 0, 3, 1, 2021).get_number_of_week(0), 0);
+	ASSERT_EQUAL(Date(0, 0, 0, 4, 1, 2021).get_number_of_week(0), 1);
+	ASSERT_EQUAL(Date(0, 0, 0, 5, 1, 2021).get_number_of_week(0), 1);
+	ASSERT_EQUAL(Date(0, 0, 0, 6, 1, 2021).get_number_of_week(0), 1);
+	ASSERT_EQUAL(Date(0, 0, 0, 7, 1, 2021).get_number_of_week(0), 1);
+	ASSERT_EQUAL(Date(0, 0, 0, 8, 1, 2021).get_number_of_week(0), 1);
+	ASSERT_EQUAL(Date(0, 0, 0, 9, 1, 2021).get_number_of_week(0), 1);
+	ASSERT_EQUAL(Date(0, 0, 0, 10, 1, 2021).get_number_of_week(0), 1);
+	ASSERT_EQUAL(Date(0, 0, 0, 11, 1, 2021).get_number_of_week(0), 2);
+
+	ASSERT_EQUAL(Date(0, 0, 0, 12, 6, 2020).get_number_of_week(0), 23);
+	ASSERT_EQUAL(Date(59, 59, 23, 12, 6, 2020).get_number_of_week(0), 23);
+
+	ASSERT_EQUAL(Date(59, 59, 23, 14, 6, 2020).get_number_of_week(0), 23);
+	ASSERT_EQUAL(Date(0, 0, 0, 15, 6, 2020).get_number_of_week(0), 24);
+
+	ASSERT_EQUAL(Date(59, 59, 23, 31, 12, 2020).get_number_of_week(0), 52);
+	ASSERT_EQUAL(Date(0, 0, 0, 1, 1, 2021).get_number_of_week(0), 0);
+}
+
+void TestDateStatistics() {
+	ASSERT_EQUAL(statistics(Date(59, 59, 23, 11, 6, 2019),
+		Date(0, 0, 0, 1, 1, 2020), 12), Day::Thursday);
+	ASSERT_EQUAL(statistics(2020,1), Day::Wednesday);
+	ASSERT_EQUAL(statistics(Date(0, 0, 0, 30, 9, 2020),
+		Date(0, 0, 0, 30, 9, 2020), 12), Day::Monday);
+	ASSERT_EQUAL(statistics(Date(0, 0, 0, 30, 9, 2020),
+		Date(59, 59, 23, 30, 9, 2020), 12), Day::Monday);
+	ASSERT_EQUAL(statistics(Date(0, 0, 0, 30, 9, 2019),
+		Date(59, 59, 23, 30, 9, 2020), 12), Day::Sunday);
+	ASSERT_EQUAL(statistics(Date(0, 0, 0, 30, 9, 2020),
+		Date(59, 59, 23, 30, 9, 2020), 30), Day::Wednesday);
+	ASSERT_EQUAL(statistics(Date(0, 0, 0, 30, 9, 2020),
+		Date(0, 0, 0, 1, 10, 2020), 30), Day::Wednesday);
+	ASSERT_EQUAL(statistics(Date(59, 59, 23, 30, 9, 2020),
+		Date(59, 59, 23, 30, 10, 2020), 1), Day::Thursday);
+	ASSERT_EQUAL(statistics(2020, 1), Day::Wednesday);
+	ASSERT_EQUAL(statistics(2019, 20), Day::Wednesday);
+	ASSERT_EQUAL(statistics(2019, 29), Day::Monday);
+	ASSERT_EQUAL(statistics(2020, 29), Day::Wednesday);
+	ASSERT_EQUAL(statistics(2021, 31), Day::Sunday);
 }
 
 int main() {
@@ -1389,4 +1484,7 @@ int main() {
 	RUN_TEST(tr, TestDatePromoteDecrease);
 	RUN_TEST(tr, TestDateDifference);
 	RUN_TEST(tr, TestDateDayOfWeek);
+	RUN_TEST(tr, TestDateAlternativeConstructor);
+	RUN_TEST(tr, TestDateNumberOfWeek);
+	RUN_TEST(tr, TestDateStatistics);
 }

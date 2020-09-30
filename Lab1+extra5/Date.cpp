@@ -5,6 +5,22 @@ Date::Date(uint16_t seconds, uint16_t minutes, uint16_t hours, uint16_t day,
 	:seconds(seconds), minutes(minutes), hours(hours),
 	day(day), month(month), year(year), time_zone(0) {}
 
+Date::Date(uint16_t seconds, uint16_t minutes, uint16_t hours, Day day,
+	uint16_t number, bool begin, uint16_t month, uint16_t year)
+	:seconds(seconds),minutes(minutes),hours(hours),month(month),
+	year(year), time_zone(0)
+{
+	choose_day(day, number, begin);
+}
+
+Date::Date(uint16_t seconds, uint16_t minutes, uint16_t hours, Day day,
+	uint16_t number, bool begin, uint16_t month, uint16_t year, int16_t time_zone)
+	: seconds(seconds), minutes(minutes), hours(hours), month(month),
+	year(year),time_zone(time_zone)
+{
+	choose_day(day, number, begin);
+}
+
 Date::Date()
 	: seconds(0),minutes(0),hours(0),day(0),month(0),year(0),time_zone(0) {}
 
@@ -322,9 +338,9 @@ int32_t Date::get_reverse_number_in_year() const
 	}
 }
 
-Day Date::get_day_of_week()
+Day Date::get_day_of_week() const
 {
-	Date basis(1, 1, 1, 27, 9, 2020);
+	Date basis(0, 0, 0, 27, 9, 2020);
 	uint16_t day = 0;
 	int32_t dif;
 	if (*this == basis) {
@@ -333,6 +349,7 @@ Day Date::get_day_of_week()
 	else if (basis< *this) {
 		dif = basis.difference(*this, MeasureTime::days);
 		day = dif % 7;
+		
 		if (day == 0) {
 			return Day::Sunday;
 		}
@@ -340,13 +357,13 @@ Day Date::get_day_of_week()
 			return Day::Monday;
 		}
 		else if (day == 2) {
-			return Day::Thursday;
+			return Day::Tuesday;
 		}
 		else if (day == 3) {
 			return Day::Wednesday;
 		}
 		else if (day == 4) {
-			return Day::Tuesday;
+			return Day::Thursday;
 		}
 		else if (day == 5) {
 			return Day::Friday;
@@ -357,6 +374,9 @@ Day Date::get_day_of_week()
 	}
 	else {
 		dif = this->difference(basis, MeasureTime::days);
+		if (basis < Date(this->seconds, this->minutes, this->hours, basis.get_day(), basis.get_month(), basis.get_year())) {
+			dif++;
+		}
 		day = dif % 7;
 		if (day == 0) {
 			return Day::Sunday;
@@ -378,6 +398,74 @@ Day Date::get_day_of_week()
 		}
 		else if (day == 6) {
 			return Day::Monday;
+		}
+	}
+}
+
+uint16_t Date::get_number_of_week(bool month_or_year)
+{
+	if (month_or_year) {
+		uint16_t buf = this->day;
+		this->day = 0;
+		uint16_t counter = 0;
+		while (this->day != buf) {
+			this->day++;
+			if (get_day_of_week() == Day::Monday) {
+				counter++;
+			}
+		}
+		return counter;
+	}
+	else {
+		Date basis(0, 0, 0, 1, 1, this->year);
+		while (basis.get_day_of_week()!=Day::Monday) {
+			basis.save_promote_day(1);
+		}
+		if (*this < basis) {
+			return 0;
+		}
+		else {
+			int32_t dif = basis.difference(*this, MeasureTime::days);
+			return 1 + dif / 7;
+		}
+	}
+}
+
+void Date::choose_day(Day day,uint16_t number,bool begin)
+{
+	if (begin) {
+		if (number == 0) {
+			this->day = 1;
+			return;
+		}
+		this->day = 0;
+		uint16_t counter = 0;
+		while (this->day != days_in_monthes[this->month] && counter != number) {
+			this->day++;
+			if (get_day_of_week() == day) {
+				counter++;
+			}
+		}
+		if (this->day == 29 && this->month == 2 && !is_leap()) {
+			this->day = 28;
+		}
+	}
+	else {
+		if (number == 0) {
+			this->day = days_in_monthes[this->month];
+			return;
+		}
+		this->day = days_in_monthes[this->month] + 1;
+		if (this->day == 30 && this->month == 2 && !is_leap()) {
+			this->day = 29;
+		}
+		uint16_t counter = 0;
+		Day cur_day;
+		while (this->day != 1 && counter != number) {
+			this->day--;
+			if (get_day_of_week() == day) {
+				counter++;
+			}
 		}
 	}
 }
@@ -640,6 +728,58 @@ std::ostream& operator<<(std::ostream& os, const Day& day)
 		os << "Wednesday";
 	}
 	return os;
+}
+
+Day statistics(const Date& bottom, const Date& top, uint16_t number)
+{
+	if (number == 0 || number > 31) {
+		//throw
+	}
+	if (top < bottom) {
+		//throw
+	}
+	else if (top == bottom && top<bottom && top.difference(bottom,MeasureTime::days)==0
+		&& top.get_day() == bottom.get_day()) {
+		if (number == bottom.get_day()) {
+			return bottom.get_day_of_week();
+		}
+		else {
+			return Day::Monday;
+		}
+	}
+	else {
+		Date basis(0, 0, 0, number, bottom.get_month(), bottom.get_year(),bottom.get_time_zone());
+		if (basis < bottom || !basis.is_valid()) {
+			basis.save_promote_month(1);
+		}
+		std::map<Day, int>numbers;
+		while (basis < top) {
+			if (basis.is_valid()) {
+				numbers[basis.get_day_of_week()]++;
+			}
+			basis.save_promote_month(1);
+			basis.set_day(number);
+		}
+		if (numbers.size() == 0) {
+			return Day::Monday;
+		}
+		else {
+			Day max = numbers.begin()->first;
+			int max_number = numbers.begin()->second;
+			for (auto it = ++numbers.begin(); it != numbers.end(); it++) {
+				if (it->second > max_number) {
+					max = it->first;
+					max_number = it->second;
+				}
+			}
+			return max;
+		}
+	}
+}
+
+Day statistics(int32_t year, uint16_t number)
+{
+	return statistics(Date(59, 59, 23, 31, 12, year - 1), Date(0, 0, 0, 1, 1, year + 1), number);
 }
 
 bool operator==(const Date& lhs, const Date& rhs)

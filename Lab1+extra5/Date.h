@@ -2,6 +2,7 @@
 
 #include <cstdint>
 #include <iostream>
+#include <map>
 
 enum class MeasureTime {
 	seconds,
@@ -14,9 +15,9 @@ enum class MeasureTime {
 
 enum class Day{
 	Monday,
-	Thursday,
-	Wednesday,
 	Tuesday,
+	Wednesday,
+	Thursday,
 	Friday,
 	Saturday,
 	Sunday
@@ -28,6 +29,10 @@ class Date
 {
 public:
 	Date(uint16_t seconds, uint16_t minutes, uint16_t hours, uint16_t day, uint16_t month, uint16_t year);
+
+	Date(uint16_t seconds, uint16_t minutes, uint16_t hours, Day day, uint16_t number, bool begin, uint16_t month, uint16_t year);
+
+	Date(uint16_t seconds, uint16_t minutes, uint16_t hours, Day day, uint16_t number, bool begin, uint16_t month, uint16_t year, int16_t time_zone);
 
 	Date();
 
@@ -81,8 +86,11 @@ public:
 	void save_decrease_second(uint16_t number);
 
 	int32_t difference(const Date& another, MeasureTime measure) const;
-	Day get_day_of_week();
+	Day get_day_of_week() const;
+	uint16_t get_number_of_week(bool month_or_year);
 private:
+	void choose_day(Day day, uint16_t number, bool begin);
+
 	const uint16_t days_in_monthes[13] = { 0,31,29,31,30,31,30,31,31,30,31,30,31 };
 
 	uint16_t day;
@@ -98,6 +106,8 @@ private:
 	friend bool operator<(const Date& lhs, const Date& rhs);
 };
 
+Day statistics(const Date& bottom, const Date& top, uint16_t number);
+Day statistics(int32_t year, uint16_t number);
 
 bool operator==(const Date& lhs, const Date& rhs);
 bool operator<(const Date& lhs, const Date& rhs);
