@@ -1,0 +1,1 @@
+#include "AdjacencyStructure.h"
