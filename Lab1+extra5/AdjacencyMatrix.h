@@ -6,6 +6,7 @@
 #include <vector>
 #include <map>
 #include <utility>
+#include <algorithm>
 
 
 
@@ -19,13 +20,23 @@ public:
 	size_t add_node(NodeType node) override;
 	void add_redge(size_t first_node, size_t second_node, EdgeType edge) override;
 
-	void delete_redge(size_t first_node, size_t second_node) override;
+	EdgeType delete_redge(size_t first_node, size_t second_node) override;
 	void delete_node(size_t node) override;
 
 	bool is_connected_graph() override;
 	std::vector<std::vector<size_t>> find_components() override;
+
+	std::vector<EdgeType> dijkstra_algorithm(size_t node) override;
+
+	bool is_acyclic() override;
+
+	bool is_tree() override;
+
+	AdjacencyMatrix<NodeType, EdgeType> minimum_spanning_tree_kruskal() override;
+	AdjacencyMatrix<NodeType, EdgeType> minimum_spanning_reverse_delete() override;
 private:
 	void find_nodes(size_t node, std::vector<bool>& for_check, std::vector<size_t>& component) override;
+	bool check_cyclic(size_t node, std::vector<char>& checked, size_t parent) override;
 };
 
 template<typename NodeType, typename EdgeType>
@@ -71,11 +82,13 @@ void AdjacencyMatrix<NodeType, EdgeType>::add_redge(size_t first_node, size_t se
 }
 
 template<typename NodeType, typename EdgeType>
-void AdjacencyMatrix<NodeType, EdgeType>::delete_redge(size_t first_node, size_t second_node)
+EdgeType AdjacencyMatrix<NodeType, EdgeType>::delete_redge(size_t first_node, size_t second_node)
 {
 	if (first_node < matrix.size() && second_node < matrix.size()) {
-		matrix[first_node][second_node] = this->zero_edge;
-		matrix[second_node][first_node] = this->zero_edge;
+		EdgeType weight = matrix[first_node][second_node];
+		matrix[first_node][second_node] = this->max_edge;
+		matrix[second_node][first_node] = this->max_edge;
+		return weight;
 	}
 	else {
 		//throw GraphErr("Incorrect first or second node");
@@ -133,6 +146,120 @@ std::vector<std::vector<size_t>> AdjacencyMatrix<NodeType, EdgeType>::find_compo
 }
 
 template<typename NodeType, typename EdgeType>
+std::vector<EdgeType> AdjacencyMatrix<NodeType, EdgeType>::dijkstra_algorithm(size_t node)
+{
+	std::vector <EdgeType> answer(matrix.size(), this->max_edge);
+	answer[node] = this->zero_edge;
+	std::vector <bool> checked(matrix.size(), 0);
+	EdgeType min_distance = this->zero_edge;
+	size_t min_node = node;
+	while (min_distance < this->max_edge)
+	{
+		size_t current = min_node;
+		checked[current] = true;
+		for (size_t i = 0; i < matrix.size(); i++) {
+			if (current != i && answer[current] != this->max_edge && matrix[current][i] != this->max_edge) {
+				if (answer[current] + matrix[current][i] < answer[i]) {
+					answer[i] = answer[current] + matrix[current][i];
+				}
+			}
+		}
+		min_distance = this->max_edge;
+		for (size_t i = 0; i < matrix.size(); i++) {
+			if (checked[i] == false && answer[i] < min_distance)
+			{
+				min_distance = answer[i];
+				min_node = i;
+			}
+		}
+	}
+	return answer;
+}
+
+template<typename NodeType, typename EdgeType>
+bool AdjacencyMatrix<NodeType, EdgeType>::is_acyclic()
+{
+	std::vector<char>checked;
+	for (size_t i = 0; i < matrix.size(); i++) {
+		checked.assign(matrix.size(), 1);
+		if (check_cyclic(i, checked, (size_t)LLONG_MAX)) {
+			return false;
+		}
+	}
+	return true;
+}
+
+template<typename NodeType, typename EdgeType>
+bool AdjacencyMatrix<NodeType, EdgeType>::is_tree()
+{
+	return is_acyclic() && is_connected_graph();
+}
+
+template<typename NodeType, typename EdgeType>
+AdjacencyMatrix<NodeType, EdgeType> AdjacencyMatrix<NodeType, EdgeType>::minimum_spanning_tree_kruskal()
+{
+	if (is_connected_graph()) {
+		std::vector<way_struct<EdgeType>>ways;
+		AdjacencyMatrix<NodeType, EdgeType> answer(matrix.size());
+		std::vector<size_t>components(matrix.size());
+		for (size_t i = 0; i < matrix.size(); i++) {
+			components[i] = i;
+		}
+		for (size_t i = 0; i < matrix.size(); i++) {
+			for (size_t j = i + 1; j < matrix.size(); j++) {
+				if (matrix[i][j] != this->max_edge) {
+					ways.push_back({ matrix[i][j] ,i,j });
+				}
+			}
+		}
+		std::sort(ways.begin(), ways.end());
+		for (size_t i = 0; i < ways.size(); i++) {
+			if (components[ways[i].begin] != components[ways[i].end]) {
+				answer.add_redge(ways[i].begin, ways[i].end, ways[i].weight);
+				size_t second = components[ways[i].end];
+				size_t first = components[ways[i].begin];
+				for (size_t j = 0; j < components.size(); j++) {
+					if (components[j] == second) {
+						components[j] = first;
+					}
+				}
+			}
+		}
+		return answer;
+	}
+	else {
+		//throw GraphErr("This function only for weighted, undirected and connected graphs");
+	}
+}
+
+template<typename NodeType, typename EdgeType>
+AdjacencyMatrix<NodeType, EdgeType> AdjacencyMatrix<NodeType, EdgeType>::minimum_spanning_reverse_delete()
+{
+	if (is_connected_graph()) {
+		AdjacencyMatrix answer = *this;
+		std::vector<way_struct<EdgeType>>edges;
+		for (size_t i = 0; i < matrix.size(); i++) {
+			for (size_t j = i + 1; j < matrix.size(); j++) {
+				if (matrix[i][j] != this->max_edge/* && i != j*/) {
+					edges.push_back({ matrix[i][j] ,i,j });
+				}
+			}
+		}
+		std::sort(edges.begin(), edges.end());
+		for (size_t i = edges.size() - 1; i > 0; i--) {
+			EdgeType weight = answer.delete_redge(edges[i].begin, edges[i].end);
+			if (!answer.is_connected_graph()) {
+				answer.add_redge(edges[i].begin, edges[i].end, weight);
+			}
+		}
+		return answer;
+	}
+	else {
+		//throw GraphErr("This function only for weighted, undirected and connected graphs");
+	}
+}
+
+template<typename NodeType, typename EdgeType>
 void AdjacencyMatrix<NodeType, EdgeType>::find_nodes(size_t node, std::vector<bool>& for_check, std::vector<size_t>& component)
 {
 	for_check[node] = 1;
@@ -142,4 +269,20 @@ void AdjacencyMatrix<NodeType, EdgeType>::find_nodes(size_t node, std::vector<bo
 			find_nodes(i, for_check, component);
 		}
 	}
+}
+
+template<typename NodeType, typename EdgeType>
+bool AdjacencyMatrix<NodeType, EdgeType>::check_cyclic(size_t node, std::vector<char>& checked, size_t parent)
+{
+	checked[node] = 2;
+	for (size_t i = 0; i < matrix.size(); i++) {
+		if (matrix[node][i] != this->max_edge && node != i && i != parent && checked[i] == 2) {
+			return true;
+		}
+		else if (matrix[node][i] != this->max_edge && node != i && i != parent) {
+			check_cyclic(i, checked, node);
+		}
+	}
+	checked[node] = 3;
+	return false;
 }
