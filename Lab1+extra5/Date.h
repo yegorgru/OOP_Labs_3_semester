@@ -32,11 +32,7 @@ public:
 
 	Date(uint16_t seconds, uint16_t minutes, uint16_t hours, Day day, uint16_t number, bool begin, uint16_t month, uint16_t year);
 
-	Date(uint16_t seconds, uint16_t minutes, uint16_t hours, Day day, uint16_t number, bool begin, uint16_t month, uint16_t year, int16_t time_zone);
-
 	Date();
-
-	Date(uint16_t seconds, uint16_t minutes, uint16_t hours, uint16_t day, uint16_t month, uint16_t year, int16_t time_zone);
 
 	Date& operator=(const Date& date);
 
@@ -57,9 +53,6 @@ public:
 
 	std::uint16_t get_seconds() const;
 	void set_seconds(uint16_t seconds);
-
-	std::int16_t get_time_zone() const;
-	void set_time_zone(int16_t zone);
 
 	bool is_valid() const;
 	bool is_leap() const;
@@ -100,8 +93,6 @@ private:
 	uint16_t minutes;
 	uint16_t seconds;
 
-	int16_t time_zone;
-
 	friend bool operator==(const Date& lhs, const Date& rhs);
 	friend bool operator<(const Date& lhs, const Date& rhs);
 };
@@ -110,5 +101,6 @@ Day statistics(const Date& bottom, const Date& top, uint16_t number);
 Day statistics(int32_t year, uint16_t number);
 
 bool operator==(const Date& lhs, const Date& rhs);
+bool operator!=(const Date& lhs, const Date& rhs);
 bool operator<(const Date& lhs, const Date& rhs);
 std::ostream& operator << (std::ostream& os, const Date& date);

@@ -303,4 +303,22 @@ std::set<book_id> PublishingHouse::get_books(const character_id& id)
 	}
 }
 
+bool operator==(const PublishingHouse& lhs, const PublishingHouse& rhs)
+{
+	return lhs.books_characters == rhs.books_characters &&
+		lhs.books_important_characters == rhs.books_important_characters &&
+		lhs.books == rhs.books && lhs.characters == rhs.characters;
+}
 
+std::ostream& operator<<(std::ostream& os, PublishingHouse PHouse)
+{
+	os << "Books:\n";
+	for (auto it = PHouse.books.begin(); it != PHouse.books.end(); it++) {
+		os << it->second;
+	}
+	os << "Characters:\n";
+	for (auto it = PHouse.characters.begin(); it != PHouse.characters.end(); it++) {
+		os << it->second;
+	}
+	return os;
+}

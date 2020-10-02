@@ -43,7 +43,14 @@ private:
 
 	std::map<book_id, Book>books;
 	std::map<character_id, BookCharacter<book_id>>characters;
+
+	friend bool operator==(const PublishingHouse& lhs, const PublishingHouse& rhs);
+	friend std::ostream& operator<<(std::ostream&, PublishingHouse PHouse);
 };
+
+bool operator==(const PublishingHouse& lhs, const PublishingHouse& rhs);
+
+std::ostream& operator<<(std::ostream&, PublishingHouse PHouse);
 
 template<typename T>
 bool is_subset(std::set<T> lesser, std::set<T> bigger) {

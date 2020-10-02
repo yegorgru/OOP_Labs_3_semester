@@ -3,31 +3,18 @@
 Date::Date(uint16_t seconds, uint16_t minutes, uint16_t hours, uint16_t day,
 	uint16_t month, uint16_t year)
 	:seconds(seconds), minutes(minutes), hours(hours),
-	day(day), month(month), year(year), time_zone(0) {}
+	day(day), month(month), year(year) {}
 
 Date::Date(uint16_t seconds, uint16_t minutes, uint16_t hours, Day day,
 	uint16_t number, bool begin, uint16_t month, uint16_t year)
 	:seconds(seconds),minutes(minutes),hours(hours),month(month),
-	year(year), time_zone(0)
-{
-	choose_day(day, number, begin);
-}
-
-Date::Date(uint16_t seconds, uint16_t minutes, uint16_t hours, Day day,
-	uint16_t number, bool begin, uint16_t month, uint16_t year, int16_t time_zone)
-	: seconds(seconds), minutes(minutes), hours(hours), month(month),
-	year(year),time_zone(time_zone)
+	year(year)
 {
 	choose_day(day, number, begin);
 }
 
 Date::Date()
-	: seconds(0),minutes(0),hours(0),day(0),month(0),year(0),time_zone(0) {}
-
-Date::Date(uint16_t seconds, uint16_t minutes, uint16_t hours, uint16_t day,
-	uint16_t month, uint16_t year, int16_t time_zone)
-	: seconds(seconds), minutes(minutes), hours(hours),
-	day(day), month(month), year(year), time_zone(time_zone) {}
+	: seconds(0),minutes(0),hours(0),day(0),month(0),year(0) {}
 
 Date& Date::operator=(const Date& date)
 {
@@ -100,16 +87,6 @@ void Date::set_seconds(uint16_t seconds)
 	this->seconds = seconds;
 }
 
-std::int16_t Date::get_time_zone() const
-{
-	return this->time_zone;
-}
-
-void Date::set_time_zone(int16_t zone)
-{
-	this->time_zone = zone;
-}
-
 int32_t Date::difference(const Date& another, MeasureTime measure) const
 {
 	if (is_valid() && another.is_valid()) {
@@ -124,7 +101,7 @@ int32_t Date::difference(const Date& another, MeasureTime measure) const
 			if (measure == MeasureTime::years) {
 				answer = another.get_year()-this->year;
 				if (another<Date(this->seconds, this->minutes, this->hours, this->day, this->month,
-					another.get_year(), this->time_zone)) {
+					another.get_year())) {
 					answer--;
 				}
 			}
@@ -138,13 +115,13 @@ int32_t Date::difference(const Date& another, MeasureTime measure) const
 					answer -= -another.get_month() + this->month;
 				}
 				if (another < Date(this->seconds, this->minutes, this->hours, this->day, another.get_month(),
-					another.get_year(), this->time_zone)) {
+					another.get_year())) {
 					answer--;
 				}
 			}
 			else if (measure == MeasureTime::days) {
 				if (this->day == 29 && this->month == 2 && is_leap()) {
-					Date tmp(this->seconds, this->minutes, this->hours, 1, 3, this->year, this->time_zone);
+					Date tmp(this->seconds, this->minutes, this->hours, 1, 3, this->year);
 					if (another < tmp) {
 						return 0;
 					}
@@ -157,15 +134,13 @@ int32_t Date::difference(const Date& another, MeasureTime measure) const
 				answer += count_29_february(another);
 
 				if (another< Date(this->seconds, this->minutes, this->hours, this->day,
-					this->month, another.get_year(), this->time_zone)) {
+					this->month, another.get_year())) {
 					answer += get_reverse_number_in_year() - 1;
 					answer += another.get_number_in_year();
-					if (another.is_leap() && Date(0, 0, 0, 29, 2, another.get_year(),
-						another.get_time_zone()) < another) {
+					if (another.is_leap() && Date(0, 0, 0, 29, 2, another.get_year()) < another) {
 						answer--;
 					}
-					if (is_leap() && *this < Date(0, 0, 0, 29, 2, this->year,
-						this->time_zone)) {
+					if (is_leap() && *this < Date(0, 0, 0, 29, 2, this->year)) {
 						answer--;
 					}
 				}
@@ -173,26 +148,24 @@ int32_t Date::difference(const Date& another, MeasureTime measure) const
 					answer -= get_number_in_year();
 					answer += another.get_number_in_year();
 
-					if (another.is_leap() && Date(59, 59, 23, 29, 2, another.get_year(),
-						another.get_time_zone()) < another) {
+					if (another.is_leap() && Date(59, 59, 23, 29, 2, another.get_year()) < another) {
 						answer--;
 					}
 					
-					if (is_leap() && Date(0, 0, 0, 29, 2, get_year(),
-						get_time_zone()) < *this) {
+					if (is_leap() && Date(0, 0, 0, 29, 2, get_year()) < *this) {
 						answer++;
 					}
 				}
 				
 				if (another < Date(this->seconds, this->minutes, this->hours,
-					another.get_day(), another.get_month(), another.get_year(), this->time_zone)) {
+					another.get_day(), another.get_month(), another.get_year())) {
 					answer--;
 				}
 			}
 			else if (measure == MeasureTime::hours) {
 				answer = difference(another, MeasureTime::days) * 24;
 				if (another < Date(this->seconds, this->minutes, this->hours,
-					another.get_day(), another.get_month(), another.get_year(), this->time_zone)) {
+					another.get_day(), another.get_month(), another.get_year())) {
 					answer += 24 - this->hours + another.get_hours();
 				}
 				else {
@@ -201,14 +174,14 @@ int32_t Date::difference(const Date& another, MeasureTime measure) const
 				}
 
 				if (another < Date(this->seconds, this->minutes, another.get_hours(),
-					another.get_day(), another.get_month(), another.get_year(), this->time_zone)) {
+					another.get_day(), another.get_month(), another.get_year())) {
 					answer--;
 				}
 			}
 			else if (measure == MeasureTime::minutes) {
 				answer = difference(another, MeasureTime::hours) * 60;
 				if (another < Date(this->seconds, this->minutes, another.get_hours(),
-					another.get_day(), another.get_month(), another.get_year(), this->time_zone)) {
+					another.get_day(), another.get_month(), another.get_year())) {
 					answer += 60 - this->minutes + another.get_minutes();
 				}
 				else {
@@ -217,14 +190,14 @@ int32_t Date::difference(const Date& another, MeasureTime measure) const
 				}
 
 				if (another < Date(this->seconds, another.get_minutes(), another.get_hours(),
-					another.get_day(), another.get_month(), another.get_year(), this->time_zone)) {
+					another.get_day(), another.get_month(), another.get_year())) {
 					answer--;
 				}
 			}
 			else if (measure == MeasureTime::seconds) {
 				answer = difference(another, MeasureTime::minutes) * 60;
 				if (another < Date(this->seconds, another.get_minutes(), another.get_hours(),
-					another.get_day(), another.get_month(), another.get_year(), this->time_zone)) {
+					another.get_day(), another.get_month(), another.get_year())) {
 					answer += 60 - this->seconds + another.get_seconds();
 				}
 				else {
@@ -247,9 +220,6 @@ bool Date::is_valid() const
 		return false;
 	}
 	if (day == 29 && month == 2 && !is_leap()) {
-		return false;
-	}
-	if (time_zone < -12 || time_zone > 12) {
 		return false;
 	}
 	return true;
@@ -291,10 +261,10 @@ int32_t Date::count_29_february(const Date& another_date) const
 			another_date < Date(0, 0, 0, 1, 3, another_date.get_year())) {
 			answer--;
 		}
-		if (*this < Date(0, 0, 0, 1, 3, this->year, this->time_zone) &&
-			Date(59, 59, 23, 28, 2, this->year, this->time_zone) < *this &&
-			another_date < Date(0, 0, 0, 1, 3, another_date.get_year(), another_date.get_time_zone()) &&
-			Date(59, 59, 23, 28, 2, another_date.get_year(), another_date.get_time_zone()) < another_date) {
+		if (*this < Date(0, 0, 0, 1, 3, this->year) &&
+			Date(59, 59, 23, 28, 2, this->year) < *this &&
+			another_date < Date(0, 0, 0, 1, 3, another_date.get_year()) &&
+			Date(59, 59, 23, 28, 2, another_date.get_year()) < another_date) {
 			return 0;
 		}
 		return answer;
@@ -460,7 +430,6 @@ void Date::choose_day(Day day,uint16_t number,bool begin)
 			this->day = 29;
 		}
 		uint16_t counter = 0;
-		Day cur_day;
 		while (this->day != 1 && counter != number) {
 			this->day--;
 			if (get_day_of_week() == day) {
@@ -748,7 +717,7 @@ Day statistics(const Date& bottom, const Date& top, uint16_t number)
 		}
 	}
 	else {
-		Date basis(0, 0, 0, number, bottom.get_month(), bottom.get_year(),bottom.get_time_zone());
+		Date basis(0, 0, 0, number, bottom.get_month(), bottom.get_year());
 		if (basis < bottom || !basis.is_valid()) {
 			basis.save_promote_month(1);
 		}
@@ -786,8 +755,13 @@ bool operator==(const Date& lhs, const Date& rhs)
 {
 	return lhs.get_day() == rhs.get_day() && lhs.get_month() == rhs.get_month() &&
 		lhs.get_year() == rhs.get_year() && lhs.get_seconds() == rhs.get_seconds() &&
-		lhs.get_minutes() == rhs.get_minutes() && lhs.get_hours() - lhs.get_time_zone()
-		== rhs.get_hours() - rhs.get_time_zone();
+		lhs.get_minutes() == rhs.get_minutes() &&
+		lhs.get_hours() == rhs.get_hours();
+}
+
+bool operator!=(const Date& lhs, const Date& rhs)
+{
+	return !(lhs == rhs);
 }
 
 bool operator<(const Date& lhs, const Date& rhs)
@@ -795,15 +769,14 @@ bool operator<(const Date& lhs, const Date& rhs)
 	if (lhs.get_year() == rhs.get_year()) {
 		if (lhs.get_month() == rhs.get_month()) {
 			if (lhs.get_day() == rhs.get_day()) {
-				if (lhs.get_hours()-lhs.get_time_zone() == rhs.get_hours() - rhs.get_time_zone()) {
+				if (lhs.get_hours() == rhs.get_hours()) {
 					if (lhs.get_minutes() == rhs.get_minutes()) {
 						return lhs.get_seconds() < rhs.get_seconds();
 					}
 					return lhs.get_minutes() < rhs.get_minutes();
 				}
 				else {
-					return lhs.get_hours() - lhs.get_time_zone() <
-						rhs.get_hours() - rhs.get_time_zone();
+					return lhs.get_hours() < rhs.get_hours();
 				}
 			}
 			else {

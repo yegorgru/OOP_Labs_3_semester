@@ -13,10 +13,10 @@ class AdjacencyStructure:public Graph<NodeType,EdgeType>
 public:
 	AdjacencyStructure(EdgeType zero_edge, EdgeType max_edge);
 	size_t add_node(NodeType node) override;
-	void add_redge(size_t first_node, size_t second_node, EdgeType edge) override;
+	void add_edge(size_t first_node, size_t second_node, EdgeType edge) override;
 
-	EdgeType delete_redge(size_t first_node, size_t second_node) override;
-	void delete_node(size_t node) override;
+	EdgeType delete_edge(size_t first_node, size_t second_node) override;
+	NodeType delete_node(size_t node) override;
 
 	bool is_connected_graph() override;
 	std::vector<std::vector<size_t>> find_components() override;
@@ -27,8 +27,14 @@ public:
 
 	bool is_tree() override;
 
-	AdjacencyStructure<NodeType, EdgeType> minimum_spanning_tree_kruskal() override;
-	AdjacencyStructure<NodeType, EdgeType> minimum_spanning_reverse_delete() override;
+	Graph<NodeType, EdgeType> minimum_spanning_tree_kruskal() override;
+	Graph<NodeType, EdgeType> minimum_spanning_reverse_delete() override;
+
+	NodeType get_node(size_t node) override;
+	EdgeType get_edge(size_t begin, size_t end) override;
+
+	void clear_edges() override;
+	void clear() override;
 private:
 	void find_nodes(size_t node, std::vector<bool>& for_check, std::vector<size_t>& component) override;	
 	bool check_cyclic(size_t node, std::vector<char>& checked, size_t parent) override;
@@ -36,7 +42,7 @@ private:
 
 template<typename NodeType, typename EdgeType>
 AdjacencyStructure<NodeType, EdgeType>::AdjacencyStructure(EdgeType zero_edge, EdgeType max_edge)
-	: Graph(zero_edge, max_edge) {}
+	: Graph<NodeType, EdgeType>(zero_edge, max_edge) {}
 
 template<typename NodeType, typename EdgeType>
 size_t AdjacencyStructure<NodeType, EdgeType>::add_node(NodeType node)
@@ -47,34 +53,8 @@ size_t AdjacencyStructure<NodeType, EdgeType>::add_node(NodeType node)
 }
 
 template<typename NodeType, typename EdgeType>
-void AdjacencyStructure<NodeType, EdgeType>::add_redge(size_t first_node, size_t second_node, EdgeType edge)
+void AdjacencyStructure<NodeType, EdgeType>::add_edge(size_t first_node, size_t second_node, EdgeType edge)
 {
-	/*if (first_node < nodes.size() && second_node < nodes.size()) {
-		if (first_node != second_node) {
-			if (this->weighted) {
-				if (!(this->find(first_node, second_node))) {
-					nodes[first_node].push_back(second_node);
-					weights[first_node].push_back(weight);
-					if (!directed) {
-						nodes[second_node].push_back(first_node);
-						weights[second_node].push_back(weight);
-					}
-				}
-				else {
-					throw GraphErr("Edge with those nodes already exists");
-				}
-			}
-			else {
-				throw GraphErr("This type of function only for weighted graphs");
-			}
-		}
-		else {
-			throw GraphErr("Graph cannot contain self-loops");
-		}
-	}
-	else {
-		throw GraphErr("Incorrect first or second node");
-	}*/
 	if (first_node != second_node) {
 		structure[first_node][second_node] = edge;
 		structure[second_node][first_node] = edge;
@@ -85,7 +65,7 @@ void AdjacencyStructure<NodeType, EdgeType>::add_redge(size_t first_node, size_t
 }
 
 template<typename NodeType, typename EdgeType>
-EdgeType AdjacencyStructure<NodeType, EdgeType>::delete_redge(size_t first_node, size_t second_node)
+EdgeType AdjacencyStructure<NodeType, EdgeType>::delete_edge(size_t first_node, size_t second_node)
 {
 	if (first_node < structure.size() && second_node < structure.size()) {
 		try
@@ -107,13 +87,27 @@ EdgeType AdjacencyStructure<NodeType, EdgeType>::delete_redge(size_t first_node,
 }
 
 template<typename NodeType, typename EdgeType>
-void AdjacencyStructure<NodeType, EdgeType>::delete_node(size_t node)
+NodeType AdjacencyStructure<NodeType, EdgeType>::delete_node(size_t node)
 {
 	if (node < structure.size()) {
-		this->Nodes.erase(node);
 		structure.erase(structure.begin() + node);
 		for (auto& i: structure) {
 			i.erase(node);
+		}
+		try
+		{
+			NodeType to_delete = this->Nodes.at(node);
+			for (auto it = this->Nodes.find(node), next = this->Nodes.find(node + 1); next != this->Nodes.end(); it++, next++) {
+				it->second = next->second;
+			}
+			auto tmp = this->Nodes.end();
+			tmp--;
+			this->Nodes.erase(tmp);
+			return to_delete;
+		}
+		catch (const std::exception&)
+		{
+			return NodeType();
 		}
 	}
 	else {
@@ -151,18 +145,18 @@ template<typename NodeType, typename EdgeType>
 std::vector<EdgeType> AdjacencyStructure<NodeType, EdgeType>::dijkstra_algorithm(size_t node)
 {
 	std::vector <EdgeType> answer(structure.size(), this->max_edge);
-	answer[node] = 0;
+	answer[node] = this->zero_edge;
 	std::vector <bool> checked(structure.size(), 0);
 	EdgeType min_distance = this->zero_edge;
 	size_t min_node = node;
-	while (min_distance < INT_MAX)
+	while (min_distance < this->zero_edge)
 	{
 		size_t current = min_node;
 		checked[current] = true;
 		for (auto it = structure[current].begin(); it != structure[current].end(); it++) {
-			if (answer[current] != this->max_edge && it->second != this->max_edge) {
-				if (answer[current] + it->second < answer[structure[current][it->first]]) {
-					answer[structure[current][it->first]] = answer[current] + it->second;
+			if (!(answer[current] == this->max_edge) && !(it->second == this->max_edge)) {
+				if (answer[current] + it->second < answer[it->first]) {
+					answer[it->first] = answer[current] + it->second;
 				}
 			}
 		}
@@ -198,11 +192,12 @@ bool AdjacencyStructure<NodeType, EdgeType>::is_tree()
 }
 
 template<typename NodeType, typename EdgeType>
-AdjacencyStructure<NodeType, EdgeType> AdjacencyStructure<NodeType, EdgeType>::minimum_spanning_tree_kruskal()
+Graph<NodeType, EdgeType> AdjacencyStructure<NodeType, EdgeType>::minimum_spanning_tree_kruskal()
 {
 	if (is_connected_graph()) {
 		std::vector<way_struct<EdgeType>>ways;
-		AdjacencyStructure answer(structure.size());
+		AdjacencyStructure answer = *this;
+		answer.clear_edges();
 		std::vector<size_t>components(structure.size());
 		for (size_t i = 0; i < structure.size(); i++) {
 			components[i] = i;
@@ -217,7 +212,7 @@ AdjacencyStructure<NodeType, EdgeType> AdjacencyStructure<NodeType, EdgeType>::m
 		std::sort(ways.begin(), ways.end());
 		for (size_t i = 0; i < ways.size(); i++) {
 			if (components[ways[i].begin] != components[ways[i].end]) {
-				answer.add_redge(ways[i].begin, ways[i].end, ways[i].weight);
+				answer.add_edge(ways[i].begin, ways[i].end, ways[i].weight);
 				size_t second = components[ways[i].end];
 				size_t first = components[ways[i].begin];
 				for (size_t j = 0; j < components.size(); j++) {
@@ -235,7 +230,7 @@ AdjacencyStructure<NodeType, EdgeType> AdjacencyStructure<NodeType, EdgeType>::m
 }
 
 template<typename NodeType, typename EdgeType>
-AdjacencyStructure<NodeType, EdgeType> AdjacencyStructure<NodeType, EdgeType>::minimum_spanning_reverse_delete()
+Graph<NodeType, EdgeType> AdjacencyStructure<NodeType, EdgeType>::minimum_spanning_reverse_delete()
 {
 	if (this->is_connected_graph()) {
 		AdjacencyStructure<NodeType, EdgeType> answer = *this;
@@ -249,9 +244,9 @@ AdjacencyStructure<NodeType, EdgeType> AdjacencyStructure<NodeType, EdgeType>::m
 		}
 		std::sort(edges.begin(), edges.end());
 		for (size_t i = edges.size() - 1; i > 0; i--) {
-			EdgeType weight = answer.delete_redge(edges[i].begin, edges[i].end);
+			EdgeType weight = answer.delete_edge(edges[i].begin, edges[i].end);
 			if (!answer.is_connected_graph()) {
-				answer.add_redge(edges[i].begin, edges[i].end, weight);
+				answer.add_edge(edges[i].begin, edges[i].end, weight);
 			}
 		}
 		return answer;
@@ -259,6 +254,52 @@ AdjacencyStructure<NodeType, EdgeType> AdjacencyStructure<NodeType, EdgeType>::m
 	else {
 		//throw GraphErr("This function only for weighted, undirected and connected graphs");
 	}
+}
+
+template<typename NodeType, typename EdgeType>
+NodeType AdjacencyStructure<NodeType, EdgeType>::get_node(size_t node)
+{
+	try
+	{
+		return this->Nodes.at(node);
+	}
+	catch (const std::exception&)
+	{
+		return NodeType();
+	}
+}
+
+template<typename NodeType, typename EdgeType>
+EdgeType AdjacencyStructure<NodeType, EdgeType>::get_edge(size_t begin, size_t end)
+{
+	if (end < structure.size() && begin < structure.size()) {
+		try
+		{
+			return structure[begin].at(end);
+		}
+		catch (const std::exception&)
+		{
+			return this->max_edge;
+		}
+	}
+	else {
+		//throw
+	}
+}
+
+template<typename NodeType, typename EdgeType>
+void AdjacencyStructure<NodeType, EdgeType>::clear_edges()
+{
+	for (size_t i = 0; i < structure.size(); i++) {
+		structure[i].clear();
+	}
+}
+
+template<typename NodeType, typename EdgeType>
+void AdjacencyStructure<NodeType, EdgeType>::clear()
+{
+	this->Nodes.clear();
+	this->structure.clear();
 }
 
 template<typename NodeType, typename EdgeType>

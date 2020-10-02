@@ -4,10 +4,15 @@
 #include "BookCharacter.h"
 #include "PublishingHouse.h"
 #include "Date.h"
+#include "Graph.h"
+#include "AdjacencyMatrix.h"
+#include "AdjacencyStructure.h"
 
 #include <string>
 #include <vector>
 #include <random>
+#include <cmath>
+#include <set>
 
 std::random_device rd;
 std::mt19937 mersenne(rd());
@@ -22,6 +27,91 @@ std::string random_element(std::string) {
 
 int random_element(int) {
 	return mersenne() % 100;
+}
+
+double random_element(double) {
+	return mersenne() % 1000*std::pow(10,0-mersenne()%3);
+}
+
+template <typename T>
+std::vector<T> random_element(std::vector<T>) {
+	std::vector<T>answer(10);
+	for (size_t i = 0; i < 10; i++) {
+		answer[i] = random_element(T());
+	}
+	return answer;
+}
+
+Role random_element(Role) {
+	switch (mersenne() % 3) {
+	case 0:
+		return Role::episodic;
+	case 1:
+		return Role::secondary;
+	case 2:
+		return Role::main;
+	}
+}
+
+template <typename T>
+BookCharacter<T> random_element(BookCharacter<T>) {
+	std::set<std::string>names;
+	for (size_t i = 0; i < mersenne() % 3; i++) {
+		names.insert(random_element(std::string()));
+	}
+	BookCharacter<T>answer(random_element(std::string()), names);
+	for (size_t i = 0; i < 5; i++) {
+		answer.update_role(random_element(T()), random_element(Role()));
+	}
+	return answer;
+}
+
+Date random_element(Date) {
+	Date date(mersenne() % 60, mersenne() % 60, mersenne() % 24, mersenne() % 31 + 1, mersenne() % 12 + 1, mersenne() % 2040);
+	while (!date.is_valid()) {
+		date.set_day(date.get_day() - 1);
+	}
+	return date;
+}
+
+Book random_element(Book) {
+	std::set<std::string>authors;
+	for (size_t i = 0; i < mersenne() % 3; i++) {
+		authors.insert(random_element(std::string()));
+	}
+	return Book(random_element(std::string()), authors, random_element(Date()), mersenne() % 100 + 1, random_element(std::string()));
+}
+
+PublishingHouse random_element(PublishingHouse) {
+	PublishingHouse PH;
+	for (size_t i = 0; i < mersenne() % 10; i++) {
+		PH.add_book(random_element(Book()));
+	}
+	for (size_t i = 0; i < mersenne() % 10; i++) {
+		PH.add_character(random_element(BookCharacter<std::string>()));
+	}
+	return PH;
+}
+
+template <typename T>
+std::vector<T> operator+(const std::vector<T>& lhs, const std::vector<T>& rhs) {
+	std::vector<T> answer(lhs.begin(), lhs.end());
+	answer.insert(answer.end(),rhs.begin(), rhs.end());
+	return answer;
+}
+
+Date operator+(const Date& lhs, const Date& rhs) {
+	Date date = lhs;
+	date.promote(lhs.difference(rhs, MeasureTime::seconds), MeasureTime::seconds);
+	return date;
+}
+
+Book operator+(const Book& lhs, const Book& rhs) {
+	auto lauthors = lhs.get_authors();
+	auto rauthors = rhs.get_authors();
+	std::set<std::string>authors(lauthors.begin(), lauthors.end());
+	authors.insert(rauthors.begin(), rauthors.end());
+	return Book (lhs.get_name() + rhs.get_name(), authors, lhs.get_date()+rhs.get_date(), lhs.get_pages() + rhs.get_pages(), lhs.get_annotation() + rhs.get_annotation());
 }
 
 template<typename T>
@@ -443,7 +533,7 @@ void TestHouseNotSeries() {
 }
 
 void TestDateBasic() {
-	Date date(1, 2, 3, 4, 5, 6,0);
+	Date date(1, 2, 3, 4, 5, 6);
 	ASSERT_EQUAL(date.get_year(), 6);
 	date.set_year(7);
 	ASSERT_EQUAL(date.get_year(), 7);
@@ -462,9 +552,6 @@ void TestDateBasic() {
 	ASSERT_EQUAL(date.get_seconds(), 1);
 	date.set_seconds(2);
 	ASSERT_EQUAL(date.get_seconds(), 2);
-	ASSERT_EQUAL(date.get_time_zone(), 0);
-	date.set_time_zone(1);
-	ASSERT_EQUAL(date.get_time_zone(), 1);
 
 	Date another = date;
 	ASSERT_EQUAL(another.get_year(), 7);
@@ -664,11 +751,6 @@ void TestDateIsValid() {
 	ASSERT(Date(1, 1, 1, 1, 7, 2020).is_valid());
 	ASSERT(Date(1, 1, 1, 31, 7, 2020).is_valid());
 	ASSERT(!(Date(1, 1, 1, 32, 7, 2020).is_valid()));
-
-	ASSERT(!(Date(1, 1, 1, 1, 7, 2020,-13).is_valid()));
-	ASSERT(Date(1, 1, 1, 1, 7, 2020,-12).is_valid());
-	ASSERT(Date(1, 1, 1, 1, 7, 2020,12).is_valid());
-	ASSERT(!(Date(1, 1, 1, 1, 7, 2020,13).is_valid()));
 
 	ASSERT(!(Date(1, 1, 1, 0, 8, 2020).is_valid()));
 	ASSERT(Date(1, 1, 1, 1, 8, 2020).is_valid());
@@ -1050,10 +1132,6 @@ void TestDateDifference() {
 			MeasureTime::years), 0);
 		ASSERT_EQUAL(Date(1, 1, 1, 12, 6, 2019).difference(Date(1, 1, 1, 12, 6, 2020),
 			MeasureTime::years), 1);
-		ASSERT_EQUAL(Date(1, 1, 3, 12, 6, 2019,2).difference(Date(1, 1, 3, 12, 6, 2020,1),
-			MeasureTime::years), 1);
-		ASSERT_EQUAL(Date(1, 1, 3, 12, 6, 2019, 1).difference(Date(1, 1, 3, 12, 6, 2020, 2),
-			MeasureTime::years), 0);
 		ASSERT_EQUAL(Date(1, 1, 1, 12, 6, 2019).difference(Date(1, 1, 1, 11, 6, 2020),
 			MeasureTime::years), 0);
 		ASSERT_EQUAL(Date(1, 1, 1, 1, 1, 2000).difference(Date(1, 1, 1, 1, 1, 2100),
@@ -1067,10 +1145,6 @@ void TestDateDifference() {
 			MeasureTime::years), 0);
 		ASSERT_EQUAL(Date(1, 1, 1, 12, 6, 2020).difference(Date(1, 1, 1, 12, 6, 2019),
 			MeasureTime::years), -1);
-		ASSERT_EQUAL(Date(1, 1, 3, 12, 6, 2020, 1).difference(Date(1, 1, 3, 12, 6, 2019, 2),
-			MeasureTime::years), -1);
-		ASSERT_EQUAL(Date(1, 1, 3, 12, 6, 2020, 2).difference(Date(1, 1, 3, 12, 6, 2019, 1),
-			MeasureTime::years), 0);
 		ASSERT_EQUAL(Date(1, 1, 1, 11, 6, 2020).difference(Date(1, 1, 1, 12, 6, 2019),
 			MeasureTime::years), 0);
 		ASSERT_EQUAL(Date(1, 1, 1, 1, 1, 2100).difference(Date(1, 1, 1, 1, 1, 2000),
@@ -1470,6 +1544,141 @@ void TestDateStatistics() {
 	ASSERT_EQUAL(statistics(2021, 31), Day::Sunday);
 }
 
+template <typename NodeType, typename EdgeType>
+void TestBasic(Graph<NodeType, EdgeType>& graph) {
+	NodeType new_node = random_element(NodeType());
+	size_t pos = graph.add_node(new_node);
+	ASSERT_EQUAL(graph.get_node(pos), new_node);
+	ASSERT_EQUAL(graph.delete_node(pos), new_node);
+
+	NodeType Node1 = random_element(NodeType());
+	size_t pos1 = graph.add_node(Node1);
+	NodeType Node2 = random_element(NodeType());
+	size_t pos2 = graph.add_node(Node2);
+	NodeType Node3 = random_element(NodeType());
+	size_t pos3 = graph.add_node(Node3);
+	NodeType Node4 = random_element(NodeType());
+	size_t pos4 = graph.add_node(Node4);
+
+	ASSERT_EQUAL(graph.get_node(pos1), Node1);
+	ASSERT_EQUAL(graph.get_node(pos2), Node2);
+	ASSERT_EQUAL(graph.get_node(pos3), Node3);
+	ASSERT_EQUAL(graph.get_node(pos4), Node4);
+
+	EdgeType edge1 = random_element(EdgeType());
+	graph.add_edge(pos1, pos2, edge1);
+	EdgeType edge2 = random_element(EdgeType());
+	graph.add_edge(pos1, pos3, edge2);
+	EdgeType edge3 = random_element(EdgeType());
+	graph.add_edge(pos2, pos4, edge3);
+
+	ASSERT_EQUAL(graph.get_edge(pos1, pos2), edge1);
+	ASSERT_EQUAL(graph.get_edge(pos1, pos3), edge2);
+	ASSERT_EQUAL(graph.get_edge(pos2, pos4), edge3);
+
+	ASSERT_EQUAL(graph.delete_edge(pos1, pos3), edge2);
+	ASSERT_EQUAL(graph.get_edge(pos1, pos2), edge1);
+	ASSERT_EQUAL(graph.get_edge(pos2, pos4), edge3);
+
+	graph.delete_node(pos2);
+	pos3--;
+	pos4--;
+	ASSERT_EQUAL(graph.get_node(pos1), Node1);
+	ASSERT_EQUAL(graph.get_node(pos3), Node3);
+	ASSERT_EQUAL(graph.get_node(pos4), Node4);
+	graph.clear();
+}
+
+template <typename NodeType, typename EdgeType>
+void TestConnected(Graph<NodeType, EdgeType>& graph) {
+	ASSERT(!graph.is_connected_graph());
+	NodeType Node1 = random_element(NodeType());
+	auto pos1 = graph.add_node(Node1);
+	ASSERT(graph.is_connected_graph());
+	NodeType Node2 = random_element(NodeType());
+	auto pos2 = graph.add_node(Node2);
+	NodeType Node3 = random_element(NodeType());
+	auto pos3 = graph.add_node(Node3);
+	NodeType Node4 = random_element(NodeType());
+	auto pos4 = graph.add_node(Node4);
+	ASSERT(!graph.is_connected_graph());
+
+	EdgeType edge1 = random_element(EdgeType());
+	graph.add_edge(pos1, pos2, edge1);
+	ASSERT(!graph.is_connected_graph());
+	EdgeType edge2 = random_element(EdgeType());
+	graph.add_edge(pos1, pos3, edge2);
+	ASSERT(!graph.is_connected_graph());
+	EdgeType edge3 = random_element(EdgeType());
+	graph.add_edge(pos2, pos3, edge3);
+	ASSERT(graph.is_connected_graph());
+
+	graph.delete_edge(pos1, pos3);
+	ASSERT(!graph.is_connected_graph());
+
+	graph.clear();
+}
+
+void TestGraph() {
+	{
+		AdjacencyMatrix<double, int>graph(0, 1000);
+		TestBasic(graph);
+		TestConnected(graph);
+	}
+	{
+		AdjacencyStructure<double, int>graph(0, 1000);
+		TestBasic(graph);
+	}
+	{
+		AdjacencyMatrix<int,double>graph(0, 1000);
+		TestBasic(graph);
+	}
+	{
+		AdjacencyStructure<int, double>graph(0, 1000);
+		TestBasic(graph);
+	}
+	{
+		AdjacencyMatrix<std::string, std::vector<int>>graph(std::vector<int>(), std::vector<int>(1000,1000));
+		TestBasic(graph);
+	}
+	{
+		AdjacencyStructure<std::string, std::vector<int>>graph(std::vector<int>(), std::vector<int>(1000, 1000));
+		TestBasic(graph);
+	}
+	{
+		AdjacencyMatrix<std::vector<int>,std::string>graph("", "zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz");
+		TestBasic(graph);
+	}
+	{
+		AdjacencyStructure<std::vector<int>,std::string>graph("", "zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz");
+		TestBasic(graph);
+	}
+	{
+		AdjacencyMatrix<double,std::vector<std::string>>graph(std::vector<std::string>(), std::vector<std::string>(1000, "z"));
+		TestBasic(graph);
+	}
+	{
+		AdjacencyStructure<double,std::vector<std::string>>graph(std::vector<std::string>(), std::vector<std::string>(1000, "z"));
+		TestBasic(graph);
+	}
+	{
+		AdjacencyMatrix<BookCharacter<int>, Book>graph(Book(), Book("zzzzzzzzzz", {},Date(),1000,"zzzzzzzz"));
+		TestBasic(graph);
+	}
+	{
+		AdjacencyStructure<BookCharacter<int>, Book>graph(Book(), Book("zzzzzzzzzz", {}, Date(), 1000, "zzzzzzzz"));
+		TestBasic(graph);
+	}
+	{
+		AdjacencyMatrix<PublishingHouse, Date>graph(Date(0,0,0,0,0,0), Date(1000, 1000, 1000, 1000, 1000, 1000));
+		TestBasic(graph);
+	}
+	{
+		AdjacencyStructure<PublishingHouse, Date>graph(Date(0, 0, 0, 0, 0, 0), Date(1000, 1000, 1000, 1000, 1000, 1000));
+		TestBasic(graph);
+	}
+}
+
 int main() {
 	TestRunner tr;
 	RUN_TEST(tr, TestCharacter<std::string>);
@@ -1487,4 +1696,5 @@ int main() {
 	RUN_TEST(tr, TestDateAlternativeConstructor);
 	RUN_TEST(tr, TestDateNumberOfWeek);
 	RUN_TEST(tr, TestDateStatistics);
+	RUN_TEST(tr, TestGraph);
 }

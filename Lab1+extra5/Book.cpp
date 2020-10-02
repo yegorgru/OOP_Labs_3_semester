@@ -89,6 +89,21 @@ bool operator<(const Book& lhs, const Book& rhs)
 }
 
 bool operator==(const Book& lhs, const Book& rhs) {
+	if (lhs.get_name() != rhs.get_name()) {
+		return false;
+	}
+	if (lhs.get_authors() != rhs.get_authors()) {
+		return false;
+	}
+	if (lhs.get_annotation() != rhs.get_annotation()) {
+		return false;
+	}
+	if (lhs.get_date() != rhs.get_date()) {
+		return false;
+	}
+	if (lhs.get_pages() != rhs.get_pages()) {
+		return false;
+	}
 	return lhs.get_name() == rhs.get_name() &&
 		lhs.get_authors() == rhs.get_authors() &&
 		lhs.get_annotation() == rhs.get_annotation() &&
