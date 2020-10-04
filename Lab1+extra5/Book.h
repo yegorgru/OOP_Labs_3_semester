@@ -36,7 +36,7 @@ private:
 	std::set<std::string> authors;
 	Date date;				
 	uint32_t pages;
-	std::string annotation;			//Maybe max number of characters
+	std::string annotation;
 };
 
 bool operator<(const Book& lhs, const Book& rhs);

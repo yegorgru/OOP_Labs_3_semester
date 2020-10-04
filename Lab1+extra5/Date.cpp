@@ -14,7 +14,7 @@ Date::Date(uint16_t seconds, uint16_t minutes, uint16_t hours, Day day,
 }
 
 Date::Date()
-	: seconds(0),minutes(0),hours(0),day(0),month(0),year(0) {}
+	: seconds(0),minutes(0),hours(0),day(0),month(),year() {}
 
 Date& Date::operator=(const Date& date)
 {
@@ -209,7 +209,7 @@ int32_t Date::difference(const Date& another, MeasureTime measure) const
 		}
 	}
 	else {
-		//throw
+		throw std::invalid_argument("invalid date");
 	}
 }
 
@@ -288,7 +288,7 @@ int32_t Date::get_number_in_year() const
 		return answer;
 	}
 	else {
-		//throw
+		throw std::invalid_argument("invalid date");
 	}
 }
 
@@ -304,7 +304,7 @@ int32_t Date::get_reverse_number_in_year() const
 	}
 	catch (const std::exception&)
 	{
-		//throw
+		throw std::invalid_argument("invalid date");
 	}
 }
 
@@ -370,6 +370,7 @@ Day Date::get_day_of_week() const
 			return Day::Monday;
 		}
 	}
+	return Day::Monday;
 }
 
 uint16_t Date::get_number_of_week(bool month_or_year)
@@ -702,10 +703,10 @@ std::ostream& operator<<(std::ostream& os, const Day& day)
 Day statistics(const Date& bottom, const Date& top, uint16_t number)
 {
 	if (number == 0 || number > 31) {
-		//throw
+		throw std::invalid_argument("invalid number");
 	}
 	if (top < bottom) {
-		//throw
+		throw std::invalid_argument("top < bottom");
 	}
 	else if (top == bottom && top<bottom && top.difference(bottom,MeasureTime::days)==0
 		&& top.get_day() == bottom.get_day()) {

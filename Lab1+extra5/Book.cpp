@@ -84,7 +84,7 @@ bool operator<(const Book& lhs, const Book& rhs)
 		}
 	}
 	else {
-		return lhs.get_name() == rhs.get_name();
+		return lhs.get_name() < rhs.get_name();
 	}
 }
 

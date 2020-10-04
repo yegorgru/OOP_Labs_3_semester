@@ -7,7 +7,8 @@
 #include <map>
 #include <utility>
 #include <algorithm>
-
+#include <iostream>
+#include <sstream>
 
 template <typename NodeType, typename EdgeType>
 class AdjacencyMatrix :public Graph<NodeType, EdgeType>
@@ -32,9 +33,6 @@ public:
 
 	bool is_tree() override;
 
-	Graph<NodeType, EdgeType> minimum_spanning_tree_kruskal() override;
-	Graph<NodeType, EdgeType> minimum_spanning_reverse_delete() override;
-
 	NodeType get_node(size_t node) override;
 	EdgeType get_edge(size_t begin, size_t end) override;
 
@@ -44,7 +42,15 @@ public:
 private:
 	void find_nodes(size_t node, std::vector<bool>& for_check, std::vector<size_t>& component) override;
 	bool check_cyclic(size_t node, std::vector<char>& checked, size_t parent) override;
+
+	friend std::ostream& operator<<(std::ostream& os, AdjacencyMatrix<NodeType, EdgeType>);
 };
+
+template <typename NodeType, typename EdgeType>
+std::ostream& operator<<(std::ostream& os, AdjacencyMatrix<NodeType, EdgeType>);
+
+template<typename NodeType, typename EdgeType>
+void AdjacencyMatrix<NodeType, EdgeType>::add_edge(size_t first_node, size_t second_node, EdgeType edge);
 
 template<typename NodeType, typename EdgeType>
 AdjacencyMatrix<NodeType, EdgeType>::AdjacencyMatrix(EdgeType zero_edge, EdgeType max_edge)
@@ -69,22 +75,14 @@ void AdjacencyMatrix<NodeType, EdgeType>::add_edge(size_t first_node, size_t sec
 	if (first_node < matrix.size() && second_node < matrix.size()) {
 		if (first_node != second_node) {
 			matrix[first_node][second_node] = edge;
-			/*if (matrix[first_node][second_node] == INT_MAX) {
-				matrix[first_node][second_node] = weight;
-				if (!this->directed) {
-					matrix[second_node][first_node] = weight;
-				}
-			}
-			else {
-				throw GraphErr("Edge with those nodes already exists");
-			}*/
+			matrix[second_node][first_node] = edge;
 		}
 		else {
-			//throw GraphErr("Graph cannot contain self-loops");
+			throw std::invalid_argument("incorrect node");
 		}
 	}
 	else {
-		//throw GraphErr("Incorrect first or second node");
+		throw std::invalid_argument("incorrect node");
 	}
 }
 
@@ -98,7 +96,7 @@ EdgeType AdjacencyMatrix<NodeType, EdgeType>::delete_edge(size_t first_node, siz
 		return weight;
 	}
 	else {
-		//throw GraphErr("Incorrect first or second node");
+		throw std::invalid_argument("incorrect node");
 	}
 }
 
@@ -137,7 +135,7 @@ NodeType AdjacencyMatrix<NodeType, EdgeType>::delete_node(size_t node)
 		}
 	}
 	else {
-		//throw GraphErr("Incorrect node");
+		throw std::invalid_argument("incorrect node");
 	}
 }
 
@@ -218,71 +216,6 @@ bool AdjacencyMatrix<NodeType, EdgeType>::is_tree()
 }
 
 template<typename NodeType, typename EdgeType>
-Graph<NodeType, EdgeType> AdjacencyMatrix<NodeType, EdgeType>::minimum_spanning_tree_kruskal()
-{
-	if (is_connected_graph()) {
-		std::vector<way_struct<EdgeType>>ways;
-		AdjacencyMatrix<NodeType, EdgeType> answer = *this;
-		answer.clear_edges();
-		std::vector<size_t>components(matrix.size());
-		for (size_t i = 0; i < matrix.size(); i++) {
-			components[i] = i;
-		}
-		for (size_t i = 0; i < matrix.size(); i++) {
-			for (size_t j = i + 1; j < matrix.size(); j++) {
-				if (!(matrix[i][j] == this->max_edge)) {
-					ways.push_back({ matrix[i][j] ,i,j });
-				}
-			}
-		}
-		std::sort(ways.begin(), ways.end());
-		for (size_t i = 0; i < ways.size(); i++) {
-			if (components[ways[i].begin] != components[ways[i].end]) {
-				answer.add_edge(ways[i].begin, ways[i].end, ways[i].weight);
-				size_t second = components[ways[i].end];
-				size_t first = components[ways[i].begin];
-				for (size_t j = 0; j < components.size(); j++) {
-					if (components[j] == second) {
-						components[j] = first;
-					}
-				}
-			}
-		}
-		return answer;
-	}
-	else {
-		//throw GraphErr("This function only for weighted, undirected and connected graphs");
-	}
-}
-
-template<typename NodeType, typename EdgeType>
-Graph<NodeType, EdgeType> AdjacencyMatrix<NodeType, EdgeType>::minimum_spanning_reverse_delete()
-{
-	if (is_connected_graph()) {
-		AdjacencyMatrix answer = *this;
-		std::vector<way_struct<EdgeType>>edges;
-		for (size_t i = 0; i < matrix.size(); i++) {
-			for (size_t j = i + 1; j < matrix.size(); j++) {
-				if (!(matrix[i][j] == this->max_edge)) {
-					edges.push_back({ matrix[i][j] ,i,j });
-				}
-			}
-		}
-		std::sort(edges.begin(), edges.end());
-		for (size_t i = edges.size() - 1; i > 0; i--) {
-			EdgeType weight = answer.delete_edge(edges[i].begin, edges[i].end);
-			if (!answer.is_connected_graph()) {
-				answer.add_edge(edges[i].begin, edges[i].end, weight);
-			}
-		}
-		return answer;
-	}
-	else {
-		//throw GraphErr("This function only for weighted, undirected and connected graphs");
-	}
-}
-
-template<typename NodeType, typename EdgeType>
 NodeType AdjacencyMatrix<NodeType, EdgeType>::get_node(size_t node)
 {
 	try
@@ -302,7 +235,7 @@ EdgeType AdjacencyMatrix<NodeType, EdgeType>::get_edge(size_t begin, size_t end)
 		return matrix[begin][end];
 	}
 	else {
-		//throw
+		throw std::invalid_argument("incorrect node");
 	}
 }
 
@@ -349,4 +282,20 @@ bool AdjacencyMatrix<NodeType, EdgeType>::check_cyclic(size_t node, std::vector<
 	}
 	checked[node] = 3;
 	return false;
+}
+
+template<typename NodeType, typename EdgeType>
+std::ostream& operator<<(std::ostream& os, AdjacencyMatrix<NodeType, EdgeType> graph)
+{
+	os << "Nodes:" << std::endl;
+	for (auto it = graph.Nodes.begin(); it != graph.Nodes.end(); it++) {
+		os << it->first << " " << it->second << std::endl;
+	}
+	os << "Edges:" << std::endl;
+	for (size_t i = 0; i != graph.matrix.size(); i++) {
+		for (size_t j = 0; j != graph.matrix.size(); j++) {
+			os << i << " " << j << " " << graph.matrix[i][j] << std::endl;
+		}
+	}
+	return os;
 }

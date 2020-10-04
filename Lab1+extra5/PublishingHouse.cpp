@@ -8,7 +8,7 @@ book_id PublishingHouse::add_book(const Book& book)
 {
 	book_id id = book.get_name();
 	if (id == book_id() || books.find(id) != end(books)) {
-		//
+		throw std::invalid_argument("incorrect book");
 	}
 	else {
 		books[id] = book;
@@ -22,7 +22,7 @@ character_id PublishingHouse::add_character(const BookCharacter<book_id>& charac
 {
 	character_id id = character.get_default_name();
 	if (id==character_id() || characters.find(id) != end(characters)) {
-		
+		throw std::invalid_argument("incorrect character");
 	}
 	else {
 		characters[id] = character;
@@ -41,7 +41,7 @@ void PublishingHouse::ban_book(const book_id& id)
 		books.erase(id);
 	}
 	else {
-		//throw
+		throw std::invalid_argument("incorrect id");
 	}
 }
 
@@ -55,7 +55,7 @@ void PublishingHouse::ban_character(const character_id& id)
 		characters.erase(id);
 	}
 	else {
-		//throw
+		throw std::invalid_argument("incorrect id");
 	}
 }
 
@@ -146,7 +146,7 @@ void PublishingHouse::add_character_in_book(const character_id& id_character, co
 {
 	if (id_character != character_id() && id_book != book_id()) {
 		if (characters.find(id_character) == end(characters)) {
-			//throw
+			throw std::invalid_argument("incorrect id");
 		}
 		else {
 			try
@@ -159,12 +159,12 @@ void PublishingHouse::add_character_in_book(const character_id& id_character, co
 			}
 			catch (const std::exception&)
 			{
-				//throw
+				throw std::invalid_argument("incorrect id");
 			}
 		}
 	}
 	else {
-		//throw
+		throw std::invalid_argument("incorrect id");
 	}
 }
 
@@ -172,7 +172,7 @@ void PublishingHouse::erase_character_from_book(const character_id& id_character
 {
 	if (id_character != character_id() && id_book != book_id()) {
 		if (characters.find(id_character) == end(characters)) {
-			//throw
+			throw std::invalid_argument("incorrect id");
 		}
 		else {
 			try
@@ -183,23 +183,37 @@ void PublishingHouse::erase_character_from_book(const character_id& id_character
 			}
 			catch (const std::exception&)
 			{
-				//throw
+				throw std::invalid_argument("incorrect id");
 			}
 		}
 	}
 	else {
-		//throw
+		throw std::invalid_argument("incorrect id");
 	}
 }
 
 BookCharacter<book_id> PublishingHouse::get_character(const character_id& id)
 {
-	return characters.at(id);
+	try
+	{
+		return characters.at(id);
+	}
+	catch (const std::exception&)
+	{
+		throw std::invalid_argument("incorrect id");
+	}
 }
 
 Book PublishingHouse::get_book(const book_id& id)
 {
-	return books.at(id);
+	try
+	{
+		return books.at(id);
+	}
+	catch (const std::exception&)
+	{
+		throw std::invalid_argument("incorrect id");
+	}
 }
 
 void PublishingHouse::promote_role(const character_id& id_character, 
@@ -207,7 +221,7 @@ void PublishingHouse::promote_role(const character_id& id_character,
 {
 	if (id_character != character_id() && id_book != book_id()) {
 		if (characters.find(id_character) == end(characters)) {
-			//throw
+			throw std::invalid_argument("incorrect id");
 		}
 		else {
 			try
@@ -219,12 +233,12 @@ void PublishingHouse::promote_role(const character_id& id_character,
 			}
 			catch (const std::exception&)
 			{
-				//throw
+				throw std::invalid_argument("incorrect id");
 			}
 		}
 	}
 	else {
-		//throw
+		throw std::invalid_argument("incorrect id");
 	}
 }
 
@@ -233,7 +247,7 @@ void PublishingHouse::decrease_role(const character_id& id_character,
 {
 	if (id_character != character_id() && id_book != book_id()) {
 		if (characters.find(id_character) == end(characters)) {
-			//throw
+			throw std::invalid_argument("incorrect id");
 		}
 		else {
 			try
@@ -245,12 +259,12 @@ void PublishingHouse::decrease_role(const character_id& id_character,
 			}
 			catch (const std::exception&)
 			{
-				//throw
+				throw std::invalid_argument("incorrect id");
 			}
 		}
 	}
 	else {
-		//throw
+		throw std::invalid_argument("incorrect id");
 	}
 }
 
@@ -263,7 +277,7 @@ Role PublishingHouse::get_role(const character_id& id_character, const book_id& 
 	}
 	catch (const std::exception&)
 	{
-
+		throw std::invalid_argument("incorrect id");
 	}
 }
 
@@ -275,7 +289,7 @@ std::set<character_id> PublishingHouse::get_characters(const book_id& id_book)
 	}
 	catch (const std::exception&)
 	{
-
+		throw std::invalid_argument("incorrect id");
 	}
 }
 
@@ -287,7 +301,7 @@ std::set<character_id> PublishingHouse::get_important_characters(const book_id& 
 	}
 	catch (const std::exception&)
 	{
-
+		throw std::invalid_argument("incorrect id");
 	}
 }
 
@@ -299,7 +313,7 @@ std::set<book_id> PublishingHouse::get_books(const character_id& id)
 	}
 	catch (const std::exception&)
 	{
-
+		throw std::invalid_argument("incorrect id");
 	}
 }
 

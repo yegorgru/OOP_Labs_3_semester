@@ -28,10 +28,6 @@ public:
 	BookCharacter(const std::string& name);
 	BookCharacter(const std::string& default_name,
 		const std::set<std::string>& names);
-
-	//BookCharacter& operator=(const BookCharacter& another);
-	
-	//BookCharacter& operator=(const BookCharacter& another);
 	
 	void promote(const id& book);
 	void decrease(const id& book);
@@ -55,8 +51,6 @@ private:
 	std::string default_name;
 
 	std::set<std::string>names;
-
-	//friend std::ostream& operator<<(std::ostream& os, const BookCharacter<id>& character);
 };
 
 template <typename id>

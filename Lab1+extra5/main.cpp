@@ -51,6 +51,7 @@ Role random_element(Role) {
 	case 2:
 		return Role::main;
 	}
+	return Role::secondary;
 }
 
 template <typename T>
@@ -101,9 +102,17 @@ std::vector<T> operator+(const std::vector<T>& lhs, const std::vector<T>& rhs) {
 }
 
 Date operator+(const Date& lhs, const Date& rhs) {
-	Date date = lhs;
-	date.promote(lhs.difference(rhs, MeasureTime::seconds), MeasureTime::seconds);
-	return date;
+	if (lhs == Date()) {
+		return rhs;
+	}
+	else if (rhs == Date()) {
+		return lhs;
+	}
+	else {
+		Date date = lhs;
+		date.promote(lhs.difference(rhs, MeasureTime::seconds), MeasureTime::seconds);
+		return date;
+	}
 }
 
 Book operator+(const Book& lhs, const Book& rhs) {
@@ -180,6 +189,11 @@ void TestCharacter() {
 
 		ASSERT_EQUAL(character.get_all_books(), books);
 	}
+}
+
+void TestBookCharacter() {
+	TestCharacter<std::string>();
+	TestCharacter<int>();
 }
 
 void TestBook() {
@@ -530,6 +544,11 @@ void TestHouseNotSeries() {
 		true_books.erase(first_book_id);
 		ASSERT_EQUAL(PHouse.get_books(third_character_id), true_books);
 	}
+}
+
+void TestHouse() {
+	TestHouseNotSeries();
+	TestHouseSeries();
 }
 
 void TestDateBasic() {
@@ -1120,40 +1139,7 @@ void TestDatePromoteDecrease() {
 	}
 }
 
-void TestDateDifference() {
-	{
-		ASSERT_EQUAL(Date(59, 59, 23, 31, 12, 2019).difference(Date(0, 0, 0, 1, 1, 2020),
-			MeasureTime::years), 0);
-		ASSERT_EQUAL(Date(0, 0, 0, 1, 1, 2020).difference(Date(59, 59, 23, 31, 12, 2019),
-			MeasureTime::years), 0);
-
-
-		ASSERT_EQUAL(Date(1, 1, 1, 12, 6, 2019).difference(Date(1, 1, 1, 11, 6, 2020),
-			MeasureTime::years), 0);
-		ASSERT_EQUAL(Date(1, 1, 1, 12, 6, 2019).difference(Date(1, 1, 1, 12, 6, 2020),
-			MeasureTime::years), 1);
-		ASSERT_EQUAL(Date(1, 1, 1, 12, 6, 2019).difference(Date(1, 1, 1, 11, 6, 2020),
-			MeasureTime::years), 0);
-		ASSERT_EQUAL(Date(1, 1, 1, 1, 1, 2000).difference(Date(1, 1, 1, 1, 1, 2100),
-			MeasureTime::years), 100);
-		ASSERT_EQUAL(Date(1, 1, 1, 1, 1, 2000).difference(Date(0, 1, 1, 1, 1, 2100),
-			MeasureTime::years), 99);
-		ASSERT_EQUAL(Date(1, 1, 1, 1, 1, 2000).difference(Date(2, 1, 1, 1, 1, 2100),
-			MeasureTime::years), 100);
-
-		ASSERT_EQUAL(Date(1, 1, 1, 11, 6, 2020).difference(Date(1, 1, 1, 12, 6, 2019),
-			MeasureTime::years), 0);
-		ASSERT_EQUAL(Date(1, 1, 1, 12, 6, 2020).difference(Date(1, 1, 1, 12, 6, 2019),
-			MeasureTime::years), -1);
-		ASSERT_EQUAL(Date(1, 1, 1, 11, 6, 2020).difference(Date(1, 1, 1, 12, 6, 2019),
-			MeasureTime::years), 0);
-		ASSERT_EQUAL(Date(1, 1, 1, 1, 1, 2100).difference(Date(1, 1, 1, 1, 1, 2000),
-			MeasureTime::years), -100);
-		ASSERT_EQUAL(Date(0, 1, 1, 1, 1, 2100).difference(Date(1, 1, 1, 1, 1, 2000),
-			MeasureTime::years), -99);
-		ASSERT_EQUAL(Date(2, 1, 1, 1, 1, 2100).difference(Date(1, 1, 1, 1, 1, 2000),
-			MeasureTime::years), -100);
-	}
+void TestDateDifference1() {
 	{
 		ASSERT_EQUAL(Date(59, 59, 23, 31, 12, 2019).difference(Date(0, 0, 0, 1, 1, 2020),
 			MeasureTime::months), 0);
@@ -1218,6 +1204,42 @@ void TestDateDifference() {
 		ASSERT_EQUAL(Date(1, 1, 1, 12, 7, 2020).difference(Date(1, 1, 1, 12, 6, 2019),
 			MeasureTime::months), -13);
 	}
+}
+
+void TestDateDifference2() {
+	{
+		ASSERT_EQUAL(Date(59, 59, 23, 31, 12, 2019).difference(Date(0, 0, 0, 1, 1, 2020),
+			MeasureTime::years), 0);
+		ASSERT_EQUAL(Date(0, 0, 0, 1, 1, 2020).difference(Date(59, 59, 23, 31, 12, 2019),
+			MeasureTime::years), 0);
+
+
+		ASSERT_EQUAL(Date(1, 1, 1, 12, 6, 2019).difference(Date(1, 1, 1, 11, 6, 2020),
+			MeasureTime::years), 0);
+		ASSERT_EQUAL(Date(1, 1, 1, 12, 6, 2019).difference(Date(1, 1, 1, 12, 6, 2020),
+			MeasureTime::years), 1);
+		ASSERT_EQUAL(Date(1, 1, 1, 12, 6, 2019).difference(Date(1, 1, 1, 11, 6, 2020),
+			MeasureTime::years), 0);
+		ASSERT_EQUAL(Date(1, 1, 1, 1, 1, 2000).difference(Date(1, 1, 1, 1, 1, 2100),
+			MeasureTime::years), 100);
+		ASSERT_EQUAL(Date(1, 1, 1, 1, 1, 2000).difference(Date(0, 1, 1, 1, 1, 2100),
+			MeasureTime::years), 99);
+		ASSERT_EQUAL(Date(1, 1, 1, 1, 1, 2000).difference(Date(2, 1, 1, 1, 1, 2100),
+			MeasureTime::years), 100);
+
+		ASSERT_EQUAL(Date(1, 1, 1, 11, 6, 2020).difference(Date(1, 1, 1, 12, 6, 2019),
+			MeasureTime::years), 0);
+		ASSERT_EQUAL(Date(1, 1, 1, 12, 6, 2020).difference(Date(1, 1, 1, 12, 6, 2019),
+			MeasureTime::years), -1);
+		ASSERT_EQUAL(Date(1, 1, 1, 11, 6, 2020).difference(Date(1, 1, 1, 12, 6, 2019),
+			MeasureTime::years), 0);
+		ASSERT_EQUAL(Date(1, 1, 1, 1, 1, 2100).difference(Date(1, 1, 1, 1, 1, 2000),
+			MeasureTime::years), -100);
+		ASSERT_EQUAL(Date(0, 1, 1, 1, 1, 2100).difference(Date(1, 1, 1, 1, 1, 2000),
+			MeasureTime::years), -99);
+		ASSERT_EQUAL(Date(2, 1, 1, 1, 1, 2100).difference(Date(1, 1, 1, 1, 1, 2000),
+			MeasureTime::years), -100);
+	}
 	{
 		ASSERT_EQUAL(Date(59, 59, 23, 31, 12, 2019).difference(Date(0, 0, 0, 1, 1, 2020),
 			MeasureTime::days), 0);
@@ -1280,7 +1302,7 @@ void TestDateDifference() {
 			MeasureTime::days), 0);
 		ASSERT_EQUAL(Date(59, 59, 23, 28, 2, 2020).difference(Date(0, 0, 0, 1, 3, 2020),
 			MeasureTime::days), 1);
-		ASSERT_EQUAL(Date(0, 0,0, 28, 2, 2019).difference(Date(0, 0, 0, 1, 3, 2019),
+		ASSERT_EQUAL(Date(0, 0, 0, 28, 2, 2019).difference(Date(0, 0, 0, 1, 3, 2019),
 			MeasureTime::days), 1);
 		ASSERT_EQUAL(Date(0, 0, 0, 28, 2, 2020).difference(Date(0, 0, 0, 29, 2, 2020),
 			MeasureTime::days), 1);
@@ -1344,7 +1366,7 @@ void TestDateDifference() {
 		ASSERT_EQUAL(Date(0, 0, 0, 1, 1, 2020).difference(Date(0, 0, 0, 1, 2, 2020),
 			MeasureTime::days), 31);
 	}
-	
+
 	{
 		ASSERT_EQUAL(Date(0, 0, 0, 1, 1, 2020).difference(Date(0, 0, 10, 1, 1, 2020),
 			MeasureTime::hours), 10);
@@ -1407,7 +1429,7 @@ void TestDateDifference() {
 		ASSERT_EQUAL(Date(0, 59, 23, 28, 2, 2019).difference(Date(0, 0, 0, 1, 3, 2019),
 			MeasureTime::minutes), 1);
 		ASSERT_EQUAL(Date(0, 59, 23, 28, 2, 2020).difference(Date(0, 0, 0, 1, 3, 2020),
-			MeasureTime::minutes), 24*60+1);
+			MeasureTime::minutes), 24 * 60 + 1);
 		ASSERT_EQUAL(Date(0, 59, 23, 29, 2, 2020).difference(Date(0, 0, 0, 1, 3, 2020),
 			MeasureTime::minutes), 1);
 	}
@@ -1544,6 +1566,20 @@ void TestDateStatistics() {
 	ASSERT_EQUAL(statistics(2021, 31), Day::Sunday);
 }
 
+void TestDate() {
+	TestDateBasic();
+	TestDateLeap();
+	TestDateIsValid();
+	TestDateNumberInYear();
+	TestDatePromoteDecrease();
+	TestDateDifference1();
+	TestDateDifference2();
+	TestDateDayOfWeek();
+	TestDateAlternativeConstructor();
+	TestDateNumberOfWeek();
+	TestDateStatistics();
+}
+
 template <typename NodeType, typename EdgeType>
 void TestBasic(Graph<NodeType, EdgeType>& graph) {
 	NodeType new_node = random_element(NodeType());
@@ -1590,11 +1626,17 @@ void TestBasic(Graph<NodeType, EdgeType>& graph) {
 }
 
 template <typename NodeType, typename EdgeType>
-void TestConnected(Graph<NodeType, EdgeType>& graph) {
+void TestConnectedComponentsAcyclicTree(Graph<NodeType, EdgeType>& graph) {
 	ASSERT(!graph.is_connected_graph());
+	ASSERT(graph.is_acyclic());
+	ASSERT(!graph.is_tree());
+	ASSERT_EQUAL(std::vector<std::vector<size_t>>{}, graph.find_components());
 	NodeType Node1 = random_element(NodeType());
 	auto pos1 = graph.add_node(Node1);
 	ASSERT(graph.is_connected_graph());
+	ASSERT(graph.is_acyclic());
+	ASSERT(graph.is_tree());
+	ASSERT_EQUAL(std::vector<std::vector<size_t>>{ {pos1}}, graph.find_components());
 	NodeType Node2 = random_element(NodeType());
 	auto pos2 = graph.add_node(Node2);
 	NodeType Node3 = random_element(NodeType());
@@ -1602,99 +1644,1068 @@ void TestConnected(Graph<NodeType, EdgeType>& graph) {
 	NodeType Node4 = random_element(NodeType());
 	auto pos4 = graph.add_node(Node4);
 	ASSERT(!graph.is_connected_graph());
+	ASSERT(graph.is_acyclic());
+	ASSERT(!graph.is_tree());
+	std::vector<std::vector<size_t>> v{ {pos1},
+		{ pos2 },
+		{ pos3 },
+		{ pos4 }
+	};
+	ASSERT_EQUAL(v, graph.find_components());
 
 	EdgeType edge1 = random_element(EdgeType());
 	graph.add_edge(pos1, pos2, edge1);
 	ASSERT(!graph.is_connected_graph());
+	ASSERT(graph.is_acyclic());
+	ASSERT(!graph.is_tree());
+	v = { {pos1,pos2},
+		{ pos3 },
+		{ pos4 }
+	};
+	ASSERT_EQUAL(v, graph.find_components());
 	EdgeType edge2 = random_element(EdgeType());
 	graph.add_edge(pos1, pos3, edge2);
 	ASSERT(!graph.is_connected_graph());
+	ASSERT(graph.is_acyclic());
+	ASSERT(!graph.is_tree());
+	v = { {pos1,pos2,pos3},
+		{ pos4 }
+	};
+	ASSERT_EQUAL(v, graph.find_components());
 	EdgeType edge3 = random_element(EdgeType());
 	graph.add_edge(pos2, pos3, edge3);
+	ASSERT(!graph.is_connected_graph());
+	ASSERT(!graph.is_acyclic());
+	ASSERT(!graph.is_tree());
+	ASSERT_EQUAL(v, graph.find_components());
+	graph.add_edge(pos2, pos4, edge3);
 	ASSERT(graph.is_connected_graph());
+	ASSERT(!graph.is_acyclic());
+	ASSERT(!graph.is_tree());
+	v = { {pos1,pos2,pos3,pos4}	};
+	ASSERT_EQUAL(v, graph.find_components());
+	graph.add_edge(pos3, pos4, edge1);
+	ASSERT(graph.is_connected_graph());
+	ASSERT(!graph.is_acyclic());
+	ASSERT(!graph.is_tree());
+	ASSERT_EQUAL(v, graph.find_components());
+
+	graph.delete_edge(pos2, pos3);
+	ASSERT(graph.is_connected_graph());
+	ASSERT(!graph.is_acyclic());
+	ASSERT(!graph.is_tree());
+	v = { {pos1,pos2,pos4,pos3} };
+	ASSERT_EQUAL(v, graph.find_components());
 
 	graph.delete_edge(pos1, pos3);
+	ASSERT(graph.is_connected_graph());
+	ASSERT(graph.is_acyclic());
+	ASSERT(graph.is_tree());
+	ASSERT_EQUAL(v, graph.find_components());
+
+	graph.delete_edge(pos2, pos4);
+	v = { {pos1,pos2},{pos3,pos4} };
 	ASSERT(!graph.is_connected_graph());
+	ASSERT(graph.is_acyclic());
+	ASSERT(!graph.is_tree());
+	ASSERT_EQUAL(v, graph.find_components());
+
+	graph.add_edge(pos2, pos3, edge3);
+	ASSERT(graph.is_connected_graph());
+	ASSERT(graph.is_acyclic());
+	ASSERT(graph.is_tree());
+	v = { {pos1,pos2,pos3,pos4} };
+	ASSERT_EQUAL(v, graph.find_components());
 
 	graph.clear();
+}
+
+void TestWays1() {
+	{
+		AdjacencyMatrix<double, int>graph(0, 10000);
+		double Node1 = random_element(double());
+		size_t pos1 = graph.add_node(Node1);
+		double Node2 = random_element(double());
+		size_t pos2 = graph.add_node(Node2);
+		double Node3 = random_element(double());
+		size_t pos3 = graph.add_node(Node3);
+		double Node4 = random_element(double());
+		size_t pos4 = graph.add_node(Node4);
+		double Node5 = random_element(double());
+		size_t pos5 = graph.add_node(Node5);
+		double Node6 = random_element(double());
+		size_t pos6 = graph.add_node(Node6);
+		double Node7 = random_element(double());
+		size_t pos7 = graph.add_node(Node7);
+		double Node8 = random_element(double());
+		size_t pos8 = graph.add_node(Node8);
+		double Node9 = random_element(double());
+		size_t pos9 = graph.add_node(Node9);
+		double Node10 = random_element(double());
+		size_t pos10 = graph.add_node(Node10);
+		auto ways = graph.dijkstra_algorithm(pos5);
+		for (size_t i = pos1; i < pos10; i++) {
+			if (i != pos5) {
+				ASSERT_EQUAL(ways[i], 10000);
+			}
+		}
+		ASSERT_EQUAL(ways[pos5], 0);
+
+		graph.add_edge(pos1, pos10, 20);
+		graph.add_edge(pos1, pos7, 30);
+
+		graph.add_edge(pos2, pos9, 100);
+		graph.add_edge(pos2, pos7, 10);
+
+		graph.add_edge(pos3, pos5, 50);
+		graph.add_edge(pos3, pos10, 305);
+
+		graph.add_edge(pos4, pos7, 20);
+		graph.add_edge(pos4, pos10, 16);
+
+		graph.add_edge(pos5, pos8, 1);
+
+		graph.add_edge(pos8, pos9, 8);
+
+		for (size_t i = pos1; i <= pos10; i++) {
+			if (i != pos6) {
+				ASSERT_EQUAL(graph.dijkstra_algorithm(i)[pos6], 10000);
+			}
+			else {
+				ASSERT_EQUAL(graph.dijkstra_algorithm(i)[pos6], 0);
+			}
+		}
+
+		graph.add_edge(pos1, pos6, 60);
+		graph.add_edge(pos3, pos6, 31);
+
+		{
+			auto ways = graph.dijkstra_algorithm(pos1);
+
+			ASSERT_EQUAL(ways[pos1], 0);
+			ASSERT_EQUAL(ways[pos2], 40);
+			ASSERT_EQUAL(ways[pos3], 91);
+			ASSERT_EQUAL(ways[pos4], 36);
+			ASSERT_EQUAL(ways[pos5], 141);
+			ASSERT_EQUAL(ways[pos6], 60);
+			ASSERT_EQUAL(ways[pos7], 30);
+			ASSERT_EQUAL(ways[pos8], 142);
+			ASSERT_EQUAL(ways[pos9], 140);
+			ASSERT_EQUAL(ways[pos10], 20);
+		}
+		{
+			auto ways = graph.dijkstra_algorithm(pos2);
+
+			ASSERT_EQUAL(ways[pos1], 40);
+			ASSERT_EQUAL(ways[pos2], 0);
+			ASSERT_EQUAL(ways[pos3], 131);
+			ASSERT_EQUAL(ways[pos4], 30);
+			ASSERT_EQUAL(ways[pos5], 109);
+			ASSERT_EQUAL(ways[pos6], 100);
+			ASSERT_EQUAL(ways[pos7], 10);
+			ASSERT_EQUAL(ways[pos8], 108);
+			ASSERT_EQUAL(ways[pos9], 100);
+			ASSERT_EQUAL(ways[pos10], 46);
+		}
+
+		{
+			auto ways = graph.dijkstra_algorithm(pos3);
+
+			ASSERT_EQUAL(ways[pos1], 91);
+			ASSERT_EQUAL(ways[pos2], 131);
+			ASSERT_EQUAL(ways[pos3], 0);
+			ASSERT_EQUAL(ways[pos4], 127);
+			ASSERT_EQUAL(ways[pos5], 50);
+			ASSERT_EQUAL(ways[pos6], 31);
+			ASSERT_EQUAL(ways[pos7], 121);
+			ASSERT_EQUAL(ways[pos8], 51);
+			ASSERT_EQUAL(ways[pos9], 59);
+			ASSERT_EQUAL(ways[pos10], 111);
+		}
+
+		{
+			auto ways = graph.dijkstra_algorithm(pos4);
+
+			ASSERT_EQUAL(ways[pos1], 36);
+			ASSERT_EQUAL(ways[pos2], 30);
+			ASSERT_EQUAL(ways[pos3], 127);
+			ASSERT_EQUAL(ways[pos4], 0);
+			ASSERT_EQUAL(ways[pos5], 139);
+			ASSERT_EQUAL(ways[pos6], 96);
+			ASSERT_EQUAL(ways[pos7], 20);
+			ASSERT_EQUAL(ways[pos8], 138);
+			ASSERT_EQUAL(ways[pos9], 130);
+			ASSERT_EQUAL(ways[pos10], 16);
+		}
+
+		{
+			auto ways = graph.dijkstra_algorithm(pos5);
+
+			ASSERT_EQUAL(ways[pos1], 141);
+			ASSERT_EQUAL(ways[pos2], 109);
+			ASSERT_EQUAL(ways[pos3], 50);
+			ASSERT_EQUAL(ways[pos4], 139);
+			ASSERT_EQUAL(ways[pos5], 0);
+			ASSERT_EQUAL(ways[pos6], 81);
+			ASSERT_EQUAL(ways[pos7], 119);
+			ASSERT_EQUAL(ways[pos8], 1);
+			ASSERT_EQUAL(ways[pos9], 9);
+			ASSERT_EQUAL(ways[pos10], 155);
+		}
+
+		{
+			auto ways = graph.dijkstra_algorithm(pos6);
+
+			ASSERT_EQUAL(ways[pos1], 60);
+			ASSERT_EQUAL(ways[pos2], 100);
+			ASSERT_EQUAL(ways[pos3], 31);
+			ASSERT_EQUAL(ways[pos4], 96);
+			ASSERT_EQUAL(ways[pos5], 81);
+			ASSERT_EQUAL(ways[pos6], 0);
+			ASSERT_EQUAL(ways[pos7], 90);
+			ASSERT_EQUAL(ways[pos8], 82);
+			ASSERT_EQUAL(ways[pos9], 90);
+			ASSERT_EQUAL(ways[pos10], 80);
+		}
+
+		{
+			auto ways = graph.dijkstra_algorithm(pos7);
+
+			ASSERT_EQUAL(ways[pos1], 30);
+			ASSERT_EQUAL(ways[pos2], 10);
+			ASSERT_EQUAL(ways[pos3], 121);
+			ASSERT_EQUAL(ways[pos4], 20);
+			ASSERT_EQUAL(ways[pos5], 119);
+			ASSERT_EQUAL(ways[pos6], 90);
+			ASSERT_EQUAL(ways[pos7], 0);
+			ASSERT_EQUAL(ways[pos8], 118);
+			ASSERT_EQUAL(ways[pos9], 110);
+			ASSERT_EQUAL(ways[pos10], 36);
+		}
+
+		{
+			auto ways = graph.dijkstra_algorithm(pos8);
+
+			ASSERT_EQUAL(ways[pos1], 142);
+			ASSERT_EQUAL(ways[pos2], 108);
+			ASSERT_EQUAL(ways[pos3], 51);
+			ASSERT_EQUAL(ways[pos4], 138);
+			ASSERT_EQUAL(ways[pos5], 1);
+			ASSERT_EQUAL(ways[pos6], 82);
+			ASSERT_EQUAL(ways[pos7], 118);
+			ASSERT_EQUAL(ways[pos8], 0);
+			ASSERT_EQUAL(ways[pos9], 8);
+			ASSERT_EQUAL(ways[pos10], 154);
+		}
+
+		{
+			auto ways = graph.dijkstra_algorithm(pos9);
+
+			ASSERT_EQUAL(ways[pos1], 140);
+			ASSERT_EQUAL(ways[pos2], 100);
+			ASSERT_EQUAL(ways[pos3], 59);
+			ASSERT_EQUAL(ways[pos4], 130);
+			ASSERT_EQUAL(ways[pos5], 9);
+			ASSERT_EQUAL(ways[pos6], 90);
+			ASSERT_EQUAL(ways[pos7], 110);
+			ASSERT_EQUAL(ways[pos8], 8);
+			ASSERT_EQUAL(ways[pos9], 0);
+			ASSERT_EQUAL(ways[pos10], 146);
+		}
+
+		{
+			auto ways = graph.dijkstra_algorithm(pos10);
+
+			ASSERT_EQUAL(ways[pos1], 20);
+			ASSERT_EQUAL(ways[pos2], 46);
+			ASSERT_EQUAL(ways[pos3], 111);
+			ASSERT_EQUAL(ways[pos4], 16);
+			ASSERT_EQUAL(ways[pos5], 155);
+			ASSERT_EQUAL(ways[pos6], 80);
+			ASSERT_EQUAL(ways[pos7], 36);
+			ASSERT_EQUAL(ways[pos8], 154);
+			ASSERT_EQUAL(ways[pos9], 146);
+			ASSERT_EQUAL(ways[pos10], 0);
+		}
+	}
+}
+
+void TestWays2() {
+	{
+		AdjacencyStructure<double, int>graph(0, 10000);
+		double Node1 = random_element(double());
+		size_t pos1 = graph.add_node(Node1);
+		double Node2 = random_element(double());
+		size_t pos2 = graph.add_node(Node2);
+		double Node3 = random_element(double());
+		size_t pos3 = graph.add_node(Node3);
+		double Node4 = random_element(double());
+		size_t pos4 = graph.add_node(Node4);
+		double Node5 = random_element(double());
+		size_t pos5 = graph.add_node(Node5);
+		double Node6 = random_element(double());
+		size_t pos6 = graph.add_node(Node6);
+		double Node7 = random_element(double());
+		size_t pos7 = graph.add_node(Node7);
+		double Node8 = random_element(double());
+		size_t pos8 = graph.add_node(Node8);
+		double Node9 = random_element(double());
+		size_t pos9 = graph.add_node(Node9);
+		double Node10 = random_element(double());
+		size_t pos10 = graph.add_node(Node10);
+		auto ways = graph.dijkstra_algorithm(pos5);
+		for (size_t i = pos1; i < pos10; i++) {
+			if (i != pos5) {
+				ASSERT_EQUAL(ways[i], 10000);
+			}
+		}
+		ASSERT_EQUAL(ways[pos5], 0);
+
+		graph.add_edge(pos1, pos10, 20);
+		graph.add_edge(pos1, pos7, 30);
+
+		graph.add_edge(pos2, pos9, 100);
+		graph.add_edge(pos2, pos7, 10);
+
+		graph.add_edge(pos3, pos5, 50);
+		graph.add_edge(pos3, pos10, 305);
+
+		graph.add_edge(pos4, pos7, 20);
+		graph.add_edge(pos4, pos10, 16);
+
+		graph.add_edge(pos5, pos8, 1);
+
+		graph.add_edge(pos8, pos9, 8);
+
+		for (size_t i = pos1; i <= pos10; i++) {
+			if (i != pos6) {
+				ASSERT_EQUAL(graph.dijkstra_algorithm(i)[pos6], 10000);
+			}
+			else {
+				ASSERT_EQUAL(graph.dijkstra_algorithm(i)[pos6], 0);
+			}
+		}
+
+		graph.add_edge(pos1, pos6, 60);
+		graph.add_edge(pos3, pos6, 31);
+
+		{
+			auto ways = graph.dijkstra_algorithm(pos1);
+
+			ASSERT_EQUAL(ways[pos1], 0);
+			ASSERT_EQUAL(ways[pos2], 40);
+			ASSERT_EQUAL(ways[pos3], 91);
+			ASSERT_EQUAL(ways[pos4], 36);
+			ASSERT_EQUAL(ways[pos5], 141);
+			ASSERT_EQUAL(ways[pos6], 60);
+			ASSERT_EQUAL(ways[pos7], 30);
+			ASSERT_EQUAL(ways[pos8], 142);
+			ASSERT_EQUAL(ways[pos9], 140);
+			ASSERT_EQUAL(ways[pos10], 20);
+		}
+		{
+			auto ways = graph.dijkstra_algorithm(pos2);
+
+			ASSERT_EQUAL(ways[pos1], 40);
+			ASSERT_EQUAL(ways[pos2], 0);
+			ASSERT_EQUAL(ways[pos3], 131);
+			ASSERT_EQUAL(ways[pos4], 30);
+			ASSERT_EQUAL(ways[pos5], 109);
+			ASSERT_EQUAL(ways[pos6], 100);
+			ASSERT_EQUAL(ways[pos7], 10);
+			ASSERT_EQUAL(ways[pos8], 108);
+			ASSERT_EQUAL(ways[pos9], 100);
+			ASSERT_EQUAL(ways[pos10], 46);
+		}
+
+		{
+			auto ways = graph.dijkstra_algorithm(pos3);
+
+			ASSERT_EQUAL(ways[pos1], 91);
+			ASSERT_EQUAL(ways[pos2], 131);
+			ASSERT_EQUAL(ways[pos3], 0);
+			ASSERT_EQUAL(ways[pos4], 127);
+			ASSERT_EQUAL(ways[pos5], 50);
+			ASSERT_EQUAL(ways[pos6], 31);
+			ASSERT_EQUAL(ways[pos7], 121);
+			ASSERT_EQUAL(ways[pos8], 51);
+			ASSERT_EQUAL(ways[pos9], 59);
+			ASSERT_EQUAL(ways[pos10], 111);
+		}
+
+		{
+			auto ways = graph.dijkstra_algorithm(pos4);
+
+			ASSERT_EQUAL(ways[pos1], 36);
+			ASSERT_EQUAL(ways[pos2], 30);
+			ASSERT_EQUAL(ways[pos3], 127);
+			ASSERT_EQUAL(ways[pos4], 0);
+			ASSERT_EQUAL(ways[pos5], 139);
+			ASSERT_EQUAL(ways[pos6], 96);
+			ASSERT_EQUAL(ways[pos7], 20);
+			ASSERT_EQUAL(ways[pos8], 138);
+			ASSERT_EQUAL(ways[pos9], 130);
+			ASSERT_EQUAL(ways[pos10], 16);
+		}
+
+		{
+			auto ways = graph.dijkstra_algorithm(pos5);
+
+			ASSERT_EQUAL(ways[pos1], 141);
+			ASSERT_EQUAL(ways[pos2], 109);
+			ASSERT_EQUAL(ways[pos3], 50);
+			ASSERT_EQUAL(ways[pos4], 139);
+			ASSERT_EQUAL(ways[pos5], 0);
+			ASSERT_EQUAL(ways[pos6], 81);
+			ASSERT_EQUAL(ways[pos7], 119);
+			ASSERT_EQUAL(ways[pos8], 1);
+			ASSERT_EQUAL(ways[pos9], 9);
+			ASSERT_EQUAL(ways[pos10], 155);
+		}
+
+		{
+			auto ways = graph.dijkstra_algorithm(pos6);
+
+			ASSERT_EQUAL(ways[pos1], 60);
+			ASSERT_EQUAL(ways[pos2], 100);
+			ASSERT_EQUAL(ways[pos3], 31);
+			ASSERT_EQUAL(ways[pos4], 96);
+			ASSERT_EQUAL(ways[pos5], 81);
+			ASSERT_EQUAL(ways[pos6], 0);
+			ASSERT_EQUAL(ways[pos7], 90);
+			ASSERT_EQUAL(ways[pos8], 82);
+			ASSERT_EQUAL(ways[pos9], 90);
+			ASSERT_EQUAL(ways[pos10], 80);
+		}
+
+		{
+			auto ways = graph.dijkstra_algorithm(pos7);
+
+			ASSERT_EQUAL(ways[pos1], 30);
+			ASSERT_EQUAL(ways[pos2], 10);
+			ASSERT_EQUAL(ways[pos3], 121);
+			ASSERT_EQUAL(ways[pos4], 20);
+			ASSERT_EQUAL(ways[pos5], 119);
+			ASSERT_EQUAL(ways[pos6], 90);
+			ASSERT_EQUAL(ways[pos7], 0);
+			ASSERT_EQUAL(ways[pos8], 118);
+			ASSERT_EQUAL(ways[pos9], 110);
+			ASSERT_EQUAL(ways[pos10], 36);
+		}
+
+		{
+			auto ways = graph.dijkstra_algorithm(pos8);
+
+			ASSERT_EQUAL(ways[pos1], 142);
+			ASSERT_EQUAL(ways[pos2], 108);
+			ASSERT_EQUAL(ways[pos3], 51);
+			ASSERT_EQUAL(ways[pos4], 138);
+			ASSERT_EQUAL(ways[pos5], 1);
+			ASSERT_EQUAL(ways[pos6], 82);
+			ASSERT_EQUAL(ways[pos7], 118);
+			ASSERT_EQUAL(ways[pos8], 0);
+			ASSERT_EQUAL(ways[pos9], 8);
+			ASSERT_EQUAL(ways[pos10], 154);
+		}
+
+		{
+			auto ways = graph.dijkstra_algorithm(pos9);
+
+			ASSERT_EQUAL(ways[pos1], 140);
+			ASSERT_EQUAL(ways[pos2], 100);
+			ASSERT_EQUAL(ways[pos3], 59);
+			ASSERT_EQUAL(ways[pos4], 130);
+			ASSERT_EQUAL(ways[pos5], 9);
+			ASSERT_EQUAL(ways[pos6], 90);
+			ASSERT_EQUAL(ways[pos7], 110);
+			ASSERT_EQUAL(ways[pos8], 8);
+			ASSERT_EQUAL(ways[pos9], 0);
+			ASSERT_EQUAL(ways[pos10], 146);
+		}
+
+		{
+			auto ways = graph.dijkstra_algorithm(pos10);
+
+			ASSERT_EQUAL(ways[pos1], 20);
+			ASSERT_EQUAL(ways[pos2], 46);
+			ASSERT_EQUAL(ways[pos3], 111);
+			ASSERT_EQUAL(ways[pos4], 16);
+			ASSERT_EQUAL(ways[pos5], 155);
+			ASSERT_EQUAL(ways[pos6], 80);
+			ASSERT_EQUAL(ways[pos7], 36);
+			ASSERT_EQUAL(ways[pos8], 154);
+			ASSERT_EQUAL(ways[pos9], 146);
+			ASSERT_EQUAL(ways[pos10], 0);
+		}
+	}
+}
+
+void TestWays3() {
+	{
+		AdjacencyMatrix<std::vector<int>, std::string>graph("", "zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz");
+		std::vector<int> Node1 = random_element(std::vector<int>());
+		size_t pos1 = graph.add_node(Node1);
+		std::vector<int> Node2 = random_element(std::vector<int>());
+		size_t pos2 = graph.add_node(Node2);
+		std::vector<int> Node3 = random_element(std::vector<int>());
+		size_t pos3 = graph.add_node(Node3);
+		std::vector<int> Node4 = random_element(std::vector<int>());
+		size_t pos4 = graph.add_node(Node4);
+		std::vector<int> Node5 = random_element(std::vector<int>());
+		size_t pos5 = graph.add_node(Node5);
+		auto ways = graph.dijkstra_algorithm(pos3);
+		for (size_t i = pos1; i < pos5; i++) {
+			if (i != pos3) {
+				ASSERT_EQUAL(ways[i], "zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz");
+			}
+		}
+		ASSERT_EQUAL(ways[pos3], "");
+
+		graph.add_edge(pos1, pos2, "abcde");
+		graph.add_edge(pos1, pos5, "orororand");
+		graph.add_edge(pos5, pos3, "dcdc");
+		graph.add_edge(pos2, pos5, "ccc");
+		graph.add_edge(pos2, pos3, "mlka");
+
+		for (size_t i = pos1; i <= pos5; i++) {
+			if (i != pos4) {
+				ASSERT_EQUAL(graph.dijkstra_algorithm(i)[pos4], "zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz");
+			}
+			else {
+				ASSERT_EQUAL(graph.dijkstra_algorithm(i)[pos4], "");
+			}
+		}
+
+		graph.add_edge(pos4, pos3, "tatl");
+		graph.add_edge(pos4, pos2, "krum");
+
+		{
+			auto ways = graph.dijkstra_algorithm(pos1);
+
+			ASSERT_EQUAL(ways[pos1], "");
+			ASSERT_EQUAL(ways[pos2], "abcde");
+			ASSERT_EQUAL(ways[pos3], "abcdecccdcdc");
+			ASSERT_EQUAL(ways[pos4], "abcdecccdcdctatl");
+			ASSERT_EQUAL(ways[pos5], "abcdeccc");
+		}
+
+		{
+			auto ways = graph.dijkstra_algorithm(pos2);
+
+			ASSERT_EQUAL(ways[pos1], "abcde");
+			ASSERT_EQUAL(ways[pos2], "");
+			ASSERT_EQUAL(ways[pos3], "abcdeorororanddcdc");
+			ASSERT_EQUAL(ways[pos4], "abcdeorororanddcdctatl");
+			ASSERT_EQUAL(ways[pos5], "abcdeorororand");
+		}
+
+		{
+			auto ways = graph.dijkstra_algorithm(pos3);
+
+			ASSERT_EQUAL(ways[pos1], "dcdccccabcde");
+			ASSERT_EQUAL(ways[pos2], "dcdcccc");
+			ASSERT_EQUAL(ways[pos3], "");
+			ASSERT_EQUAL(ways[pos4], "dcdcccckrum");
+			ASSERT_EQUAL(ways[pos5], "dcdc");
+		}
+
+		{
+			auto ways = graph.dijkstra_algorithm(pos4);
+
+			ASSERT_EQUAL(ways[pos1], "krumabcde");
+			ASSERT_EQUAL(ways[pos2], "krum");
+			ASSERT_EQUAL(ways[pos3], "krumabcdeorororanddcdc");
+			ASSERT_EQUAL(ways[pos4], "");
+			ASSERT_EQUAL(ways[pos5], "krumabcdeorororand");
+		}
+
+		{
+			auto ways = graph.dijkstra_algorithm(pos5);
+
+			ASSERT_EQUAL(ways[pos1], "cccabcde");
+			ASSERT_EQUAL(ways[pos2], "ccc");
+			ASSERT_EQUAL(ways[pos3], "ccckrumtatl");
+			ASSERT_EQUAL(ways[pos4], "ccckrum");
+			ASSERT_EQUAL(ways[pos5], "");
+		}
+	}
+	{
+		AdjacencyStructure<std::vector<int>, std::string>graph("", "zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz");
+		std::vector<int> Node1 = random_element(std::vector<int>());
+		size_t pos1 = graph.add_node(Node1);
+		std::vector<int> Node2 = random_element(std::vector<int>());
+		size_t pos2 = graph.add_node(Node2);
+		std::vector<int> Node3 = random_element(std::vector<int>());
+		size_t pos3 = graph.add_node(Node3);
+		std::vector<int> Node4 = random_element(std::vector<int>());
+		size_t pos4 = graph.add_node(Node4);
+		std::vector<int> Node5 = random_element(std::vector<int>());
+		size_t pos5 = graph.add_node(Node5);
+		auto ways = graph.dijkstra_algorithm(pos3);
+		for (size_t i = pos1; i < pos5; i++) {
+			if (i != pos3) {
+				ASSERT_EQUAL(ways[i], "zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz");
+			}
+		}
+		ASSERT_EQUAL(ways[pos3], "");
+
+		graph.add_edge(pos1, pos2, "abcde");
+		graph.add_edge(pos1, pos5, "orororand");
+		graph.add_edge(pos5, pos3, "dcdc");
+		graph.add_edge(pos2, pos5, "ccc");
+		graph.add_edge(pos2, pos3, "mlka");
+
+		for (size_t i = pos1; i <= pos5; i++) {
+			if (i != pos4) {
+				ASSERT_EQUAL(graph.dijkstra_algorithm(i)[pos4], "zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz");
+			}
+			else {
+				ASSERT_EQUAL(graph.dijkstra_algorithm(i)[pos4], "");
+			}
+		}
+
+		graph.add_edge(pos4, pos3, "tatl");
+		graph.add_edge(pos4, pos2, "krum");
+
+		{
+			auto ways = graph.dijkstra_algorithm(pos1);
+
+			ASSERT_EQUAL(ways[pos1], "");
+			ASSERT_EQUAL(ways[pos2], "abcde");
+			ASSERT_EQUAL(ways[pos3], "abcdecccdcdc");
+			ASSERT_EQUAL(ways[pos4], "abcdecccdcdctatl");
+			ASSERT_EQUAL(ways[pos5], "abcdeccc");
+		}
+
+		{
+			auto ways = graph.dijkstra_algorithm(pos2);
+
+			ASSERT_EQUAL(ways[pos1], "abcde");
+			ASSERT_EQUAL(ways[pos2], "");
+			ASSERT_EQUAL(ways[pos3], "abcdeorororanddcdc");
+			ASSERT_EQUAL(ways[pos4], "abcdeorororanddcdctatl");
+			ASSERT_EQUAL(ways[pos5], "abcdeorororand");
+		}
+
+		{
+			auto ways = graph.dijkstra_algorithm(pos3);
+
+			ASSERT_EQUAL(ways[pos1], "dcdccccabcde");
+			ASSERT_EQUAL(ways[pos2], "dcdcccc");
+			ASSERT_EQUAL(ways[pos3], "");
+			ASSERT_EQUAL(ways[pos4], "dcdcccckrum");
+			ASSERT_EQUAL(ways[pos5], "dcdc");
+		}
+
+		{
+			auto ways = graph.dijkstra_algorithm(pos4);
+
+			ASSERT_EQUAL(ways[pos1], "krumabcde");
+			ASSERT_EQUAL(ways[pos2], "krum");
+			ASSERT_EQUAL(ways[pos3], "krumabcdeorororanddcdc");
+			ASSERT_EQUAL(ways[pos4], "");
+			ASSERT_EQUAL(ways[pos5], "krumabcdeorororand");
+		}
+
+		{
+			auto ways = graph.dijkstra_algorithm(pos5);
+
+			ASSERT_EQUAL(ways[pos1], "cccabcde");
+			ASSERT_EQUAL(ways[pos2], "ccc");
+			ASSERT_EQUAL(ways[pos3], "ccckrumtatl");
+			ASSERT_EQUAL(ways[pos4], "ccckrum");
+			ASSERT_EQUAL(ways[pos5], "");
+		}
+	}
+}
+
+void TestWays4() {
+	{
+		AdjacencyMatrix<BookCharacter<int>, Book>graph(Book(), Book("zzzzzzzzzz", {}, Date(), 1000, "zzzzzzzz"));
+		BookCharacter<int> Node1 = random_element(BookCharacter<int>());
+		size_t pos1 = graph.add_node(Node1);
+		BookCharacter<int> Node2 = random_element(BookCharacter<int>());
+		size_t pos2 = graph.add_node(Node2);
+		BookCharacter<int> Node3 = random_element(BookCharacter<int>());
+		size_t pos3 = graph.add_node(Node3);
+		BookCharacter<int> Node4 = random_element(BookCharacter<int>());
+		size_t pos4 = graph.add_node(Node4);
+		auto ways = graph.dijkstra_algorithm(pos3);
+		for (size_t i = pos1; i <= pos4; i++) {
+			if (i != pos3) {
+				ASSERT_EQUAL(ways[i], Book("zzzzzzzzzz", {}, Date(), 1000, "zzzzzzzz"));
+			}
+		}
+		ASSERT_EQUAL(ways[pos3], Book());
+
+		Book edge1("aaa", std::set<std::string>{"baba"}, Date(1, 1, 1, 1, 1, 1), 100, "annot");
+		Book edge2("bbb", std::set<std::string>{"abab"}, Date(1, 1, 1, 1, 1, 1), 100, "annot");
+		Book edge3("aaa", std::set<std::string>{"abab"}, Date(1, 1, 1, 1, 1, 1), 100, "annot");
+		Book edge4("ccc", std::set<std::string>{"abab"}, Date(1, 1, 1, 1, 1, 1), 100, "annot");
+
+		graph.add_edge(pos1, pos3, edge1);
+		graph.add_edge(pos3, pos2, edge2);
+
+		for (size_t i = pos1; i <= pos4; i++) {
+			if (i != pos4) {
+				ASSERT_EQUAL(graph.dijkstra_algorithm(i)[pos4], Book("zzzzzzzzzz", {}, Date(), 1000, "zzzzzzzz"));
+			}
+			else {
+				ASSERT_EQUAL(graph.dijkstra_algorithm(i)[pos4], Book());
+			}
+		}
+
+		graph.add_edge(pos1,pos4,edge3);
+		graph.add_edge(pos2, pos4, edge4);
+
+		{
+			auto ways = graph.dijkstra_algorithm(pos1);
+
+			ASSERT_EQUAL(ways[pos1], Book());
+			ASSERT_EQUAL(ways[pos2], edge1+edge2);
+			ASSERT_EQUAL(ways[pos3], edge1);
+			ASSERT_EQUAL(ways[pos4], edge3);
+		}
+
+		{
+			auto ways = graph.dijkstra_algorithm(pos2);
+
+			ASSERT_EQUAL(ways[pos1], edge2 + edge1);
+			ASSERT_EQUAL(ways[pos2], Book());
+			ASSERT_EQUAL(ways[pos3], edge2);
+			ASSERT_EQUAL(ways[pos4], edge2+edge1+edge3);
+		}
+
+		{
+			auto ways = graph.dijkstra_algorithm(pos3);
+
+			ASSERT_EQUAL(ways[pos1], edge1);
+			ASSERT_EQUAL(ways[pos2], edge1 + edge3 +edge4);
+			ASSERT_EQUAL(ways[pos3], Book());
+			ASSERT_EQUAL(ways[pos4], edge1 + edge3);
+		}
+
+		{
+			auto ways = graph.dijkstra_algorithm(pos4);
+
+			ASSERT_EQUAL(ways[pos1], edge3);
+			ASSERT_EQUAL(ways[pos2], edge3 + edge1 +edge2);
+			ASSERT_EQUAL(ways[pos3], edge3 + edge1);
+			ASSERT_EQUAL(ways[pos4], Book());
+		}
+
+	}
+	{
+		AdjacencyStructure<BookCharacter<int>, Book>graph(Book(), Book("zzzzzzzzzz", {}, Date(), 1000, "zzzzzzzz"));
+		BookCharacter<int> Node1 = random_element(BookCharacter<int>());
+		size_t pos1 = graph.add_node(Node1);
+		BookCharacter<int> Node2 = random_element(BookCharacter<int>());
+		size_t pos2 = graph.add_node(Node2);
+		BookCharacter<int> Node3 = random_element(BookCharacter<int>());
+		size_t pos3 = graph.add_node(Node3);
+		BookCharacter<int> Node4 = random_element(BookCharacter<int>());
+		size_t pos4 = graph.add_node(Node4);
+		auto ways = graph.dijkstra_algorithm(pos3);
+		for (size_t i = pos1; i <= pos4; i++) {
+			if (i != pos3) {
+				ASSERT_EQUAL(ways[i], Book("zzzzzzzzzz", {}, Date(), 1000, "zzzzzzzz"));
+			}
+		}
+		ASSERT_EQUAL(ways[pos3], Book());
+
+		Book edge1("aaa", std::set<std::string>{"baba"}, Date(1, 1, 1, 1, 1, 1), 100, "annot");
+		Book edge2("bbb", std::set<std::string>{"abab"}, Date(1, 1, 1, 1, 1, 1), 100, "annot");
+		Book edge3("aaa", std::set<std::string>{"abab"}, Date(1, 1, 1, 1, 1, 1), 100, "annot");
+		Book edge4("ccc", std::set<std::string>{"abab"}, Date(1, 1, 1, 1, 1, 1), 100, "annot");
+
+		graph.add_edge(pos1, pos3, edge1);
+		graph.add_edge(pos3, pos2, edge2);
+
+		for (size_t i = pos1; i <= pos4; i++) {
+			if (i != pos4) {
+				ASSERT_EQUAL(graph.dijkstra_algorithm(i)[pos4], Book("zzzzzzzzzz", {}, Date(), 1000, "zzzzzzzz"));
+			}
+			else {
+				ASSERT_EQUAL(graph.dijkstra_algorithm(i)[pos4], Book());
+			}
+		}
+
+		graph.add_edge(pos1, pos4, edge3);
+		graph.add_edge(pos2, pos4, edge4);
+
+		{
+			auto ways = graph.dijkstra_algorithm(pos1);
+
+			ASSERT_EQUAL(ways[pos1], Book());
+			ASSERT_EQUAL(ways[pos2], edge1 + edge2);
+			ASSERT_EQUAL(ways[pos3], edge1);
+			ASSERT_EQUAL(ways[pos4], edge3);
+		}
+
+		{
+			auto ways = graph.dijkstra_algorithm(pos2);
+
+			ASSERT_EQUAL(ways[pos1], edge2 + edge1);
+			ASSERT_EQUAL(ways[pos2], Book());
+			ASSERT_EQUAL(ways[pos3], edge2);
+			ASSERT_EQUAL(ways[pos4], edge2 + edge1 + edge3);
+		}
+
+		{
+			auto ways = graph.dijkstra_algorithm(pos3);
+
+			ASSERT_EQUAL(ways[pos1], edge1);
+			ASSERT_EQUAL(ways[pos2], edge1 + edge3 + edge4);
+			ASSERT_EQUAL(ways[pos3], Book());
+			ASSERT_EQUAL(ways[pos4], edge1 + edge3);
+		}
+
+		{
+			auto ways = graph.dijkstra_algorithm(pos4);
+
+			ASSERT_EQUAL(ways[pos1], edge3);
+			ASSERT_EQUAL(ways[pos2], edge3 + edge1 + edge2);
+			ASSERT_EQUAL(ways[pos3], edge3 + edge1);
+			ASSERT_EQUAL(ways[pos4], Book());
+		}
+
+	}
+}
+
+void TestWays5() {
+	{
+		AdjacencyMatrix<PublishingHouse, Date>graph(Date(), Date(1000, 1000, 1000, 1000, 1000, 10000)); 
+		PublishingHouse Node1 = random_element(PublishingHouse());
+		size_t pos1 = graph.add_node(Node1);
+		PublishingHouse Node2 = random_element(PublishingHouse());
+		size_t pos2 = graph.add_node(Node2);
+		PublishingHouse Node3 = random_element(PublishingHouse());
+		size_t pos3 = graph.add_node(Node3);
+		PublishingHouse Node4 = random_element(PublishingHouse());
+		size_t pos4 = graph.add_node(Node4);
+		auto ways = graph.dijkstra_algorithm(pos3);
+		for (size_t i = pos1; i <= pos4; i++) {
+			if (i != pos3) {
+				ASSERT_EQUAL(ways[i], Date(1000, 1000, 1000, 1000, 1000, 10000));
+			}
+		}
+		ASSERT_EQUAL(ways[pos3], Date());
+
+		Date edge1(0,0,0,4,10,2020);
+		Date edge2(0,0,0,5,10,2020);
+		Date edge3(0,0,12,3,10,2020);
+		Date edge4(0,0,12,1,1,2021);
+
+		graph.add_edge(pos1, pos3, edge1);
+		graph.add_edge(pos1, pos4, edge4);
+
+		for (size_t i = pos1; i <= pos4; i++) {
+			if (i != pos2) {
+				ASSERT_EQUAL(graph.dijkstra_algorithm(i)[pos2], Date(1000, 1000, 1000, 1000, 1000, 10000));
+			}
+			else {
+				ASSERT_EQUAL(graph.dijkstra_algorithm(i)[pos2], Date());
+			}
+		}
+
+		graph.add_edge(pos2, pos4, edge3);
+		graph.add_edge(pos2, pos3, edge2);
+
+		{
+			auto ways = graph.dijkstra_algorithm(pos1);
+
+			ASSERT_EQUAL(ways[pos1], Date());
+			ASSERT_EQUAL(ways[pos2], edge1 + edge2);
+			ASSERT_EQUAL(ways[pos3], edge1);
+			ASSERT_EQUAL(ways[pos4], edge1 + edge2+edge3);
+		}
+
+		{
+			auto ways = graph.dijkstra_algorithm(pos2);
+
+			ASSERT_EQUAL(ways[pos1], edge3 + edge4);
+			ASSERT_EQUAL(ways[pos2], Date());
+			ASSERT_EQUAL(ways[pos3], edge3+edge4+edge1);
+			ASSERT_EQUAL(ways[pos4], edge3);
+		}
+
+		{
+			auto ways = graph.dijkstra_algorithm(pos3);
+
+			ASSERT_EQUAL(ways[pos1], edge1);
+			ASSERT_EQUAL(ways[pos2], edge2);
+			ASSERT_EQUAL(ways[pos3], Date());
+			ASSERT_EQUAL(ways[pos4], edge1 + edge4);
+		}
+
+		{
+			auto ways = graph.dijkstra_algorithm(pos4);
+
+			ASSERT_EQUAL(ways[pos1], edge3+edge2+edge1);
+			ASSERT_EQUAL(ways[pos2], edge3);
+			ASSERT_EQUAL(ways[pos3], edge3+edge2);
+			ASSERT_EQUAL(ways[pos4], Date());
+		}
+	}
+	{
+		AdjacencyStructure<PublishingHouse, Date>graph(Date(), Date(1000, 1000, 1000, 1000, 1000, 10000));
+		PublishingHouse Node1 = random_element(PublishingHouse());
+		size_t pos1 = graph.add_node(Node1);
+		PublishingHouse Node2 = random_element(PublishingHouse());
+		size_t pos2 = graph.add_node(Node2);
+		PublishingHouse Node3 = random_element(PublishingHouse());
+		size_t pos3 = graph.add_node(Node3);
+		PublishingHouse Node4 = random_element(PublishingHouse());
+		size_t pos4 = graph.add_node(Node4);
+		auto ways = graph.dijkstra_algorithm(pos3);
+		for (size_t i = pos1; i <= pos4; i++) {
+			if (i != pos3) {
+				ASSERT_EQUAL(ways[i], Date(1000, 1000, 1000, 1000, 1000, 10000));
+			}
+		}
+		ASSERT_EQUAL(ways[pos3], Date());
+
+		Date edge1(0, 0, 0, 4, 10, 2020);
+		Date edge2(0, 0, 0, 5, 10, 2020);
+		Date edge3(0, 0, 12, 3, 10, 2020);
+		Date edge4(0, 0, 12, 1, 1, 2021);
+
+		graph.add_edge(pos1, pos3, edge1);
+		graph.add_edge(pos1, pos4, edge4);
+
+		for (size_t i = pos1; i <= pos4; i++) {
+			if (i != pos2) {
+				ASSERT_EQUAL(graph.dijkstra_algorithm(i)[pos2], Date(1000, 1000, 1000, 1000, 1000, 10000));
+			}
+			else {
+				ASSERT_EQUAL(graph.dijkstra_algorithm(i)[pos2], Date());
+			}
+		}
+
+		graph.add_edge(pos2, pos4, edge3);
+		graph.add_edge(pos2, pos3, edge2);
+
+		{
+			auto ways = graph.dijkstra_algorithm(pos1);
+
+			ASSERT_EQUAL(ways[pos1], Date());
+			ASSERT_EQUAL(ways[pos2], edge1 + edge2);
+			ASSERT_EQUAL(ways[pos3], edge1);
+			ASSERT_EQUAL(ways[pos4], edge1 + edge2 + edge3);
+		}
+
+		{
+			auto ways = graph.dijkstra_algorithm(pos2);
+
+			ASSERT_EQUAL(ways[pos1], edge3 + edge4);
+			ASSERT_EQUAL(ways[pos2], Date());
+			ASSERT_EQUAL(ways[pos3], edge3 + edge4 + edge1);
+			ASSERT_EQUAL(ways[pos4], edge3);
+		}
+
+		{
+			auto ways = graph.dijkstra_algorithm(pos3);
+
+			ASSERT_EQUAL(ways[pos1], edge1);
+			ASSERT_EQUAL(ways[pos2], edge2);
+			ASSERT_EQUAL(ways[pos3], Date());
+			ASSERT_EQUAL(ways[pos4], edge1 + edge4);
+		}
+
+		{
+			auto ways = graph.dijkstra_algorithm(pos4);
+
+			ASSERT_EQUAL(ways[pos1], edge3 + edge2 + edge1);
+			ASSERT_EQUAL(ways[pos2], edge3);
+			ASSERT_EQUAL(ways[pos3], edge3 + edge2);
+			ASSERT_EQUAL(ways[pos4], Date());
+		}
+	}
 }
 
 void TestGraph() {
 	{
 		AdjacencyMatrix<double, int>graph(0, 1000);
 		TestBasic(graph);
-		TestConnected(graph);
+		TestConnectedComponentsAcyclicTree(graph);
 	}
 	{
 		AdjacencyStructure<double, int>graph(0, 1000);
 		TestBasic(graph);
+		TestConnectedComponentsAcyclicTree(graph);
 	}
 	{
 		AdjacencyMatrix<int,double>graph(0, 1000);
 		TestBasic(graph);
+		TestConnectedComponentsAcyclicTree(graph);
 	}
 	{
 		AdjacencyStructure<int, double>graph(0, 1000);
 		TestBasic(graph);
+		TestConnectedComponentsAcyclicTree(graph);
 	}
 	{
 		AdjacencyMatrix<std::string, std::vector<int>>graph(std::vector<int>(), std::vector<int>(1000,1000));
 		TestBasic(graph);
+		TestConnectedComponentsAcyclicTree(graph);
 	}
 	{
 		AdjacencyStructure<std::string, std::vector<int>>graph(std::vector<int>(), std::vector<int>(1000, 1000));
 		TestBasic(graph);
+		TestConnectedComponentsAcyclicTree(graph);
 	}
 	{
 		AdjacencyMatrix<std::vector<int>,std::string>graph("", "zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz");
 		TestBasic(graph);
+		TestConnectedComponentsAcyclicTree(graph);
 	}
 	{
 		AdjacencyStructure<std::vector<int>,std::string>graph("", "zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz");
 		TestBasic(graph);
+		TestConnectedComponentsAcyclicTree(graph);
 	}
 	{
 		AdjacencyMatrix<double,std::vector<std::string>>graph(std::vector<std::string>(), std::vector<std::string>(1000, "z"));
 		TestBasic(graph);
+		TestConnectedComponentsAcyclicTree(graph);
 	}
 	{
 		AdjacencyStructure<double,std::vector<std::string>>graph(std::vector<std::string>(), std::vector<std::string>(1000, "z"));
 		TestBasic(graph);
+		TestConnectedComponentsAcyclicTree(graph);
 	}
 	{
 		AdjacencyMatrix<BookCharacter<int>, Book>graph(Book(), Book("zzzzzzzzzz", {},Date(),1000,"zzzzzzzz"));
 		TestBasic(graph);
+		TestConnectedComponentsAcyclicTree(graph);
 	}
 	{
 		AdjacencyStructure<BookCharacter<int>, Book>graph(Book(), Book("zzzzzzzzzz", {}, Date(), 1000, "zzzzzzzz"));
 		TestBasic(graph);
+		TestConnectedComponentsAcyclicTree(graph);
 	}
 	{
 		AdjacencyMatrix<PublishingHouse, Date>graph(Date(0,0,0,0,0,0), Date(1000, 1000, 1000, 1000, 1000, 1000));
 		TestBasic(graph);
+		TestConnectedComponentsAcyclicTree(graph);
 	}
 	{
 		AdjacencyStructure<PublishingHouse, Date>graph(Date(0, 0, 0, 0, 0, 0), Date(1000, 1000, 1000, 1000, 1000, 1000));
 		TestBasic(graph);
+		TestConnectedComponentsAcyclicTree(graph);
 	}
+	TestWays1();
+	TestWays2();
+	TestWays3();
+	TestWays4();
+	TestWays5();
 }
 
 int main() {
 	TestRunner tr;
-	RUN_TEST(tr, TestCharacter<std::string>);
-	RUN_TEST(tr, TestCharacter<int>);
+	RUN_TEST(tr, TestBookCharacter);
 	RUN_TEST(tr, TestBook);
-	RUN_TEST(tr, TestHouseSeries);
-	RUN_TEST(tr, TestHouseNotSeries);
-	RUN_TEST(tr, TestDateBasic);
-	RUN_TEST(tr, TestDateLeap);
-	RUN_TEST(tr, TestDateIsValid);
-	RUN_TEST(tr, TestDateNumberInYear);
-	RUN_TEST(tr, TestDatePromoteDecrease);
-	RUN_TEST(tr, TestDateDifference);
-	RUN_TEST(tr, TestDateDayOfWeek);
-	RUN_TEST(tr, TestDateAlternativeConstructor);
-	RUN_TEST(tr, TestDateNumberOfWeek);
-	RUN_TEST(tr, TestDateStatistics);
+	RUN_TEST(tr, TestHouse);
+	RUN_TEST(tr, TestDate);
 	RUN_TEST(tr, TestGraph);
 }

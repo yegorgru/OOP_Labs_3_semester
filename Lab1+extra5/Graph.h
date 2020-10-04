@@ -46,9 +46,6 @@ public:
 
 	virtual bool is_tree();
 
-	virtual Graph<NodeType, EdgeType> minimum_spanning_tree_kruskal();
-	virtual Graph<NodeType, EdgeType> minimum_spanning_reverse_delete();
-
 	virtual NodeType get_node(size_t node);
 
 	virtual EdgeType get_edge(size_t begin, size_t end);
@@ -123,18 +120,6 @@ template<typename NodeType, typename EdgeType>
 inline bool Graph<NodeType, EdgeType>::is_tree()
 {
 	return false;
-}
-
-template<typename NodeType, typename EdgeType>
-inline Graph<NodeType, EdgeType> Graph<NodeType, EdgeType>::minimum_spanning_tree_kruskal()
-{
-	return Graph<NodeType, EdgeType>(this->zero_edge,this->max_edge);
-}
-
-template<typename NodeType, typename EdgeType>
-inline Graph<NodeType, EdgeType> Graph<NodeType, EdgeType>::minimum_spanning_reverse_delete()
-{
-	return Graph<NodeType, EdgeType>(this->zero_edge, this->max_edge);
 }
 
 template<typename NodeType, typename EdgeType>
