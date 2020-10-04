@@ -1,6 +1,6 @@
 ﻿#include "TestFramework.h"
-#include "Profile.h"
 #include "Book.h"
+#include "Profile.h"
 #include "BookCharacter.h"
 #include "PublishingHouse.h"
 #include "Date.h"
@@ -2700,6 +2700,9 @@ void TestGraph() {
 	TestWays4();
 	TestWays5();
 }
+
+//Resources
+//https://stackoverflow.com/questions/28261805/c-private-class-member-variables-dont-appear-in-the-documentation
 
 int main() {
 	TestRunner tr;

@@ -14,7 +14,7 @@ Date::Date(uint16_t seconds, uint16_t minutes, uint16_t hours, Day day,
 }
 
 Date::Date()
-	: seconds(0),minutes(0),hours(0),day(0),month(),year() {}
+	: seconds(0),minutes(0),hours(0),day(0),month(0),year(0) {}
 
 Date& Date::operator=(const Date& date)
 {

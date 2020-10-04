@@ -6,34 +6,138 @@
 #include <map>
 #include <algorithm>
 
+/**
+\brief Adjacency structure graph imlementation. Inheritor of Graph
+*/
+
 template <typename NodeType, typename EdgeType>
 class AdjacencyStructure:public Graph<NodeType,EdgeType>
 {
+	/**
+	\brief structure which consists of edges (EdgeType).
+
+	structure[pos1][pos2] means edge from pos1 node to pos2 node. If edge doesn't exist, it isn't stored in the structure
+	*/
 	std::vector<std::map<size_t,EdgeType>>structure;
 public:
+
+	/**
+	\brief AdjacencyMatrix constructor
+
+	\param zero_edge All edges in graph must be bigger than zero_edge
+	\param max_edge All edges in graph must be lesser than max_edge
+	*/
 	AdjacencyStructure(EdgeType zero_edge, EdgeType max_edge);
+
+	/**
+	\brief adds new node in graph
+
+	\param node NodeType value of new node
+	\return current number of node. For new node this is size of matrix - 1
+	*/
 	size_t add_node(NodeType node) override;
+
+	/**
+	\brief adds new edge in graph
+
+	\param first_node number of node that will be begin of new edge
+	\param second_node number of node that will be end of new edge
+	\param edge EdgeType value of new edge
+	*/
 	void add_edge(size_t first_node, size_t second_node, EdgeType edge) override;
 
+	/**
+	\brief deletes edge from graph
+
+	\param first_node number of node begin of deleted edge
+	\param first_node number of node end of deleted edge
+	\return EdgeType value of deleted edge
+	*/
 	EdgeType delete_edge(size_t first_node, size_t second_node) override;
+
+	/**
+	\brief deletes node from graph
+
+	Removes node and all edges where this node was begin or end
+	Numbers of all nodes after node will be decreased
+	\param node number of deleted node
+	\return NodeType value of deleted node
+	*/
 	NodeType delete_node(size_t node) override;
 
+	/**
+	\brief checks whether this graph is connected
+	*/
 	bool is_connected_graph() override;
+
+	/**
+	\brief finds all components of graph
+
+	\return std::vector<std::vector<size_t>> where each std::vector<size_t> is numbers of nodes that are in one component
+	*/
 	std::vector<std::vector<size_t>> find_components() override;
 
+	/**
+	\brief finds minimal ways from one node to all others
+
+	\param node number of basic node
+	\return std::vector<EdgeType>ways, where ways[pos] means minimal way from basic node to node with number pos
+	*/
 	std::vector<EdgeType> dijkstra_algorithm(size_t node) override;
 
+	/**
+	\brief checks whether this graph is acyclic
+	*/
 	bool is_acyclic() override;
 
+	/**
+	\brief checks whether this graph is tree (connected and acyclic)
+	*/
 	bool is_tree() override;
 
+	/**
+	\brief access to node
+
+	\param node number of searched node
+	\return NodeType Node with number node
+	*/
 	NodeType get_node(size_t node) override;
+
+	/**
+	\brief access to node
+
+	\param begin number of begin node of searched edge
+	\param begin number of end node of searched edge
+	\return EdgeType Edge with such begin and end
+	*/
 	EdgeType get_edge(size_t begin, size_t end) override;
 
+	/**
+	\brief removes all edges from graph
+	*/
 	void clear_edges() override;
+
+	/**
+	\brief removes all nodes and edges from graph
+	*/
 	void clear() override;
 private:
-	void find_nodes(size_t node, std::vector<bool>& for_check, std::vector<size_t>& component) override;	
+	/**
+	\brief finds nodes that are in one component with node
+
+	\param node number of basic node
+	\param for_check vector reference to mark checked nodes
+	\param component current component (component of node)
+	*/
+	void find_nodes(size_t node, std::vector<bool>& for_check, std::vector<size_t>& component) override;
+
+	/**
+	\brief checks if is there cycle with begin in node
+
+	\param node number of ckecked node
+	\param checked vector reference to mark checked nodes
+	\param parent number of last node
+	*/
 	bool check_cyclic(size_t node, std::vector<char>& checked, size_t parent) override;
 
 	friend std::ostream& operator<<(std::ostream& os, AdjacencyStructure<NodeType, EdgeType>);
@@ -94,6 +198,12 @@ NodeType AdjacencyStructure<NodeType, EdgeType>::delete_node(size_t node)
 		structure.erase(structure.begin() + node);
 		for (auto& i: structure) {
 			i.erase(node);
+			for (auto it = i.upper_bound(node); it != i.end(); it++) {
+				size_t tmp = it->first;
+				i[it->first - 1] = i[it->first];
+				i.erase(it->first);
+				it = i.upper_bound(tmp);
+			}
 		}
 		try
 		{

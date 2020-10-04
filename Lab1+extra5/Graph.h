@@ -3,32 +3,22 @@
 #include <vector>
 #include <iostream>
 
-template <typename T>
-struct way_struct
-{
-	T weight;
-	size_t begin;
-	size_t end;
-};
+/**
+\brief Basic class of graph imlementations.
 
-template <typename T>
-bool operator <(const way_struct<T>& lhs, const way_struct<T>& rhs);
-
-namespace std
-{
-	template<typename T> struct  less<way_struct<T>>
-	{
-		bool operator() (const way_struct<T>& lhs, const way_struct<T>& rhs) const
-		{
-			return lhs.weight < rhs.weight;
-		}
-	};
-}
+For documentation of methods check AdjacencyMatrix or AdjacencyStructure
+*/
 
 template <typename NodeType, typename EdgeType>
 class Graph
 {
 public:
+	/**
+	\brief Graph constructor
+
+	\param zero_edge All edges in graph must be bigger than zero_edge
+	\param max_edge All edges in graph must be lesser than max_edge
+	*/
 	Graph(EdgeType zero_edge, EdgeType max_edge);
 
     virtual size_t add_node(NodeType node);
@@ -60,9 +50,14 @@ protected:
 	virtual  bool check_cyclic(size_t node, std::vector<char>& checked, size_t parent);
 	virtual void find_nodes(size_t node, std::vector<bool>& for_check, std::vector<size_t>& component);
 
+	/**
+	\brief structure which consists of Nodes (NodeType).
+
+	Nodes[pos] means node with number pos
+	*/
 	std::map<size_t, NodeType>Nodes;
-	EdgeType zero_edge;
-	EdgeType max_edge;
+	EdgeType zero_edge;	///<All edges in graph must be bigger than zero_edge
+	EdgeType max_edge;	///<All edges in graph must be lesser than max_edge
 };
 
 template<typename NodeType, typename EdgeType>
@@ -165,10 +160,4 @@ inline bool Graph<NodeType, EdgeType>::check_cyclic(size_t node, std::vector<cha
 template<typename NodeType, typename EdgeType>
 inline void Graph<NodeType, EdgeType>::find_nodes(size_t node, std::vector<bool>& for_check, std::vector<size_t>& component)
 {
-}
-
-template<typename T>
-bool operator<(const way_struct<T>& lhs, const way_struct<T>& rhs)
-{
-	return lhs.weight < rhs.weight;
 }

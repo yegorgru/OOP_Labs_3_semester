@@ -12,45 +12,128 @@
 #include <list>
 #include <iostream>
 
+/**
+\brief class for marking roles of characters in books
+*/
 enum class Role {
-	main,
-	secondary,
-	episodic
+	main,		///< main role
+	secondary,	///< secondary role
+	episodic	///< episodic role
 };
 
 std::ostream& operator << (std::ostream& os, const Role& role);
+
+/**
+\brief class for storing information about book characters
+
+has information about:
+- default name
+- all names in all book
+- roles in all books
+*/
 
 template <typename id>
 class BookCharacter
 {
 public:
+
+	/**
+	\brief basic constructor of BookCharacter.
+
+	All fields are empty
+	*/
 	BookCharacter();
+
+	/**
+	\brief constructor of BookCharacter with known default name
+	*/
 	BookCharacter(const std::string& name);
+
+	/**
+	\brief constructor of BookCharacter with known default name and all names
+	*/
 	BookCharacter(const std::string& default_name,
 		const std::set<std::string>& names);
 	
+	/**
+	\brief promotes character's role in some book
+
+	role can't be bigger than Role::main
+	\param book id of book to promote role in it
+	*/
 	void promote(const id& book);
+
+	/**
+	\brief decreases character's role in some book
+
+	role can't be lesser than Role::episodic
+	\param book id of book to promote role in it
+	*/
 	void decrease(const id& book);
 
+	/**
+	\brief adds new book(and role in it) or updated role in old book
+
+	\param book id of book
+	\param role role in that book
+	*/
 	void update_role(const id& book, const Role role);
 	
+	/**
+	\brief erases book(and role in it)
+
+	\param book id of erased book
+	*/
 	void erase_book(const id& book);
 	
+	/**
+	\return default name of character
+	*/
 	std::string get_default_name() const;
+
+	/**
+	\return id of all books where is this character
+	*/
 	std::set<id> get_all_books() const;
+
+	/**
+	\return names of character in all books (+ default name)
+	*/
 	std::set<std::string> get_all_names() const;
+
+	/**
+	\param book book id with searched role
+	\return role of character in all books (+ default name)
+	*/
 	Role get_role(const id& book) const;
 
+	/**
+	\brief sets all names of character
+
+	\param names set of all names
+	*/
 	void set_names(const std::set<std::string>& names);
+
+	/**
+	\brief adds new name of character
+
+	\param name new name of character
+	*/
 	void add_name(const std::string& name);
+
+	/**
+	\brief erases name of character
+
+	\param name erased name of character
+	*/
 	void erase_name(const std::string& name);
 private:
 
-	std::map<id, Role>books_and_roles;
+	std::map<id, Role>books_and_roles;	///<books id and role of character in those books
+		
+	std::string default_name;			///<default name of character
 
-	std::string default_name;
-
-	std::set<std::string>names;
+	std::set<std::string>names;			///<all names of character
 };
 
 template <typename id>
