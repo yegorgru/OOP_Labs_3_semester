@@ -1,3 +1,11 @@
+/**
+\file
+\brief cpp file of class BookCharacter
+
+std::ostream& operator<<(std::ostream& os, const Role& role) implementation is here
+*/
+
+
 #include "BookCharacter.h"
 
 std::ostream& operator<<(std::ostream& os, const Role& role)

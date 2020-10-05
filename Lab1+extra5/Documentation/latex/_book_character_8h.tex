@@ -1,0 +1,103 @@
+\hypertarget{_book_character_8h}{}\doxysection{C\+:/\+Users/yegor/\+Documents/\+Git\+Hub/\+O\+O\+P\+\_\+\+Labs\+\_\+3\+\_\+semester/\+Lab1+extra5/\+Book\+Character.h File Reference}
+\label{_book_character_8h}\index{C:/Users/yegor/Documents/GitHub/OOP\_Labs\_3\_semester/Lab1+extra5/BookCharacter.h@{C:/Users/yegor/Documents/GitHub/OOP\_Labs\_3\_semester/Lab1+extra5/BookCharacter.h}}
+
+
+h file of class \mbox{\hyperlink{class_book_character}{Book\+Character}}  
+
+
+{\ttfamily \#include \char`\"{}Book.\+h\char`\"{}}\newline
+{\ttfamily \#include $<$string$>$}\newline
+{\ttfamily \#include $<$set$>$}\newline
+{\ttfamily \#include $<$map$>$}\newline
+{\ttfamily \#include $<$cstdint$>$}\newline
+{\ttfamily \#include $<$algorithm$>$}\newline
+{\ttfamily \#include $<$vector$>$}\newline
+{\ttfamily \#include $<$list$>$}\newline
+{\ttfamily \#include $<$iostream$>$}\newline
+\doxysubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+class \mbox{\hyperlink{class_book_character}{Book\+Character$<$ id $>$}}
+\begin{DoxyCompactList}\small\item\em class for storing information about book characters \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Enumerations}
+\begin{DoxyCompactItemize}
+\item 
+enum \mbox{\hyperlink{_book_character_8h_acdd79a1a4f81dd6ee5cddcb21149b951}{Role}} \{ \mbox{\hyperlink{_book_character_8h_acdd79a1a4f81dd6ee5cddcb21149b951afad58de7366495db4650cfefac2fcd61}{Role\+::main}}, 
+\mbox{\hyperlink{_book_character_8h_acdd79a1a4f81dd6ee5cddcb21149b951a1f7ba58706f9d405023da32864d059c8}{Role\+::secondary}}, 
+\mbox{\hyperlink{_book_character_8h_acdd79a1a4f81dd6ee5cddcb21149b951a36bca603395aa1c060e02e42ff3cf2bb}{Role\+::episodic}}
+ \}
+\begin{DoxyCompactList}\small\item\em class for marking roles of characters in books \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+std\+::ostream \& \mbox{\hyperlink{_book_character_8h_a233f8a4ca4c3cb40b5b7e1f408bb218f}{operator$<$$<$}} (std\+::ostream \&os, const \mbox{\hyperlink{_book_character_8h_acdd79a1a4f81dd6ee5cddcb21149b951}{Role}} \&role)
+\item 
+{\footnotesize template$<$typename id $>$ }\\std\+::ostream \& \mbox{\hyperlink{_book_character_8h_acddcad12e9c5b207e6939db3ee71a38a}{operator$<$$<$}} (std\+::ostream \&os, const \mbox{\hyperlink{class_book_character}{Book\+Character}}$<$ id $>$ \&character)
+\item 
+{\footnotesize template$<$typename id $>$ }\\bool \mbox{\hyperlink{_book_character_8h_af3bc459f46a6ce3672077d7ff8e2a608}{operator==}} (const \mbox{\hyperlink{class_book_character}{Book\+Character}}$<$ id $>$ \&lhs, const \mbox{\hyperlink{class_book_character}{Book\+Character}}$<$ id $>$ \&rhs)
+\item 
+{\footnotesize template$<$typename id $>$ }\\bool \mbox{\hyperlink{_book_character_8h_a491fb4ea253369c0740d8b02c2a7db5d}{operator$<$}} (const \mbox{\hyperlink{class_book_character}{Book\+Character}}$<$ id $>$ \&lhs, const \mbox{\hyperlink{class_book_character}{Book\+Character}}$<$ id $>$ \&rhs)
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+h file of class \mbox{\hyperlink{class_book_character}{Book\+Character}} 
+
+definitions and implementations of \mbox{\hyperlink{class_book_character}{Book\+Character}} methods and operators, enum class Role are here 
+
+\doxysubsection{Enumeration Type Documentation}
+\mbox{\Hypertarget{_book_character_8h_acdd79a1a4f81dd6ee5cddcb21149b951}\label{_book_character_8h_acdd79a1a4f81dd6ee5cddcb21149b951}} 
+\index{BookCharacter.h@{BookCharacter.h}!Role@{Role}}
+\index{Role@{Role}!BookCharacter.h@{BookCharacter.h}}
+\doxysubsubsection{\texorpdfstring{Role}{Role}}
+{\footnotesize\ttfamily enum \mbox{\hyperlink{_book_character_8h_acdd79a1a4f81dd6ee5cddcb21149b951}{Role}}\hspace{0.3cm}{\ttfamily [strong]}}
+
+
+
+class for marking roles of characters in books 
+
+\begin{DoxyEnumFields}{Enumerator}
+\raisebox{\heightof{T}}[0pt][0pt]{\index{main@{main}!BookCharacter.h@{BookCharacter.h}}\index{BookCharacter.h@{BookCharacter.h}!main@{main}}}\mbox{\Hypertarget{_book_character_8h_acdd79a1a4f81dd6ee5cddcb21149b951afad58de7366495db4650cfefac2fcd61}\label{_book_character_8h_acdd79a1a4f81dd6ee5cddcb21149b951afad58de7366495db4650cfefac2fcd61}} 
+main&main role \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{secondary@{secondary}!BookCharacter.h@{BookCharacter.h}}\index{BookCharacter.h@{BookCharacter.h}!secondary@{secondary}}}\mbox{\Hypertarget{_book_character_8h_acdd79a1a4f81dd6ee5cddcb21149b951a1f7ba58706f9d405023da32864d059c8}\label{_book_character_8h_acdd79a1a4f81dd6ee5cddcb21149b951a1f7ba58706f9d405023da32864d059c8}} 
+secondary&secondary role \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{episodic@{episodic}!BookCharacter.h@{BookCharacter.h}}\index{BookCharacter.h@{BookCharacter.h}!episodic@{episodic}}}\mbox{\Hypertarget{_book_character_8h_acdd79a1a4f81dd6ee5cddcb21149b951a36bca603395aa1c060e02e42ff3cf2bb}\label{_book_character_8h_acdd79a1a4f81dd6ee5cddcb21149b951a36bca603395aa1c060e02e42ff3cf2bb}} 
+episodic&episodic role \\
+\hline
+
+\end{DoxyEnumFields}
+
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{_book_character_8h_a491fb4ea253369c0740d8b02c2a7db5d}\label{_book_character_8h_a491fb4ea253369c0740d8b02c2a7db5d}} 
+\index{BookCharacter.h@{BookCharacter.h}!operator$<$@{operator$<$}}
+\index{operator$<$@{operator$<$}!BookCharacter.h@{BookCharacter.h}}
+\doxysubsubsection{\texorpdfstring{operator$<$()}{operator<()}}
+{\footnotesize\ttfamily template$<$typename id $>$ \\
+bool operator$<$ (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{class_book_character}{Book\+Character}}$<$ id $>$ \&}]{lhs,  }\item[{const \mbox{\hyperlink{class_book_character}{Book\+Character}}$<$ id $>$ \&}]{rhs }\end{DoxyParamCaption})}
+
+Operator $<$ for Book\+Characters \mbox{\Hypertarget{_book_character_8h_acddcad12e9c5b207e6939db3ee71a38a}\label{_book_character_8h_acddcad12e9c5b207e6939db3ee71a38a}} 
+\index{BookCharacter.h@{BookCharacter.h}!operator$<$$<$@{operator$<$$<$}}
+\index{operator$<$$<$@{operator$<$$<$}!BookCharacter.h@{BookCharacter.h}}
+\doxysubsubsection{\texorpdfstring{operator$<$$<$()}{operator<<()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily template$<$typename id $>$ \\
+std\+::ostream \& operator$<$$<$ (\begin{DoxyParamCaption}\item[{std\+::ostream \&}]{os,  }\item[{const \mbox{\hyperlink{class_book_character}{Book\+Character}}$<$ id $>$ \&}]{character }\end{DoxyParamCaption})}
+
+Operator $<$$<$ for \mbox{\hyperlink{class_book_character}{Book\+Character}} in streams \mbox{\Hypertarget{_book_character_8h_a233f8a4ca4c3cb40b5b7e1f408bb218f}\label{_book_character_8h_a233f8a4ca4c3cb40b5b7e1f408bb218f}} 
+\index{BookCharacter.h@{BookCharacter.h}!operator$<$$<$@{operator$<$$<$}}
+\index{operator$<$$<$@{operator$<$$<$}!BookCharacter.h@{BookCharacter.h}}
+\doxysubsubsection{\texorpdfstring{operator$<$$<$()}{operator<<()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily std\+::ostream\& operator$<$$<$ (\begin{DoxyParamCaption}\item[{std\+::ostream \&}]{os,  }\item[{const \mbox{\hyperlink{_book_character_8h_acdd79a1a4f81dd6ee5cddcb21149b951}{Role}} \&}]{role }\end{DoxyParamCaption})}
+
+Operator $<$$<$ for Role in streams \mbox{\Hypertarget{_book_character_8h_af3bc459f46a6ce3672077d7ff8e2a608}\label{_book_character_8h_af3bc459f46a6ce3672077d7ff8e2a608}} 
+\index{BookCharacter.h@{BookCharacter.h}!operator==@{operator==}}
+\index{operator==@{operator==}!BookCharacter.h@{BookCharacter.h}}
+\doxysubsubsection{\texorpdfstring{operator==()}{operator==()}}
+{\footnotesize\ttfamily template$<$typename id $>$ \\
+bool operator== (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{class_book_character}{Book\+Character}}$<$ id $>$ \&}]{lhs,  }\item[{const \mbox{\hyperlink{class_book_character}{Book\+Character}}$<$ id $>$ \&}]{rhs }\end{DoxyParamCaption})}
+
+Operator == for Book\+Characters 

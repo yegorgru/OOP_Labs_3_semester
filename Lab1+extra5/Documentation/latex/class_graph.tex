@@ -1,0 +1,135 @@
+\hypertarget{class_graph}{}\doxysection{Graph$<$ Node\+Type, Edge\+Type $>$ Class Template Reference}
+\label{class_graph}\index{Graph$<$ NodeType, EdgeType $>$@{Graph$<$ NodeType, EdgeType $>$}}
+
+
+Basic class of graph imlementations.  
+
+
+
+
+{\ttfamily \#include $<$Graph.\+h$>$}
+
+Inheritance diagram for Graph$<$ Node\+Type, Edge\+Type $>$\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=1.992882cm]{class_graph}
+\end{center}
+\end{figure}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_graph_a242df5a8df7e1c96d7dde64770fb7a62}{Graph}} (Edge\+Type \mbox{\hyperlink{class_graph_a1d5d595122088351bb3cd94d208fd4ac}{zero\+\_\+edge}}, Edge\+Type \mbox{\hyperlink{class_graph_a1f4d740c84d64cac0af25f6b5b439c73}{max\+\_\+edge}})
+\begin{DoxyCompactList}\small\item\em \mbox{\hyperlink{class_graph}{Graph}} constructor. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_graph_a61f60329a38d8506c510b6291ff0c7bd}\label{class_graph_a61f60329a38d8506c510b6291ff0c7bd}} 
+virtual size\+\_\+t {\bfseries add\+\_\+node} (Node\+Type node)
+\item 
+\mbox{\Hypertarget{class_graph_a1f36a6479d6cd528729acee8fbb90dab}\label{class_graph_a1f36a6479d6cd528729acee8fbb90dab}} 
+virtual void {\bfseries add\+\_\+edge} (size\+\_\+t first\+\_\+node, size\+\_\+t second\+\_\+node, Edge\+Type edge)
+\item 
+\mbox{\Hypertarget{class_graph_a43999420c8ba203483faff3b08b57694}\label{class_graph_a43999420c8ba203483faff3b08b57694}} 
+virtual Edge\+Type {\bfseries delete\+\_\+edge} (size\+\_\+t first\+\_\+node, size\+\_\+t second\+\_\+node)
+\item 
+\mbox{\Hypertarget{class_graph_a8777683b8ecdda138083e0e07f39bcfa}\label{class_graph_a8777683b8ecdda138083e0e07f39bcfa}} 
+virtual Node\+Type {\bfseries delete\+\_\+node} (size\+\_\+t node)
+\item 
+\mbox{\Hypertarget{class_graph_abc643df0ad4c87a40897ae01b9526214}\label{class_graph_abc643df0ad4c87a40897ae01b9526214}} 
+virtual bool {\bfseries is\+\_\+connected\+\_\+graph} ()
+\item 
+\mbox{\Hypertarget{class_graph_a641998d22929491d43d3ade0e64e676b}\label{class_graph_a641998d22929491d43d3ade0e64e676b}} 
+virtual std\+::vector$<$ std\+::vector$<$ size\+\_\+t $>$ $>$ {\bfseries find\+\_\+components} ()
+\item 
+\mbox{\Hypertarget{class_graph_a1cc205417f409156c3e428634df7948c}\label{class_graph_a1cc205417f409156c3e428634df7948c}} 
+virtual std\+::vector$<$ Edge\+Type $>$ {\bfseries dijkstra\+\_\+algorithm} (size\+\_\+t node)
+\item 
+\mbox{\Hypertarget{class_graph_a99ac98aa9d74d6a67324f544e049fd5d}\label{class_graph_a99ac98aa9d74d6a67324f544e049fd5d}} 
+virtual bool {\bfseries is\+\_\+acyclic} ()
+\item 
+\mbox{\Hypertarget{class_graph_a250fee4a6b60a93748013bdbeabd17ff}\label{class_graph_a250fee4a6b60a93748013bdbeabd17ff}} 
+virtual bool {\bfseries is\+\_\+tree} ()
+\item 
+\mbox{\Hypertarget{class_graph_ad3504bd6cdf19b25c976e2fdaad540b6}\label{class_graph_ad3504bd6cdf19b25c976e2fdaad540b6}} 
+virtual Node\+Type {\bfseries get\+\_\+node} (size\+\_\+t node)
+\item 
+\mbox{\Hypertarget{class_graph_a11f7528059ee5e33d3998e74b9682671}\label{class_graph_a11f7528059ee5e33d3998e74b9682671}} 
+virtual Edge\+Type {\bfseries get\+\_\+edge} (size\+\_\+t begin, size\+\_\+t end)
+\item 
+\mbox{\Hypertarget{class_graph_ac07d975681872d90985bb3a6e5053214}\label{class_graph_ac07d975681872d90985bb3a6e5053214}} 
+Edge\+Type {\bfseries get\+\_\+max\+\_\+edge} ()
+\item 
+\mbox{\Hypertarget{class_graph_af7f8dba6abc88e40f9cfb25b73cfc99e}\label{class_graph_af7f8dba6abc88e40f9cfb25b73cfc99e}} 
+Edge\+Type {\bfseries get\+\_\+zero\+\_\+edge} ()
+\item 
+\mbox{\Hypertarget{class_graph_ac7b6c5e21c3b50819b66e2be080feedc}\label{class_graph_ac7b6c5e21c3b50819b66e2be080feedc}} 
+virtual void {\bfseries clear\+\_\+edges} ()
+\item 
+\mbox{\Hypertarget{class_graph_a6057bf53ebb0499c193ae257ec74204f}\label{class_graph_a6057bf53ebb0499c193ae257ec74204f}} 
+virtual void {\bfseries clear} ()
+\end{DoxyCompactItemize}
+\doxysubsection*{Protected Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{class_graph_a7f71528902f27e33af5395f350d8b1d2}\label{class_graph_a7f71528902f27e33af5395f350d8b1d2}} 
+virtual bool {\bfseries check\+\_\+cyclic} (size\+\_\+t node, std\+::vector$<$ char $>$ \&checked, size\+\_\+t parent)
+\item 
+\mbox{\Hypertarget{class_graph_a627462c31081741773503387e9d8070c}\label{class_graph_a627462c31081741773503387e9d8070c}} 
+virtual void {\bfseries find\+\_\+nodes} (size\+\_\+t node, std\+::vector$<$ bool $>$ \&for\+\_\+check, std\+::vector$<$ size\+\_\+t $>$ \&component)
+\end{DoxyCompactItemize}
+\doxysubsection*{Protected Attributes}
+\begin{DoxyCompactItemize}
+\item 
+std\+::map$<$ size\+\_\+t, Node\+Type $>$ \mbox{\hyperlink{class_graph_a6efa5d8d3ce3194f589fac00a2012d66}{Nodes}}
+\begin{DoxyCompactList}\small\item\em structure which consists of Nodes (Node\+Type). \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_graph_a1d5d595122088351bb3cd94d208fd4ac}\label{class_graph_a1d5d595122088351bb3cd94d208fd4ac}} 
+Edge\+Type \mbox{\hyperlink{class_graph_a1d5d595122088351bb3cd94d208fd4ac}{zero\+\_\+edge}}
+\begin{DoxyCompactList}\small\item\em All edges in graph must be bigger than zero\+\_\+edge. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_graph_a1f4d740c84d64cac0af25f6b5b439c73}\label{class_graph_a1f4d740c84d64cac0af25f6b5b439c73}} 
+Edge\+Type \mbox{\hyperlink{class_graph_a1f4d740c84d64cac0af25f6b5b439c73}{max\+\_\+edge}}
+\begin{DoxyCompactList}\small\item\em All edges in graph must be lesser than max\+\_\+edge. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\subsubsection*{template$<$typename Node\+Type, typename Edge\+Type$>$\newline
+class Graph$<$ Node\+Type, Edge\+Type $>$}
+
+Basic class of graph imlementations. 
+
+For documentation of methods check \mbox{\hyperlink{class_adjacency_matrix}{Adjacency\+Matrix}} or \mbox{\hyperlink{class_adjacency_structure}{Adjacency\+Structure}} 
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{class_graph_a242df5a8df7e1c96d7dde64770fb7a62}\label{class_graph_a242df5a8df7e1c96d7dde64770fb7a62}} 
+\index{Graph$<$ NodeType, EdgeType $>$@{Graph$<$ NodeType, EdgeType $>$}!Graph@{Graph}}
+\index{Graph@{Graph}!Graph$<$ NodeType, EdgeType $>$@{Graph$<$ NodeType, EdgeType $>$}}
+\doxysubsubsection{\texorpdfstring{Graph()}{Graph()}}
+{\footnotesize\ttfamily template$<$typename Node\+Type , typename Edge\+Type $>$ \\
+\mbox{\hyperlink{class_graph}{Graph}}$<$ Node\+Type, Edge\+Type $>$\+::\mbox{\hyperlink{class_graph}{Graph}} (\begin{DoxyParamCaption}\item[{Edge\+Type}]{zero\+\_\+edge,  }\item[{Edge\+Type}]{max\+\_\+edge }\end{DoxyParamCaption})}
+
+
+
+\mbox{\hyperlink{class_graph}{Graph}} constructor. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em zero\+\_\+edge} & All edges in graph must be bigger than zero\+\_\+edge \\
+\hline
+{\em max\+\_\+edge} & All edges in graph must be lesser than max\+\_\+edge \\
+\hline
+\end{DoxyParams}
+
+
+\doxysubsection{Member Data Documentation}
+\mbox{\Hypertarget{class_graph_a6efa5d8d3ce3194f589fac00a2012d66}\label{class_graph_a6efa5d8d3ce3194f589fac00a2012d66}} 
+\index{Graph$<$ NodeType, EdgeType $>$@{Graph$<$ NodeType, EdgeType $>$}!Nodes@{Nodes}}
+\index{Nodes@{Nodes}!Graph$<$ NodeType, EdgeType $>$@{Graph$<$ NodeType, EdgeType $>$}}
+\doxysubsubsection{\texorpdfstring{Nodes}{Nodes}}
+{\footnotesize\ttfamily template$<$typename Node\+Type , typename Edge\+Type $>$ \\
+std\+::map$<$size\+\_\+t, Node\+Type$>$ \mbox{\hyperlink{class_graph}{Graph}}$<$ Node\+Type, Edge\+Type $>$\+::Nodes\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+
+structure which consists of Nodes (Node\+Type). 
+
+Nodes\mbox{[}pos\mbox{]} means node with number pos 
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+C\+:/\+Users/yegor/\+Documents/\+Git\+Hub/\+O\+O\+P\+\_\+\+Labs\+\_\+3\+\_\+semester/\+Lab1+extra5/\mbox{\hyperlink{_graph_8h}{Graph.\+h}}\end{DoxyCompactItemize}

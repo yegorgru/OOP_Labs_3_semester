@@ -1,3 +1,10 @@
+/**
+\file
+\brief cpp file of class Book
+
+implementations of Book methods and operators are here
+*/
+
 #include "Book.h"
 
 Book::Book()

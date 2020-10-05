@@ -1,3 +1,10 @@
+/**
+\file
+\brief h file of class Date
+
+definitions of Date methods and operators, enum classes MeasureTime and Day are here
+*/
+
 #pragma once
 
 #include <cstdint>
@@ -30,6 +37,9 @@ enum class Day{
 	Sunday
 };
 
+/**
+Operator << for Days in streams
+*/
 std::ostream& operator << (std::ostream& os, const Day& day);
 
 
@@ -156,11 +166,13 @@ public:
 	int32_t count_29_february(const Date& another_date) const;
 
 	/**
+	\throw throw std::invalid_argument("invalid date") if date isn't valid
 	\return number of day of this date in the year
 	*/
 	int32_t get_number_in_year() const;
 
 	/**
+	\throw throw std::invalid_argument("invalid date") if date isn't valid
 	\return number of day of this date in the year if starts counting from end of year
 	*/
 	int32_t get_reverse_number_in_year() const;
@@ -279,6 +291,7 @@ public:
 
 	\param another another date in difference
 	\param measure type of MeasureTime in difference
+	\throw throw std::invalid_argument("invalid date") if this date or another isn't valid
 	\return number number of years
 	*/
 	int32_t difference(const Date& another, MeasureTime measure) const;
@@ -318,10 +331,43 @@ private:
 	friend bool operator<(const Date& lhs, const Date& rhs);
 };
 
+/**
+\brief function to get some statistics
+
+Counts what day of week is the most common among days with some number in month. Only dates bigger than bottom and lesser than top are taken into account
+\param bottom min Date
+\param top max Date
+\param number number in month to get statistics
+\return the most common day
+*/
 Day statistics(const Date& bottom, const Date& top, uint16_t number);
+
+/**
+\brief another version of statistics function
+
+Counts what day of week is the most common in year among days with some number in month.
+\param year year to get statistics
+\param number number in month to get statistics
+\return the most common day
+*/
 Day statistics(int32_t year, uint16_t number);
 
+/**
+Operator == for Dates
+*/
 bool operator==(const Date& lhs, const Date& rhs);
+
+/**
+Operator != for Dates
+*/
 bool operator!=(const Date& lhs, const Date& rhs);
+
+/**
+Operator < for Dates
+*/
 bool operator<(const Date& lhs, const Date& rhs);
+
+/**
+Operator << for Dates in streams
+*/
 std::ostream& operator << (std::ostream& os, const Date& date);

@@ -1,3 +1,11 @@
+/**
+\file
+\brief h file of class AdjacencyMatrix
+
+definitions and implementations of AdjacencyMatrix methods and operators are here
+*/
+
+
 #pragma once
 
 
@@ -46,6 +54,7 @@ public:
 	\param first_node number of node that will be begin of new edge
 	\param second_node number of node that will be end of new edge
 	\param edge EdgeType value of new edge
+	\throw std::invalid_argument("incorrect node") if first_node == second_node or they are lesser than Nodes.size()
 	*/
 	void add_edge(size_t first_node, size_t second_node, EdgeType edge) override;
 
@@ -54,6 +63,7 @@ public:
 
 	\param first_node number of node begin of deleted edge
 	\param first_node number of node end of deleted edge
+	\throw std::invalid_argument("incorrect node") if first_node == second_node or they are lesser than Nodes.size()
 	\return EdgeType value of deleted edge
 	*/
 	EdgeType delete_edge(size_t first_node, size_t second_node) override;
@@ -64,6 +74,7 @@ public:
 	Removes node and all edges where this node was begin or end
 	Numbers of all nodes after node will be decreased
 	\param node number of deleted node
+	\throw std::invalid_argument("incorrect node") if node is lesser than Nodes.size()
 	\return NodeType value of deleted node
 	*/
 	NodeType delete_node(size_t node) override;
@@ -84,6 +95,7 @@ public:
 	\brief finds minimal ways from one node to all others
 
 	\param node number of basic node
+	\throw std::invalid_argument("incorrect node") if node is lesser than Nodes.size()
 	\return std::vector<EdgeType>ways, where ways[pos] means minimal way from basic node to node with number pos
 	*/
 	std::vector<EdgeType> dijkstra_algorithm(size_t node) override;
@@ -102,6 +114,7 @@ public:
 	\brief access to node
 
 	\param node number of searched node
+	\throw std::invalid_argument("incorrect node") if node is lesser than Nodes.size()
 	\return NodeType Node with number node
 	*/
 	NodeType get_node(size_t node) override;
@@ -111,6 +124,7 @@ public:
 
 	\param begin number of begin node of searched edge
 	\param begin number of end node of searched edge
+	\throw std::invalid_argument("incorrect node") if begin or end is lesser than Nodes.size()
 	\return EdgeType Edge with such begin and end
 	*/
 	EdgeType get_edge(size_t begin, size_t end) override;
@@ -146,6 +160,10 @@ private:
 
 	friend std::ostream& operator<<(std::ostream& os, AdjacencyMatrix<NodeType, EdgeType>);
 };
+
+/**
+Operator << for AdjacencyMatrix in streams
+*/
 
 template <typename NodeType, typename EdgeType>
 std::ostream& operator<<(std::ostream& os, AdjacencyMatrix<NodeType, EdgeType>);
@@ -190,7 +208,7 @@ void AdjacencyMatrix<NodeType, EdgeType>::add_edge(size_t first_node, size_t sec
 template<typename NodeType, typename EdgeType>
 EdgeType AdjacencyMatrix<NodeType, EdgeType>::delete_edge(size_t first_node, size_t second_node)
 {
-	if (first_node < matrix.size() && second_node < matrix.size()) {
+	if (first_node < matrix.size() && second_node < matrix.size() && first_node!= second_node) {
 		EdgeType weight = matrix[first_node][second_node];
 		matrix[first_node][second_node] = this->max_edge;
 		matrix[second_node][first_node] = this->max_edge;

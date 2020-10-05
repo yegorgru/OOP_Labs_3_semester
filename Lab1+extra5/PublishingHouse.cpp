@@ -1,3 +1,10 @@
+/**
+\file
+\brief cpp file of class PublishingHouse
+
+implementations of PublishingHouse methods and operators are here
+*/
+
 #include "PublishingHouse.h"
 
 PublishingHouse::PublishingHouse()
@@ -33,12 +40,19 @@ character_id PublishingHouse::add_character(const BookCharacter<book_id>& charac
 void PublishingHouse::ban_book(const book_id& id)
 {
 	if (id != book_id()) {
-		for (auto cur_character : books_characters.at(id)) {
-			characters[cur_character].erase_book(id);
+		try
+		{
+			for (auto cur_character : books_characters.at(id)) {
+				characters[cur_character].erase_book(id);
+			}
+			books_characters.erase(id);
+			books_important_characters.erase(id);
+			books.erase(id);
 		}
-		books_characters.erase(id);
-		books_important_characters.erase(id);
-		books.erase(id);
+		catch (const std::exception&)
+		{
+			throw std::invalid_argument("incorrect id");
+		}
 	}
 	else {
 		throw std::invalid_argument("incorrect id");
@@ -48,11 +62,18 @@ void PublishingHouse::ban_book(const book_id& id)
 void PublishingHouse::ban_character(const character_id& id)
 {
 	if (id != character_id()) {
-		for (auto book_id : characters[id].get_all_books()) {
-			books_characters[book_id].erase(id);
-			books_important_characters[book_id].erase(id);
+		try
+		{
+			for (auto book_id : characters[id].get_all_books()) {
+				books_characters[book_id].erase(id);
+				books_important_characters[book_id].erase(id);
+			}
+			characters.erase(id);
 		}
-		characters.erase(id);
+		catch (const std::exception&)
+		{
+			throw std::invalid_argument("incorrect id");
+		}
 	}
 	else {
 		throw std::invalid_argument("incorrect id");

@@ -1,0 +1,312 @@
+\hypertarget{main_8cpp}{}\doxysection{C\+:/\+Users/yegor/\+Documents/\+Git\+Hub/\+O\+O\+P\+\_\+\+Labs\+\_\+3\+\_\+semester/\+Lab1+extra5/main.cpp File Reference}
+\label{main_8cpp}\index{C:/Users/yegor/Documents/GitHub/OOP\_Labs\_3\_semester/Lab1+extra5/main.cpp@{C:/Users/yegor/Documents/GitHub/OOP\_Labs\_3\_semester/Lab1+extra5/main.cpp}}
+
+
+main cpp file  
+
+
+{\ttfamily \#include \char`\"{}Test\+Framework.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}Book.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}Profile.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}Book\+Character.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}Publishing\+House.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}Date.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}Graph.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}Adjacency\+Matrix.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}Adjacency\+Structure.\+h\char`\"{}}\newline
+{\ttfamily \#include $<$string$>$}\newline
+{\ttfamily \#include $<$vector$>$}\newline
+{\ttfamily \#include $<$random$>$}\newline
+{\ttfamily \#include $<$cmath$>$}\newline
+{\ttfamily \#include $<$set$>$}\newline
+\doxysubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{main_8cpp_a25012349285b237b180b92a39a520cb9}\label{main_8cpp_a25012349285b237b180b92a39a520cb9}} 
+\#define {\bfseries R\+U\+N\+\_\+\+T\+E\+ST}(tr,  func)~  tr.\+Run\+Test(func, \#func)
+\end{DoxyCompactItemize}
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{main_8cpp_ade66af73209a384311a12f4510dedd4e}\label{main_8cpp_ade66af73209a384311a12f4510dedd4e}} 
+std\+::mt19937 {\bfseries mersenne} (\mbox{\hyperlink{main_8cpp_a7071b0092ad8c5b57d6cc40c5f803df5}{rd}}())
+\item 
+std\+::string \mbox{\hyperlink{main_8cpp_aea8742791efebe908530f02cce9c3167}{random\+\_\+element}} (std\+::string)
+\item 
+int \mbox{\hyperlink{main_8cpp_ae43747616a2f36f9970a6e6c9750def5}{random\+\_\+element}} (int)
+\item 
+double \mbox{\hyperlink{main_8cpp_afb92437b9c373b63cf93d3be39107710}{random\+\_\+element}} (double)
+\item 
+{\footnotesize template$<$typename T $>$ }\\std\+::vector$<$ T $>$ \mbox{\hyperlink{main_8cpp_a5684334cb9d253f69d1c8e3e716be82b}{random\+\_\+element}} (std\+::vector$<$ T $>$)
+\item 
+\mbox{\hyperlink{_book_character_8h_acdd79a1a4f81dd6ee5cddcb21149b951}{Role}} \mbox{\hyperlink{main_8cpp_aa1b6c36cfc5959418c0b1cdf432f9fb4}{random\+\_\+element}} (\mbox{\hyperlink{_book_character_8h_acdd79a1a4f81dd6ee5cddcb21149b951}{Role}})
+\item 
+\mbox{\hyperlink{class_date}{Date}} \mbox{\hyperlink{main_8cpp_a217b2706efb25cfc4c9f17560ee85d2f}{random\+\_\+element}} (\mbox{\hyperlink{class_date}{Date}})
+\item 
+\mbox{\hyperlink{class_book}{Book}} \mbox{\hyperlink{main_8cpp_a644768b71bae2014a452d1b966d95b3d}{random\+\_\+element}} (\mbox{\hyperlink{class_book}{Book}})
+\item 
+\mbox{\hyperlink{class_publishing_house}{Publishing\+House}} \mbox{\hyperlink{main_8cpp_ab4b57deae6a0c9abc68854541d328166}{random\+\_\+element}} (\mbox{\hyperlink{class_publishing_house}{Publishing\+House}})
+\item 
+{\footnotesize template$<$typename T $>$ }\\std\+::vector$<$ T $>$ \mbox{\hyperlink{main_8cpp_ac705c59245360c79a0c3cf162f6e2c36}{operator+}} (const std\+::vector$<$ T $>$ \&lhs, const std\+::vector$<$ T $>$ \&rhs)
+\item 
+\mbox{\hyperlink{class_date}{Date}} \mbox{\hyperlink{main_8cpp_a8d86a201ec8c67de684500b6359f7f13}{operator+}} (const \mbox{\hyperlink{class_date}{Date}} \&lhs, const \mbox{\hyperlink{class_date}{Date}} \&rhs)
+\item 
+\mbox{\hyperlink{class_book}{Book}} \mbox{\hyperlink{main_8cpp_ab7480ac8501f90f65f3573708ad11153}{operator+}} (const \mbox{\hyperlink{class_book}{Book}} \&lhs, const \mbox{\hyperlink{class_book}{Book}} \&rhs)
+\item 
+\mbox{\Hypertarget{main_8cpp_a3a7c7d53abf1ca32387db3d295864760}\label{main_8cpp_a3a7c7d53abf1ca32387db3d295864760}} 
+{\footnotesize template$<$typename T $>$ }\\void \mbox{\hyperlink{main_8cpp_a3a7c7d53abf1ca32387db3d295864760}{Test\+Character}} ()
+\begin{DoxyCompactList}\small\item\em tests Book\+Character$<$\+T$>$ \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{main_8cpp_a82f83233aae21e460ca32c92724cdb22}\label{main_8cpp_a82f83233aae21e460ca32c92724cdb22}} 
+void \mbox{\hyperlink{main_8cpp_a82f83233aae21e460ca32c92724cdb22}{Test\+Book\+Character}} ()
+\begin{DoxyCompactList}\small\item\em tests Book\+Characters (int and std\+::string) \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{main_8cpp_abbf295e1ff24349b619d78d31248085c}\label{main_8cpp_abbf295e1ff24349b619d78d31248085c}} 
+void \mbox{\hyperlink{main_8cpp_abbf295e1ff24349b619d78d31248085c}{Test\+Book}} ()
+\begin{DoxyCompactList}\small\item\em tests Books \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{main_8cpp_aa707920ac57d35b563a909e392ca4c62}\label{main_8cpp_aa707920ac57d35b563a909e392ca4c62}} 
+void \mbox{\hyperlink{main_8cpp_aa707920ac57d35b563a909e392ca4c62}{Test\+House\+Series}} ()
+\begin{DoxyCompactList}\small\item\em tests \mbox{\hyperlink{class_publishing_house_a1a7dbaf6260248aa1063724fa59f6ed4}{Publishing\+House\+::get\+\_\+series}} \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{main_8cpp_a2747dc5736915ae46e5f01fd797e4832}\label{main_8cpp_a2747dc5736915ae46e5f01fd797e4832}} 
+void \mbox{\hyperlink{main_8cpp_a2747dc5736915ae46e5f01fd797e4832}{Test\+House\+Not\+Series}} ()
+\begin{DoxyCompactList}\small\item\em tests \mbox{\hyperlink{class_publishing_house}{Publishing\+House}} methods except \mbox{\hyperlink{class_publishing_house_a1a7dbaf6260248aa1063724fa59f6ed4}{Publishing\+House\+::get\+\_\+series}} \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{main_8cpp_a686a95b3dd4d8225a75968b1ecffbeda}\label{main_8cpp_a686a95b3dd4d8225a75968b1ecffbeda}} 
+void \mbox{\hyperlink{main_8cpp_a686a95b3dd4d8225a75968b1ecffbeda}{Test\+House}} ()
+\begin{DoxyCompactList}\small\item\em launches tests for \mbox{\hyperlink{class_publishing_house}{Publishing\+House}} \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{main_8cpp_a2841bfa9f7392a1bcad632fc5ccfa15a}\label{main_8cpp_a2841bfa9f7392a1bcad632fc5ccfa15a}} 
+void \mbox{\hyperlink{main_8cpp_a2841bfa9f7392a1bcad632fc5ccfa15a}{Test\+Date\+Basic}} ()
+\begin{DoxyCompactList}\small\item\em tests basic methods of \mbox{\hyperlink{class_date}{Date}} (getters, setters, basic constructor) \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{main_8cpp_a4a68b01b01c510d8ce521d53d76bde20}\label{main_8cpp_a4a68b01b01c510d8ce521d53d76bde20}} 
+void \mbox{\hyperlink{main_8cpp_a4a68b01b01c510d8ce521d53d76bde20}{Test\+Date\+Leap}} ()
+\begin{DoxyCompactList}\small\item\em tests \mbox{\hyperlink{class_date_ace49c39bea4b54b94f3d3c6fb950ebce}{Date\+::is\+\_\+leap}} and \mbox{\hyperlink{class_date_a14ca10da35b7a45f2c177864f5f7658d}{Date\+::count\+\_\+29\+\_\+february}} \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{main_8cpp_a1050eca985ee92f0d1f9489d932c446f}\label{main_8cpp_a1050eca985ee92f0d1f9489d932c446f}} 
+void \mbox{\hyperlink{main_8cpp_a1050eca985ee92f0d1f9489d932c446f}{Test\+Date\+Is\+Valid}} ()
+\begin{DoxyCompactList}\small\item\em tests \mbox{\hyperlink{class_date_ac08a8d71e2faf6ac01b1403acafcc880}{Date\+::is\+\_\+valid}} \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{main_8cpp_a94fb755edd36a88fddc526ed34a9e2ca}\label{main_8cpp_a94fb755edd36a88fddc526ed34a9e2ca}} 
+void \mbox{\hyperlink{main_8cpp_a94fb755edd36a88fddc526ed34a9e2ca}{Test\+Date\+Number\+In\+Year}} ()
+\begin{DoxyCompactList}\small\item\em tests \mbox{\hyperlink{class_date_acf038c9d524941cdd181706a5233ac71}{Date\+::get\+\_\+number\+\_\+in\+\_\+year}} and \mbox{\hyperlink{class_date_adf57ab995d87cc708d4cb22d959819ad}{Date\+::get\+\_\+reverse\+\_\+number\+\_\+in\+\_\+year}} \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{main_8cpp_a6d83d6e527053f649d379a80326026af}\label{main_8cpp_a6d83d6e527053f649d379a80326026af}} 
+void \mbox{\hyperlink{main_8cpp_a6d83d6e527053f649d379a80326026af}{Test\+Date\+Promote\+Decrease}} ()
+\begin{DoxyCompactList}\small\item\em tests save promote and save decrease methods from \mbox{\hyperlink{class_date}{Date}} \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{main_8cpp_a0a273d704e85b89958de9163aafe94bc}\label{main_8cpp_a0a273d704e85b89958de9163aafe94bc}} 
+void \mbox{\hyperlink{main_8cpp_a0a273d704e85b89958de9163aafe94bc}{Test\+Date\+Difference1}} ()
+\begin{DoxyCompactList}\small\item\em tests \mbox{\hyperlink{class_date_a896282329e5ad340b6ccb1afc6ed68df}{Date\+::difference}}, part1 \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{main_8cpp_a45301473b14d4831ed9d1a1a8f99dbff}\label{main_8cpp_a45301473b14d4831ed9d1a1a8f99dbff}} 
+void \mbox{\hyperlink{main_8cpp_a45301473b14d4831ed9d1a1a8f99dbff}{Test\+Date\+Difference2}} ()
+\begin{DoxyCompactList}\small\item\em tests \mbox{\hyperlink{class_date_a896282329e5ad340b6ccb1afc6ed68df}{Date\+::difference}}, part2 \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{main_8cpp_a3aec7744b12636df050e643f29dc01e9}\label{main_8cpp_a3aec7744b12636df050e643f29dc01e9}} 
+void \mbox{\hyperlink{main_8cpp_a3aec7744b12636df050e643f29dc01e9}{Test\+Date\+Day\+Of\+Week}} ()
+\begin{DoxyCompactList}\small\item\em tests \mbox{\hyperlink{class_date_ac929bcd6ea2a238923a06564bb77cdcc}{Date\+::get\+\_\+day\+\_\+of\+\_\+week}} \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{main_8cpp_a627d7eb3ce9192f2593d27d50a2451c0}\label{main_8cpp_a627d7eb3ce9192f2593d27d50a2451c0}} 
+void \mbox{\hyperlink{main_8cpp_a627d7eb3ce9192f2593d27d50a2451c0}{Test\+Date\+Alternative\+Constructor}} ()
+\begin{DoxyCompactList}\small\item\em tests alternative constructor for \mbox{\hyperlink{class_date}{Date}} \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{main_8cpp_a4f1bbb280a5b1701ca9ba186a8b89aab}\label{main_8cpp_a4f1bbb280a5b1701ca9ba186a8b89aab}} 
+void \mbox{\hyperlink{main_8cpp_a4f1bbb280a5b1701ca9ba186a8b89aab}{Test\+Date\+Number\+Of\+Week}} ()
+\begin{DoxyCompactList}\small\item\em tests \mbox{\hyperlink{class_date_a5d9ae2534069a6929319bcec246fe493}{Date\+::get\+\_\+number\+\_\+of\+\_\+week}} \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{main_8cpp_a684281f4faf76cbacf4a009c98ed267d}\label{main_8cpp_a684281f4faf76cbacf4a009c98ed267d}} 
+void \mbox{\hyperlink{main_8cpp_a684281f4faf76cbacf4a009c98ed267d}{Test\+Date\+Statistics}} ()
+\begin{DoxyCompactList}\small\item\em statistics functions (for years and ranges of Dates) \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{main_8cpp_aa963d2f134aec03e5299bdb7c9c28b19}\label{main_8cpp_aa963d2f134aec03e5299bdb7c9c28b19}} 
+void \mbox{\hyperlink{main_8cpp_aa963d2f134aec03e5299bdb7c9c28b19}{Test\+Date}} ()
+\begin{DoxyCompactList}\small\item\em launches tests for \mbox{\hyperlink{class_date}{Date}} \end{DoxyCompactList}\item 
+{\footnotesize template$<$typename Node\+Type , typename Edge\+Type $>$ }\\void \mbox{\hyperlink{main_8cpp_a6b44f498220c3568713729f9abddfbef}{Test\+Basic}} (\mbox{\hyperlink{class_graph}{Graph}}$<$ Node\+Type, Edge\+Type $>$ \&graph)
+\begin{DoxyCompactList}\small\item\em tests basic methods of graphs (add\+\_\+node, get\+\_\+node, add\+\_\+edge, get\+\_\+edge, delete\+\_\+node, delete\+\_\+edge) \end{DoxyCompactList}\item 
+{\footnotesize template$<$typename Node\+Type , typename Edge\+Type $>$ }\\void \mbox{\hyperlink{main_8cpp_a65e313600e5ca9e3258e8001f279387f}{Test\+Connected\+Components\+Acyclic\+Tree}} (\mbox{\hyperlink{class_graph}{Graph}}$<$ Node\+Type, Edge\+Type $>$ \&graph)
+\begin{DoxyCompactList}\small\item\em tests is\+\_\+connected, is\+\_\+acyclic, is\+\_\+tree and find\+\_\+components methods of graph \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{main_8cpp_ab18ed7869fb5e65582b66de385ae024b}\label{main_8cpp_ab18ed7869fb5e65582b66de385ae024b}} 
+void \mbox{\hyperlink{main_8cpp_ab18ed7869fb5e65582b66de385ae024b}{Test\+Ways1}} ()
+\begin{DoxyCompactList}\small\item\em tests dijkstra\+\_\+algorithm method for Adjacency\+Matrix$<$double, int$>$ \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{main_8cpp_a7ceb0e5f349d1bffc1051b189ed77468}\label{main_8cpp_a7ceb0e5f349d1bffc1051b189ed77468}} 
+void \mbox{\hyperlink{main_8cpp_a7ceb0e5f349d1bffc1051b189ed77468}{Test\+Ways2}} ()
+\begin{DoxyCompactList}\small\item\em tests dijkstra\+\_\+algorithm method for Adjacency\+Structure$<$double, int$>$ \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{main_8cpp_a114b52bdae5393e1058e82407398fd3e}\label{main_8cpp_a114b52bdae5393e1058e82407398fd3e}} 
+void \mbox{\hyperlink{main_8cpp_a114b52bdae5393e1058e82407398fd3e}{Test\+Ways3}} ()
+\begin{DoxyCompactList}\small\item\em tests dijkstra\+\_\+algorithm method for \mbox{\hyperlink{class_adjacency_matrix}{Adjacency\+Matrix}}$<$std\+::vector$<$int$>$, std\+::string$>$ \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{main_8cpp_a259f2c683258e411aa469d88c57ed576}\label{main_8cpp_a259f2c683258e411aa469d88c57ed576}} 
+void \mbox{\hyperlink{main_8cpp_a259f2c683258e411aa469d88c57ed576}{Test\+Ways4}} ()
+\begin{DoxyCompactList}\small\item\em tests dijkstra\+\_\+algorithm method for \mbox{\hyperlink{class_adjacency_structure}{Adjacency\+Structure}}$<$std\+::vector$<$int$>$, std\+::string$>$ \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{main_8cpp_ac205106316b6dad109c696ebb35159b9}\label{main_8cpp_ac205106316b6dad109c696ebb35159b9}} 
+void \mbox{\hyperlink{main_8cpp_ac205106316b6dad109c696ebb35159b9}{Test\+Ways5}} ()
+\begin{DoxyCompactList}\small\item\em tests dijkstra\+\_\+algorithm method for \mbox{\hyperlink{class_adjacency_matrix}{Adjacency\+Matrix}}$<$Book\+Character$<$int$>$, \mbox{\hyperlink{class_book}{Book}}$>$ \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{main_8cpp_a283964d06297ed6d32035ee64fb9b1b4}\label{main_8cpp_a283964d06297ed6d32035ee64fb9b1b4}} 
+void \mbox{\hyperlink{main_8cpp_a283964d06297ed6d32035ee64fb9b1b4}{Test\+Ways6}} ()
+\begin{DoxyCompactList}\small\item\em tests dijkstra\+\_\+algorithm method for \mbox{\hyperlink{class_adjacency_structure}{Adjacency\+Structure}}$<$Book\+Character$<$int$>$, \mbox{\hyperlink{class_book}{Book}}$>$ \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{main_8cpp_aa5ad9af9ad1e0a27d69b1e25a8f7e4b3}\label{main_8cpp_aa5ad9af9ad1e0a27d69b1e25a8f7e4b3}} 
+void \mbox{\hyperlink{main_8cpp_aa5ad9af9ad1e0a27d69b1e25a8f7e4b3}{Test\+Ways7}} ()
+\begin{DoxyCompactList}\small\item\em tests dijkstra\+\_\+algorithm method for Adjacency\+Matrix$<$\+Publishing\+House, Date$>$ \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{main_8cpp_af49df1d9ecea31c3483619366ecbc6fc}\label{main_8cpp_af49df1d9ecea31c3483619366ecbc6fc}} 
+void \mbox{\hyperlink{main_8cpp_af49df1d9ecea31c3483619366ecbc6fc}{Test\+Ways8}} ()
+\begin{DoxyCompactList}\small\item\em tests dijkstra\+\_\+algorithm method for Adjacency\+Structure$<$\+Publishing\+House, Date$>$ \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{main_8cpp_a82b1be04181be655fd6d61719f45699a}\label{main_8cpp_a82b1be04181be655fd6d61719f45699a}} 
+void \mbox{\hyperlink{main_8cpp_a82b1be04181be655fd6d61719f45699a}{Test\+Graph}} ()
+\begin{DoxyCompactList}\small\item\em launches tests for graphs \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{main_8cpp_ae66f6b31b5ad750f1fe042a706a4e3d4}\label{main_8cpp_ae66f6b31b5ad750f1fe042a706a4e3d4}} 
+int {\bfseries main} ()
+\end{DoxyCompactItemize}
+\doxysubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+std\+::random\+\_\+device \mbox{\hyperlink{main_8cpp_a7071b0092ad8c5b57d6cc40c5f803df5}{rd}}
+\item 
+{\footnotesize template$<$typename T $>$ }\\\mbox{\hyperlink{class_book_character}{Book\+Character}}$<$ T $>$ \mbox{\hyperlink{main_8cpp_a72dd491e32ead4ed39862d795d519370}{random\+\_\+element}} (\mbox{\hyperlink{class_book_character}{Book\+Character}}$<$ T $>$)
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+main cpp file 
+
+main function, unit tests, random functions and + operators for some classes are here 
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{main_8cpp_ab7480ac8501f90f65f3573708ad11153}\label{main_8cpp_ab7480ac8501f90f65f3573708ad11153}} 
+\index{main.cpp@{main.cpp}!operator+@{operator+}}
+\index{operator+@{operator+}!main.cpp@{main.cpp}}
+\doxysubsubsection{\texorpdfstring{operator+()}{operator+()}\hspace{0.1cm}{\footnotesize\ttfamily [1/3]}}
+{\footnotesize\ttfamily \mbox{\hyperlink{class_book}{Book}} operator+ (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{class_book}{Book}} \&}]{lhs,  }\item[{const \mbox{\hyperlink{class_book}{Book}} \&}]{rhs }\end{DoxyParamCaption})}
+
+Operator + for Books
+
+\begin{DoxyReturn}{Returns}
+\mbox{\hyperlink{class_book}{Book}} with fields -\/ sum of fields 0f lhs and rhs 
+\end{DoxyReturn}
+\mbox{\Hypertarget{main_8cpp_a8d86a201ec8c67de684500b6359f7f13}\label{main_8cpp_a8d86a201ec8c67de684500b6359f7f13}} 
+\index{main.cpp@{main.cpp}!operator+@{operator+}}
+\index{operator+@{operator+}!main.cpp@{main.cpp}}
+\doxysubsubsection{\texorpdfstring{operator+()}{operator+()}\hspace{0.1cm}{\footnotesize\ttfamily [2/3]}}
+{\footnotesize\ttfamily \mbox{\hyperlink{class_date}{Date}} operator+ (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{class_date}{Date}} \&}]{lhs,  }\item[{const \mbox{\hyperlink{class_date}{Date}} \&}]{rhs }\end{DoxyParamCaption})}
+
+Operator + for Dates
+
+\begin{DoxyReturn}{Returns}
+lhs \mbox{\hyperlink{class_date}{Date}}, promote on difference between rhs \mbox{\hyperlink{class_date}{Date}} and lhs date in seconds 
+\end{DoxyReturn}
+\mbox{\Hypertarget{main_8cpp_ac705c59245360c79a0c3cf162f6e2c36}\label{main_8cpp_ac705c59245360c79a0c3cf162f6e2c36}} 
+\index{main.cpp@{main.cpp}!operator+@{operator+}}
+\index{operator+@{operator+}!main.cpp@{main.cpp}}
+\doxysubsubsection{\texorpdfstring{operator+()}{operator+()}\hspace{0.1cm}{\footnotesize\ttfamily [3/3]}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+std\+::vector$<$T$>$ operator+ (\begin{DoxyParamCaption}\item[{const std\+::vector$<$ T $>$ \&}]{lhs,  }\item[{const std\+::vector$<$ T $>$ \&}]{rhs }\end{DoxyParamCaption})}
+
+Operator + for vectors \mbox{\Hypertarget{main_8cpp_a644768b71bae2014a452d1b966d95b3d}\label{main_8cpp_a644768b71bae2014a452d1b966d95b3d}} 
+\index{main.cpp@{main.cpp}!random\_element@{random\_element}}
+\index{random\_element@{random\_element}!main.cpp@{main.cpp}}
+\doxysubsubsection{\texorpdfstring{random\_element()}{random\_element()}\hspace{0.1cm}{\footnotesize\ttfamily [1/8]}}
+{\footnotesize\ttfamily \mbox{\hyperlink{class_book}{Book}} random\+\_\+element (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_book}{Book}}}]{ }\end{DoxyParamCaption})}
+
+\begin{DoxyReturn}{Returns}
+random \mbox{\hyperlink{class_book}{Book}} (3 authors) 
+\end{DoxyReturn}
+\mbox{\Hypertarget{main_8cpp_a217b2706efb25cfc4c9f17560ee85d2f}\label{main_8cpp_a217b2706efb25cfc4c9f17560ee85d2f}} 
+\index{main.cpp@{main.cpp}!random\_element@{random\_element}}
+\index{random\_element@{random\_element}!main.cpp@{main.cpp}}
+\doxysubsubsection{\texorpdfstring{random\_element()}{random\_element()}\hspace{0.1cm}{\footnotesize\ttfamily [2/8]}}
+{\footnotesize\ttfamily \mbox{\hyperlink{class_date}{Date}} random\+\_\+element (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_date}{Date}}}]{ }\end{DoxyParamCaption})}
+
+\begin{DoxyReturn}{Returns}
+random valid \mbox{\hyperlink{class_date}{Date}} 
+\end{DoxyReturn}
+\mbox{\Hypertarget{main_8cpp_afb92437b9c373b63cf93d3be39107710}\label{main_8cpp_afb92437b9c373b63cf93d3be39107710}} 
+\index{main.cpp@{main.cpp}!random\_element@{random\_element}}
+\index{random\_element@{random\_element}!main.cpp@{main.cpp}}
+\doxysubsubsection{\texorpdfstring{random\_element()}{random\_element()}\hspace{0.1cm}{\footnotesize\ttfamily [3/8]}}
+{\footnotesize\ttfamily double random\+\_\+element (\begin{DoxyParamCaption}\item[{double}]{ }\end{DoxyParamCaption})}
+
+\begin{DoxyReturn}{Returns}
+random double $<$1000 and $>$=0 
+\end{DoxyReturn}
+\mbox{\Hypertarget{main_8cpp_ae43747616a2f36f9970a6e6c9750def5}\label{main_8cpp_ae43747616a2f36f9970a6e6c9750def5}} 
+\index{main.cpp@{main.cpp}!random\_element@{random\_element}}
+\index{random\_element@{random\_element}!main.cpp@{main.cpp}}
+\doxysubsubsection{\texorpdfstring{random\_element()}{random\_element()}\hspace{0.1cm}{\footnotesize\ttfamily [4/8]}}
+{\footnotesize\ttfamily int random\+\_\+element (\begin{DoxyParamCaption}\item[{int}]{ }\end{DoxyParamCaption})}
+
+\begin{DoxyReturn}{Returns}
+random int $<$100 and $>$=0 
+\end{DoxyReturn}
+\mbox{\Hypertarget{main_8cpp_ab4b57deae6a0c9abc68854541d328166}\label{main_8cpp_ab4b57deae6a0c9abc68854541d328166}} 
+\index{main.cpp@{main.cpp}!random\_element@{random\_element}}
+\index{random\_element@{random\_element}!main.cpp@{main.cpp}}
+\doxysubsubsection{\texorpdfstring{random\_element()}{random\_element()}\hspace{0.1cm}{\footnotesize\ttfamily [5/8]}}
+{\footnotesize\ttfamily \mbox{\hyperlink{class_publishing_house}{Publishing\+House}} random\+\_\+element (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_publishing_house}{Publishing\+House}}}]{ }\end{DoxyParamCaption})}
+
+\begin{DoxyReturn}{Returns}
+random \mbox{\hyperlink{class_publishing_house}{Publishing\+House}} with 10 Books and 10 Book\+Characters (characters will not be added in books) 
+\end{DoxyReturn}
+\mbox{\Hypertarget{main_8cpp_aa1b6c36cfc5959418c0b1cdf432f9fb4}\label{main_8cpp_aa1b6c36cfc5959418c0b1cdf432f9fb4}} 
+\index{main.cpp@{main.cpp}!random\_element@{random\_element}}
+\index{random\_element@{random\_element}!main.cpp@{main.cpp}}
+\doxysubsubsection{\texorpdfstring{random\_element()}{random\_element()}\hspace{0.1cm}{\footnotesize\ttfamily [6/8]}}
+{\footnotesize\ttfamily \mbox{\hyperlink{_book_character_8h_acdd79a1a4f81dd6ee5cddcb21149b951}{Role}} random\+\_\+element (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{_book_character_8h_acdd79a1a4f81dd6ee5cddcb21149b951}{Role}}}]{ }\end{DoxyParamCaption})}
+
+\begin{DoxyReturn}{Returns}
+random Role (episodic, secondary or main) 
+\end{DoxyReturn}
+\mbox{\Hypertarget{main_8cpp_aea8742791efebe908530f02cce9c3167}\label{main_8cpp_aea8742791efebe908530f02cce9c3167}} 
+\index{main.cpp@{main.cpp}!random\_element@{random\_element}}
+\index{random\_element@{random\_element}!main.cpp@{main.cpp}}
+\doxysubsubsection{\texorpdfstring{random\_element()}{random\_element()}\hspace{0.1cm}{\footnotesize\ttfamily [7/8]}}
+{\footnotesize\ttfamily std\+::string random\+\_\+element (\begin{DoxyParamCaption}\item[{std\+::string}]{ }\end{DoxyParamCaption})}
+
+\begin{DoxyReturn}{Returns}
+random string with 10 characters 
+\end{DoxyReturn}
+\mbox{\Hypertarget{main_8cpp_a5684334cb9d253f69d1c8e3e716be82b}\label{main_8cpp_a5684334cb9d253f69d1c8e3e716be82b}} 
+\index{main.cpp@{main.cpp}!random\_element@{random\_element}}
+\index{random\_element@{random\_element}!main.cpp@{main.cpp}}
+\doxysubsubsection{\texorpdfstring{random\_element()}{random\_element()}\hspace{0.1cm}{\footnotesize\ttfamily [8/8]}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+std\+::vector$<$T$>$ random\+\_\+element (\begin{DoxyParamCaption}\item[{std\+::vector$<$ T $>$}]{ }\end{DoxyParamCaption})}
+
+\begin{DoxyReturn}{Returns}
+random vector with 10 elements 
+\end{DoxyReturn}
+\mbox{\Hypertarget{main_8cpp_a6b44f498220c3568713729f9abddfbef}\label{main_8cpp_a6b44f498220c3568713729f9abddfbef}} 
+\index{main.cpp@{main.cpp}!TestBasic@{TestBasic}}
+\index{TestBasic@{TestBasic}!main.cpp@{main.cpp}}
+\doxysubsubsection{\texorpdfstring{TestBasic()}{TestBasic()}}
+{\footnotesize\ttfamily template$<$typename Node\+Type , typename Edge\+Type $>$ \\
+void Test\+Basic (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_graph}{Graph}}$<$ Node\+Type, Edge\+Type $>$ \&}]{graph }\end{DoxyParamCaption})}
+
+
+
+tests basic methods of graphs (add\+\_\+node, get\+\_\+node, add\+\_\+edge, get\+\_\+edge, delete\+\_\+node, delete\+\_\+edge) 
+
+
+\begin{DoxyParams}{Parameters}
+{\em graph} & reference to some graph (\mbox{\hyperlink{class_adjacency_matrix}{Adjacency\+Matrix}} or \mbox{\hyperlink{class_adjacency_structure}{Adjacency\+Structure}} in tests) \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{main_8cpp_a65e313600e5ca9e3258e8001f279387f}\label{main_8cpp_a65e313600e5ca9e3258e8001f279387f}} 
+\index{main.cpp@{main.cpp}!TestConnectedComponentsAcyclicTree@{TestConnectedComponentsAcyclicTree}}
+\index{TestConnectedComponentsAcyclicTree@{TestConnectedComponentsAcyclicTree}!main.cpp@{main.cpp}}
+\doxysubsubsection{\texorpdfstring{TestConnectedComponentsAcyclicTree()}{TestConnectedComponentsAcyclicTree()}}
+{\footnotesize\ttfamily template$<$typename Node\+Type , typename Edge\+Type $>$ \\
+void Test\+Connected\+Components\+Acyclic\+Tree (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_graph}{Graph}}$<$ Node\+Type, Edge\+Type $>$ \&}]{graph }\end{DoxyParamCaption})}
+
+
+
+tests is\+\_\+connected, is\+\_\+acyclic, is\+\_\+tree and find\+\_\+components methods of graph 
+
+
+\begin{DoxyParams}{Parameters}
+{\em graph} & reference to some graph (\mbox{\hyperlink{class_adjacency_matrix}{Adjacency\+Matrix}} or \mbox{\hyperlink{class_adjacency_structure}{Adjacency\+Structure}} in tests) \\
+\hline
+\end{DoxyParams}
+
+
+\doxysubsection{Variable Documentation}
+\mbox{\Hypertarget{main_8cpp_a72dd491e32ead4ed39862d795d519370}\label{main_8cpp_a72dd491e32ead4ed39862d795d519370}} 
+\index{main.cpp@{main.cpp}!random\_element@{random\_element}}
+\index{random\_element@{random\_element}!main.cpp@{main.cpp}}
+\doxysubsubsection{\texorpdfstring{random\_element}{random\_element}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+\mbox{\hyperlink{class_book_character}{Book\+Character}}$<$T$>$ random\+\_\+element(\mbox{\hyperlink{class_book_character}{Book\+Character}}$<$ T $>$)}
+
+\begin{DoxyReturn}{Returns}
+random \mbox{\hyperlink{class_book_character}{Book\+Character}} with 3 names and 5 roles in books 
+\end{DoxyReturn}
+\mbox{\Hypertarget{main_8cpp_a7071b0092ad8c5b57d6cc40c5f803df5}\label{main_8cpp_a7071b0092ad8c5b57d6cc40c5f803df5}} 
+\index{main.cpp@{main.cpp}!rd@{rd}}
+\index{rd@{rd}!main.cpp@{main.cpp}}
+\doxysubsubsection{\texorpdfstring{rd}{rd}}
+{\footnotesize\ttfamily std\+::random\+\_\+device rd}
+
+mersenne generates random numbers (better than std\+::rand) 

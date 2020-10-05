@@ -1,3 +1,10 @@
+/**
+\file
+\brief h file of class Book
+
+definitions of Book methods and operators are here, std::less for Book
+*/
+
 #pragma once
 
 #include <string>
@@ -112,11 +119,27 @@ private:
 	std::string annotation;				///<annotation
 };
 
+/**
+Operator < for Books
+*/
 bool operator<(const Book& lhs, const Book& rhs);
-bool operator==(const Book& lhs, const Book& rhs);
-std::ostream& operator << (std::ostream& os, const Book& book);
-//https://stackoverflow.com/questions/1102392/how-can-i-use-stdmaps-with-user-defined-types-as-key
 
+/**
+Operator == for Books
+*/
+bool operator==(const Book& lhs, const Book& rhs);
+
+/**
+Operator << for Books in streams
+*/
+std::ostream& operator << (std::ostream& os, const Book& book);
+
+
+/**
+\brief supplement namespace std
+
+supplement namespace std with struct less in order to have opportunity to do std::set<Book> or std::map with key Book
+*/
 namespace std
 {
 	template<> struct  less<Book>

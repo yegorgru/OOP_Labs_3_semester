@@ -1,3 +1,10 @@
+/**
+\file
+\brief h file of class BookCharacter
+
+definitions and implementations of BookCharacter methods and operators, enum class Role are here
+*/
+
 #pragma once
 
 
@@ -21,6 +28,9 @@ enum class Role {
 	episodic	///< episodic role
 };
 
+/**
+Operator << for Role in streams
+*/
 std::ostream& operator << (std::ostream& os, const Role& role);
 
 /**
@@ -136,24 +146,23 @@ private:
 	std::set<std::string>names;			///<all names of character
 };
 
+/**
+Operator << for BookCharacter in streams
+*/
 template <typename id>
-std::ostream& operator<<(std::ostream& os, const BookCharacter<id>& character) {
-	os << "Default name: "<<character.get_default_name() << std::endl<<"All names: ";
-	for (const auto& i : character.get_all_names()) {
-		os << i<<" ";
-	}
-	os << std::endl<<"All roles:"<<std::endl;
-	for (const auto& i : character.get_all_books()) {
-		os<<"Book:" << i << " Role:"<<character.get_role(i)<<std::endl;
-	}
-	return os;
-}
+std::ostream& operator<<(std::ostream& os, const BookCharacter<id>& character);
 
+/**
+Operator == for BookCharacters
+*/
 template <typename id>
 bool operator==(const BookCharacter<id>& lhs, const BookCharacter<id>& rhs) {
 	return lhs.get_default_name() == rhs.get_default_name();
 }
 
+/**
+Operator < for BookCharacters
+*/
 template <typename id>
 bool operator<(const BookCharacter<id>& lhs, const BookCharacter<id>& rhs) {
 	return lhs.get_default_name() < rhs.get_default_name();
@@ -260,4 +269,17 @@ template <typename id>
 std::string BookCharacter<id>::get_default_name() const
 {
 	return this->default_name;
+}
+
+template <typename id>
+std::ostream& operator<<(std::ostream& os, const BookCharacter<id>& character) {
+	os << "Default name: " << character.get_default_name() << std::endl << "All names: ";
+	for (const auto& i : character.get_all_names()) {
+		os << i << " ";
+	}
+	os << std::endl << "All roles:" << std::endl;
+	for (const auto& i : character.get_all_books()) {
+		os << "Book:" << i << " Role:" << character.get_role(i) << std::endl;
+	}
+	return os;
 }

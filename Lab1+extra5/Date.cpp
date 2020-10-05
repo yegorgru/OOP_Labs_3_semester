@@ -1,3 +1,11 @@
+/**
+\file
+\brief cpp file of class Date
+
+implementations of Date methods and operators for it and statistics function implementation are here
+*/
+
+
 #include "Date.h"
 
 Date::Date(uint16_t seconds, uint16_t minutes, uint16_t hours, uint16_t day,

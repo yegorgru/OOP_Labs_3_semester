@@ -1,3 +1,11 @@
+/**
+\file
+\brief h file of class Graph (basic class for graph)
+
+definitions and implementations of Graph methods are here
+*/
+
+
 #pragma once
 #include <map>
 #include <vector>

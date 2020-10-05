@@ -1,0 +1,105 @@
+\hypertarget{_date_8cpp}{}\doxysection{C\+:/\+Users/yegor/\+Documents/\+Git\+Hub/\+O\+O\+P\+\_\+\+Labs\+\_\+3\+\_\+semester/\+Lab1+extra5/\+Date.cpp File Reference}
+\label{_date_8cpp}\index{C:/Users/yegor/Documents/GitHub/OOP\_Labs\_3\_semester/Lab1+extra5/Date.cpp@{C:/Users/yegor/Documents/GitHub/OOP\_Labs\_3\_semester/Lab1+extra5/Date.cpp}}
+
+
+cpp file of class \mbox{\hyperlink{class_date}{Date}}  
+
+
+{\ttfamily \#include \char`\"{}Date.\+h\char`\"{}}\newline
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+std\+::ostream \& \mbox{\hyperlink{_date_8cpp_a909cb88bf2c7e3aba47452770b37306f}{operator$<$$<$}} (std\+::ostream \&os, const \mbox{\hyperlink{_date_8h_ac572d2be8b3c04018816ba1a6e75adad}{Day}} \&day)
+\item 
+\mbox{\hyperlink{_date_8h_ac572d2be8b3c04018816ba1a6e75adad}{Day}} \mbox{\hyperlink{_date_8cpp_a681d3f4be60db28fca9a4fe1593c2555}{statistics}} (const \mbox{\hyperlink{class_date}{Date}} \&bottom, const \mbox{\hyperlink{class_date}{Date}} \&top, uint16\+\_\+t number)
+\begin{DoxyCompactList}\small\item\em function to get some statistics \end{DoxyCompactList}\item 
+\mbox{\hyperlink{_date_8h_ac572d2be8b3c04018816ba1a6e75adad}{Day}} \mbox{\hyperlink{_date_8cpp_a9663c56eb650e74da58cb694f78704a6}{statistics}} (int32\+\_\+t year, uint16\+\_\+t number)
+\begin{DoxyCompactList}\small\item\em another version of statistics function \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{_date_8cpp_a27425be265a0cc57e4f731825154ec4d}{operator==}} (const \mbox{\hyperlink{class_date}{Date}} \&lhs, const \mbox{\hyperlink{class_date}{Date}} \&rhs)
+\item 
+bool \mbox{\hyperlink{_date_8cpp_ad12683e4457513f4f834e13c4e7f72f8}{operator!=}} (const \mbox{\hyperlink{class_date}{Date}} \&lhs, const \mbox{\hyperlink{class_date}{Date}} \&rhs)
+\item 
+bool \mbox{\hyperlink{_date_8cpp_a611ba98c72bec2ae82bbf086b81563ef}{operator$<$}} (const \mbox{\hyperlink{class_date}{Date}} \&lhs, const \mbox{\hyperlink{class_date}{Date}} \&rhs)
+\item 
+std\+::ostream \& \mbox{\hyperlink{_date_8cpp_a1862604492a841a6b98e1a3061d95b96}{operator$<$$<$}} (std\+::ostream \&os, const \mbox{\hyperlink{class_date}{Date}} \&date)
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+cpp file of class \mbox{\hyperlink{class_date}{Date}} 
+
+implementations of \mbox{\hyperlink{class_date}{Date}} methods and operators for it and statistics function implementation are here 
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{_date_8cpp_ad12683e4457513f4f834e13c4e7f72f8}\label{_date_8cpp_ad12683e4457513f4f834e13c4e7f72f8}} 
+\index{Date.cpp@{Date.cpp}!operator"!=@{operator"!=}}
+\index{operator"!=@{operator"!=}!Date.cpp@{Date.cpp}}
+\doxysubsubsection{\texorpdfstring{operator"!=()}{operator!=()}}
+{\footnotesize\ttfamily bool operator!= (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{class_date}{Date}} \&}]{lhs,  }\item[{const \mbox{\hyperlink{class_date}{Date}} \&}]{rhs }\end{DoxyParamCaption})}
+
+Operator != for Dates \mbox{\Hypertarget{_date_8cpp_a611ba98c72bec2ae82bbf086b81563ef}\label{_date_8cpp_a611ba98c72bec2ae82bbf086b81563ef}} 
+\index{Date.cpp@{Date.cpp}!operator$<$@{operator$<$}}
+\index{operator$<$@{operator$<$}!Date.cpp@{Date.cpp}}
+\doxysubsubsection{\texorpdfstring{operator$<$()}{operator<()}}
+{\footnotesize\ttfamily bool operator$<$ (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{class_date}{Date}} \&}]{lhs,  }\item[{const \mbox{\hyperlink{class_date}{Date}} \&}]{rhs }\end{DoxyParamCaption})}
+
+Operator $<$ for Dates \mbox{\Hypertarget{_date_8cpp_a1862604492a841a6b98e1a3061d95b96}\label{_date_8cpp_a1862604492a841a6b98e1a3061d95b96}} 
+\index{Date.cpp@{Date.cpp}!operator$<$$<$@{operator$<$$<$}}
+\index{operator$<$$<$@{operator$<$$<$}!Date.cpp@{Date.cpp}}
+\doxysubsubsection{\texorpdfstring{operator$<$$<$()}{operator<<()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily std\+::ostream\& operator$<$$<$ (\begin{DoxyParamCaption}\item[{std\+::ostream \&}]{os,  }\item[{const \mbox{\hyperlink{class_date}{Date}} \&}]{date }\end{DoxyParamCaption})}
+
+Operator $<$$<$ for Dates in streams \mbox{\Hypertarget{_date_8cpp_a909cb88bf2c7e3aba47452770b37306f}\label{_date_8cpp_a909cb88bf2c7e3aba47452770b37306f}} 
+\index{Date.cpp@{Date.cpp}!operator$<$$<$@{operator$<$$<$}}
+\index{operator$<$$<$@{operator$<$$<$}!Date.cpp@{Date.cpp}}
+\doxysubsubsection{\texorpdfstring{operator$<$$<$()}{operator<<()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily std\+::ostream\& operator$<$$<$ (\begin{DoxyParamCaption}\item[{std\+::ostream \&}]{os,  }\item[{const \mbox{\hyperlink{_date_8h_ac572d2be8b3c04018816ba1a6e75adad}{Day}} \&}]{day }\end{DoxyParamCaption})}
+
+Operator $<$$<$ for Days in streams \mbox{\Hypertarget{_date_8cpp_a27425be265a0cc57e4f731825154ec4d}\label{_date_8cpp_a27425be265a0cc57e4f731825154ec4d}} 
+\index{Date.cpp@{Date.cpp}!operator==@{operator==}}
+\index{operator==@{operator==}!Date.cpp@{Date.cpp}}
+\doxysubsubsection{\texorpdfstring{operator==()}{operator==()}}
+{\footnotesize\ttfamily bool operator== (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{class_date}{Date}} \&}]{lhs,  }\item[{const \mbox{\hyperlink{class_date}{Date}} \&}]{rhs }\end{DoxyParamCaption})}
+
+Operator == for Dates \mbox{\Hypertarget{_date_8cpp_a681d3f4be60db28fca9a4fe1593c2555}\label{_date_8cpp_a681d3f4be60db28fca9a4fe1593c2555}} 
+\index{Date.cpp@{Date.cpp}!statistics@{statistics}}
+\index{statistics@{statistics}!Date.cpp@{Date.cpp}}
+\doxysubsubsection{\texorpdfstring{statistics()}{statistics()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \mbox{\hyperlink{_date_8h_ac572d2be8b3c04018816ba1a6e75adad}{Day}} statistics (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{class_date}{Date}} \&}]{bottom,  }\item[{const \mbox{\hyperlink{class_date}{Date}} \&}]{top,  }\item[{uint16\+\_\+t}]{number }\end{DoxyParamCaption})}
+
+
+
+function to get some statistics 
+
+Counts what day of week is the most common among days with some number in month. Only dates bigger than bottom and lesser than top are taken into account 
+\begin{DoxyParams}{Parameters}
+{\em bottom} & min \mbox{\hyperlink{class_date}{Date}} \\
+\hline
+{\em top} & max \mbox{\hyperlink{class_date}{Date}} \\
+\hline
+{\em number} & number in month to get statistics \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+the most common day 
+\end{DoxyReturn}
+\mbox{\Hypertarget{_date_8cpp_a9663c56eb650e74da58cb694f78704a6}\label{_date_8cpp_a9663c56eb650e74da58cb694f78704a6}} 
+\index{Date.cpp@{Date.cpp}!statistics@{statistics}}
+\index{statistics@{statistics}!Date.cpp@{Date.cpp}}
+\doxysubsubsection{\texorpdfstring{statistics()}{statistics()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily \mbox{\hyperlink{_date_8h_ac572d2be8b3c04018816ba1a6e75adad}{Day}} statistics (\begin{DoxyParamCaption}\item[{int32\+\_\+t}]{year,  }\item[{uint16\+\_\+t}]{number }\end{DoxyParamCaption})}
+
+
+
+another version of statistics function 
+
+Counts what day of week is the most common in year among days with some number in month. 
+\begin{DoxyParams}{Parameters}
+{\em year} & year to get statistics \\
+\hline
+{\em number} & number in month to get statistics \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+the most common day 
+\end{DoxyReturn}
