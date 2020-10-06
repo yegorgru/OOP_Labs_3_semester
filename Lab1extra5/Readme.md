@@ -27,6 +27,6 @@
 
 Додаткові бали:
 - unit tests
-- Doxygen
+- Doxygen https://yegorgru.github.io/OOP_Labs_3_semester/Lab1extra5/docs%20folder/html/index.html
 - extra5
 
