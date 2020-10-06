@@ -1,0 +1,250 @@
+\hypertarget{class_book_character}{}\doxysection{Book\+Character$<$ id $>$ Class Template Reference}
+\label{class_book_character}\index{BookCharacter$<$ id $>$@{BookCharacter$<$ id $>$}}
+
+
+class for storing information about book characters  
+
+
+
+
+{\ttfamily \#include $<$Book\+Character.\+h$>$}
+
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_book_character_afba019424ffe810bfcf69a532b4bfba7}{Book\+Character}} ()
+\begin{DoxyCompactList}\small\item\em basic constructor of \mbox{\hyperlink{class_book_character}{Book\+Character}}. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_book_character_a5d88083eb278bc2e3a0cb0f86042f88d}\label{class_book_character_a5d88083eb278bc2e3a0cb0f86042f88d}} 
+\mbox{\hyperlink{class_book_character_a5d88083eb278bc2e3a0cb0f86042f88d}{Book\+Character}} (const std\+::string \&name)
+\begin{DoxyCompactList}\small\item\em constructor of \mbox{\hyperlink{class_book_character}{Book\+Character}} with known default name \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_book_character_aed76e5630d6232ace73d9b51e058820b}\label{class_book_character_aed76e5630d6232ace73d9b51e058820b}} 
+\mbox{\hyperlink{class_book_character_aed76e5630d6232ace73d9b51e058820b}{Book\+Character}} (const std\+::string \&\mbox{\hyperlink{class_book_character_a9ceb86a14d24db410449474df04a2799}{default\+\_\+name}}, const std\+::set$<$ std\+::string $>$ \&\mbox{\hyperlink{class_book_character_afa752add467472567630aaac74bcd917}{names}})
+\begin{DoxyCompactList}\small\item\em constructor of \mbox{\hyperlink{class_book_character}{Book\+Character}} with known default name and all names \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_book_character_ad8e8a02672cfd7c9ade6b1dcd6596bb3}{promote}} (const id \&book)
+\begin{DoxyCompactList}\small\item\em promotes character\textquotesingle{}s role in some book \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_book_character_aa1823186685e714eb31fc1313e36171a}{decrease}} (const id \&book)
+\begin{DoxyCompactList}\small\item\em decreases character\textquotesingle{}s role in some book \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_book_character_a4e3fb0746f075c384084f4e8ac750a42}{update\+\_\+role}} (const id \&book, const \mbox{\hyperlink{_book_character_8h_acdd79a1a4f81dd6ee5cddcb21149b951}{Role}} role)
+\begin{DoxyCompactList}\small\item\em adds new book(and role in it) or updated role in old book \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_book_character_aca079c78dcaa79b3fd9eddf049dfbe41}{erase\+\_\+book}} (const id \&book)
+\begin{DoxyCompactList}\small\item\em erases book(and role in it) \end{DoxyCompactList}\item 
+std\+::string \mbox{\hyperlink{class_book_character_a7e54faac35af2fb9c73d475ac9c8e496}{get\+\_\+default\+\_\+name}} () const
+\item 
+std\+::set$<$ id $>$ \mbox{\hyperlink{class_book_character_a629b8518ffaaccffe976dd05a5a100d3}{get\+\_\+all\+\_\+books}} () const
+\item 
+std\+::set$<$ std\+::string $>$ \mbox{\hyperlink{class_book_character_a95384c57539c97a26959168243d7315e}{get\+\_\+all\+\_\+names}} () const
+\item 
+\mbox{\hyperlink{_book_character_8h_acdd79a1a4f81dd6ee5cddcb21149b951}{Role}} \mbox{\hyperlink{class_book_character_a53b5282a2fc4c31b6fa24409947a37b4}{get\+\_\+role}} (const id \&book) const
+\item 
+void \mbox{\hyperlink{class_book_character_aafc72b2f19342261624426b60baa181d}{set\+\_\+names}} (const std\+::set$<$ std\+::string $>$ \&\mbox{\hyperlink{class_book_character_afa752add467472567630aaac74bcd917}{names}})
+\begin{DoxyCompactList}\small\item\em sets all names of character \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_book_character_a13a435be48d392fa3fd16ea569856e70}{add\+\_\+name}} (const std\+::string \&name)
+\begin{DoxyCompactList}\small\item\em adds new name of character \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_book_character_ad3a1a0a2b5f4ed0f427db6a4236f923f}{erase\+\_\+name}} (const std\+::string \&name)
+\begin{DoxyCompactList}\small\item\em erases name of character \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{class_book_character_aacfad50c4ddab3a2e8a550aa69a318fe}\label{class_book_character_aacfad50c4ddab3a2e8a550aa69a318fe}} 
+std\+::map$<$ id, \mbox{\hyperlink{_book_character_8h_acdd79a1a4f81dd6ee5cddcb21149b951}{Role}} $>$ \mbox{\hyperlink{class_book_character_aacfad50c4ddab3a2e8a550aa69a318fe}{books\+\_\+and\+\_\+roles}}
+\begin{DoxyCompactList}\small\item\em books id and role of character in those books \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_book_character_a9ceb86a14d24db410449474df04a2799}\label{class_book_character_a9ceb86a14d24db410449474df04a2799}} 
+std\+::string \mbox{\hyperlink{class_book_character_a9ceb86a14d24db410449474df04a2799}{default\+\_\+name}}
+\begin{DoxyCompactList}\small\item\em default name of character \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_book_character_afa752add467472567630aaac74bcd917}\label{class_book_character_afa752add467472567630aaac74bcd917}} 
+std\+::set$<$ std\+::string $>$ \mbox{\hyperlink{class_book_character_afa752add467472567630aaac74bcd917}{names}}
+\begin{DoxyCompactList}\small\item\em all names of character \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\subsubsection*{template$<$typename id$>$\newline
+class Book\+Character$<$ id $>$}
+
+class for storing information about book characters 
+
+has information about\+:
+\begin{DoxyItemize}
+\item default name
+\item all names in all book
+\item roles in all books 
+\end{DoxyItemize}
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{class_book_character_afba019424ffe810bfcf69a532b4bfba7}\label{class_book_character_afba019424ffe810bfcf69a532b4bfba7}} 
+\index{BookCharacter$<$ id $>$@{BookCharacter$<$ id $>$}!BookCharacter@{BookCharacter}}
+\index{BookCharacter@{BookCharacter}!BookCharacter$<$ id $>$@{BookCharacter$<$ id $>$}}
+\doxysubsubsection{\texorpdfstring{BookCharacter()}{BookCharacter()}}
+{\footnotesize\ttfamily template$<$typename id $>$ \\
+\mbox{\hyperlink{class_book_character}{Book\+Character}}$<$ id $>$\+::\mbox{\hyperlink{class_book_character}{Book\+Character}}\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+basic constructor of \mbox{\hyperlink{class_book_character}{Book\+Character}}. 
+
+All fields are empty 
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{class_book_character_a13a435be48d392fa3fd16ea569856e70}\label{class_book_character_a13a435be48d392fa3fd16ea569856e70}} 
+\index{BookCharacter$<$ id $>$@{BookCharacter$<$ id $>$}!add\_name@{add\_name}}
+\index{add\_name@{add\_name}!BookCharacter$<$ id $>$@{BookCharacter$<$ id $>$}}
+\doxysubsubsection{\texorpdfstring{add\_name()}{add\_name()}}
+{\footnotesize\ttfamily template$<$typename id $>$ \\
+void \mbox{\hyperlink{class_book_character}{Book\+Character}}$<$ id $>$\+::add\+\_\+name (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{name }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+adds new name of character 
+
+
+\begin{DoxyParams}{Parameters}
+{\em name} & new name of character \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_book_character_aa1823186685e714eb31fc1313e36171a}\label{class_book_character_aa1823186685e714eb31fc1313e36171a}} 
+\index{BookCharacter$<$ id $>$@{BookCharacter$<$ id $>$}!decrease@{decrease}}
+\index{decrease@{decrease}!BookCharacter$<$ id $>$@{BookCharacter$<$ id $>$}}
+\doxysubsubsection{\texorpdfstring{decrease()}{decrease()}}
+{\footnotesize\ttfamily template$<$typename id $>$ \\
+void \mbox{\hyperlink{class_book_character}{Book\+Character}}$<$ id $>$\+::decrease (\begin{DoxyParamCaption}\item[{const id \&}]{book }\end{DoxyParamCaption})}
+
+
+
+decreases character\textquotesingle{}s role in some book 
+
+role can\textquotesingle{}t be lesser than \mbox{\hyperlink{_book_character_8h_acdd79a1a4f81dd6ee5cddcb21149b951afad58de7366495db4650cfefac2fcd61}{Role\+::episodic}} 
+\begin{DoxyParams}{Parameters}
+{\em book} & id of book to promote role in it \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_book_character_aca079c78dcaa79b3fd9eddf049dfbe41}\label{class_book_character_aca079c78dcaa79b3fd9eddf049dfbe41}} 
+\index{BookCharacter$<$ id $>$@{BookCharacter$<$ id $>$}!erase\_book@{erase\_book}}
+\index{erase\_book@{erase\_book}!BookCharacter$<$ id $>$@{BookCharacter$<$ id $>$}}
+\doxysubsubsection{\texorpdfstring{erase\_book()}{erase\_book()}}
+{\footnotesize\ttfamily template$<$typename id $>$ \\
+void \mbox{\hyperlink{class_book_character}{Book\+Character}}$<$ id $>$\+::erase\+\_\+book (\begin{DoxyParamCaption}\item[{const id \&}]{book }\end{DoxyParamCaption})}
+
+
+
+erases book(and role in it) 
+
+
+\begin{DoxyParams}{Parameters}
+{\em book} & id of erased book \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_book_character_ad3a1a0a2b5f4ed0f427db6a4236f923f}\label{class_book_character_ad3a1a0a2b5f4ed0f427db6a4236f923f}} 
+\index{BookCharacter$<$ id $>$@{BookCharacter$<$ id $>$}!erase\_name@{erase\_name}}
+\index{erase\_name@{erase\_name}!BookCharacter$<$ id $>$@{BookCharacter$<$ id $>$}}
+\doxysubsubsection{\texorpdfstring{erase\_name()}{erase\_name()}}
+{\footnotesize\ttfamily template$<$typename id $>$ \\
+void \mbox{\hyperlink{class_book_character}{Book\+Character}}$<$ id $>$\+::erase\+\_\+name (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{name }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+erases name of character 
+
+
+\begin{DoxyParams}{Parameters}
+{\em name} & erased name of character \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_book_character_a629b8518ffaaccffe976dd05a5a100d3}\label{class_book_character_a629b8518ffaaccffe976dd05a5a100d3}} 
+\index{BookCharacter$<$ id $>$@{BookCharacter$<$ id $>$}!get\_all\_books@{get\_all\_books}}
+\index{get\_all\_books@{get\_all\_books}!BookCharacter$<$ id $>$@{BookCharacter$<$ id $>$}}
+\doxysubsubsection{\texorpdfstring{get\_all\_books()}{get\_all\_books()}}
+{\footnotesize\ttfamily template$<$typename id $>$ \\
+std\+::set$<$ id $>$ \mbox{\hyperlink{class_book_character}{Book\+Character}}$<$ id $>$\+::get\+\_\+all\+\_\+books}
+
+\begin{DoxyReturn}{Returns}
+id of all books where is this character 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_book_character_a95384c57539c97a26959168243d7315e}\label{class_book_character_a95384c57539c97a26959168243d7315e}} 
+\index{BookCharacter$<$ id $>$@{BookCharacter$<$ id $>$}!get\_all\_names@{get\_all\_names}}
+\index{get\_all\_names@{get\_all\_names}!BookCharacter$<$ id $>$@{BookCharacter$<$ id $>$}}
+\doxysubsubsection{\texorpdfstring{get\_all\_names()}{get\_all\_names()}}
+{\footnotesize\ttfamily template$<$typename id $>$ \\
+std\+::set$<$ std\+::string $>$ \mbox{\hyperlink{class_book_character}{Book\+Character}}$<$ id $>$\+::get\+\_\+all\+\_\+names}
+
+\begin{DoxyReturn}{Returns}
+names of character in all books (+ default name) 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_book_character_a7e54faac35af2fb9c73d475ac9c8e496}\label{class_book_character_a7e54faac35af2fb9c73d475ac9c8e496}} 
+\index{BookCharacter$<$ id $>$@{BookCharacter$<$ id $>$}!get\_default\_name@{get\_default\_name}}
+\index{get\_default\_name@{get\_default\_name}!BookCharacter$<$ id $>$@{BookCharacter$<$ id $>$}}
+\doxysubsubsection{\texorpdfstring{get\_default\_name()}{get\_default\_name()}}
+{\footnotesize\ttfamily template$<$typename id $>$ \\
+std\+::string \mbox{\hyperlink{class_book_character}{Book\+Character}}$<$ id $>$\+::get\+\_\+default\+\_\+name}
+
+\begin{DoxyReturn}{Returns}
+default name of character 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_book_character_a53b5282a2fc4c31b6fa24409947a37b4}\label{class_book_character_a53b5282a2fc4c31b6fa24409947a37b4}} 
+\index{BookCharacter$<$ id $>$@{BookCharacter$<$ id $>$}!get\_role@{get\_role}}
+\index{get\_role@{get\_role}!BookCharacter$<$ id $>$@{BookCharacter$<$ id $>$}}
+\doxysubsubsection{\texorpdfstring{get\_role()}{get\_role()}}
+{\footnotesize\ttfamily template$<$typename id $>$ \\
+\mbox{\hyperlink{_book_character_8h_acdd79a1a4f81dd6ee5cddcb21149b951}{Role}} \mbox{\hyperlink{class_book_character}{Book\+Character}}$<$ id $>$\+::get\+\_\+role (\begin{DoxyParamCaption}\item[{const id \&}]{book }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+\begin{DoxyParams}{Parameters}
+{\em book} & book id with searched role \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+role of character in all books (+ default name) 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_book_character_ad8e8a02672cfd7c9ade6b1dcd6596bb3}\label{class_book_character_ad8e8a02672cfd7c9ade6b1dcd6596bb3}} 
+\index{BookCharacter$<$ id $>$@{BookCharacter$<$ id $>$}!promote@{promote}}
+\index{promote@{promote}!BookCharacter$<$ id $>$@{BookCharacter$<$ id $>$}}
+\doxysubsubsection{\texorpdfstring{promote()}{promote()}}
+{\footnotesize\ttfamily template$<$typename id $>$ \\
+void \mbox{\hyperlink{class_book_character}{Book\+Character}}$<$ id $>$\+::promote (\begin{DoxyParamCaption}\item[{const id \&}]{book }\end{DoxyParamCaption})}
+
+
+
+promotes character\textquotesingle{}s role in some book 
+
+role can\textquotesingle{}t be bigger than Role\+::main 
+\begin{DoxyParams}{Parameters}
+{\em book} & id of book to promote role in it \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_book_character_aafc72b2f19342261624426b60baa181d}\label{class_book_character_aafc72b2f19342261624426b60baa181d}} 
+\index{BookCharacter$<$ id $>$@{BookCharacter$<$ id $>$}!set\_names@{set\_names}}
+\index{set\_names@{set\_names}!BookCharacter$<$ id $>$@{BookCharacter$<$ id $>$}}
+\doxysubsubsection{\texorpdfstring{set\_names()}{set\_names()}}
+{\footnotesize\ttfamily template$<$typename id $>$ \\
+void \mbox{\hyperlink{class_book_character}{Book\+Character}}$<$ id $>$\+::set\+\_\+names (\begin{DoxyParamCaption}\item[{const std\+::set$<$ std\+::string $>$ \&}]{names }\end{DoxyParamCaption})}
+
+
+
+sets all names of character 
+
+
+\begin{DoxyParams}{Parameters}
+{\em names} & set of all names \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_book_character_a4e3fb0746f075c384084f4e8ac750a42}\label{class_book_character_a4e3fb0746f075c384084f4e8ac750a42}} 
+\index{BookCharacter$<$ id $>$@{BookCharacter$<$ id $>$}!update\_role@{update\_role}}
+\index{update\_role@{update\_role}!BookCharacter$<$ id $>$@{BookCharacter$<$ id $>$}}
+\doxysubsubsection{\texorpdfstring{update\_role()}{update\_role()}}
+{\footnotesize\ttfamily template$<$typename id $>$ \\
+void \mbox{\hyperlink{class_book_character}{Book\+Character}}$<$ id $>$\+::update\+\_\+role (\begin{DoxyParamCaption}\item[{const id \&}]{book,  }\item[{const \mbox{\hyperlink{_book_character_8h_acdd79a1a4f81dd6ee5cddcb21149b951}{Role}}}]{role }\end{DoxyParamCaption})}
+
+
+
+adds new book(and role in it) or updated role in old book 
+
+
+\begin{DoxyParams}{Parameters}
+{\em book} & id of book \\
+\hline
+{\em role} & role in that book \\
+\hline
+\end{DoxyParams}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+C\+:/\+Users/yegor/\+Documents/\+Git\+Hub/\+O\+O\+P\+\_\+\+Labs\+\_\+3\+\_\+semester/\+Lab1extra5/\mbox{\hyperlink{_book_character_8h}{Book\+Character.\+h}}\end{DoxyCompactItemize}

@@ -1,0 +1,411 @@
+\hypertarget{class_publishing_house}{}\doxysection{Publishing\+House Class Reference}
+\label{class_publishing_house}\index{PublishingHouse@{PublishingHouse}}
+
+
+class for storing information about books and characters in them  
+
+
+
+
+{\ttfamily \#include $<$Publishing\+House.\+h$>$}
+
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_publishing_house_a9fc319964ecbd73260b5130aac4920d6}{Publishing\+House}} ()
+\begin{DoxyCompactList}\small\item\em basic constructor of \mbox{\hyperlink{class_book}{Book}}. \end{DoxyCompactList}\item 
+book\+\_\+id \mbox{\hyperlink{class_publishing_house_ade85ae8ed137c2a25221c5043d28d7af}{add\+\_\+book}} (const \mbox{\hyperlink{class_book}{Book}} \&book)
+\begin{DoxyCompactList}\small\item\em adds book \end{DoxyCompactList}\item 
+character\+\_\+id \mbox{\hyperlink{class_publishing_house_a627e8a4ea8f5dbf1e0ed643aa1959ca0}{add\+\_\+character}} (const \mbox{\hyperlink{class_book_character}{Book\+Character}}$<$ book\+\_\+id $>$ \&character)
+\begin{DoxyCompactList}\small\item\em adds book character \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_publishing_house_ae3960e027a8ed29d6a1f92daafa49885}{ban\+\_\+book}} (const book\+\_\+id \&id)
+\begin{DoxyCompactList}\small\item\em erases book \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_publishing_house_ad4d0e3428561c21a036d780e97df7344}{ban\+\_\+character}} (const character\+\_\+id \&id)
+\begin{DoxyCompactList}\small\item\em erases character \end{DoxyCompactList}\item 
+std\+::vector$<$ std\+::vector$<$ \mbox{\hyperlink{class_book}{Book}} $>$ $>$ \mbox{\hyperlink{class_publishing_house_a1a7dbaf6260248aa1063724fa59f6ed4}{get\+\_\+series}} ()
+\begin{DoxyCompactList}\small\item\em returns all series of books \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_publishing_house_aaf6f0e90cbd4bc985cb945a4e5212b58}{add\+\_\+character\+\_\+in\+\_\+book}} (const character\+\_\+id \&id\+\_\+character, const book\+\_\+id \&id\+\_\+book, \mbox{\hyperlink{_book_character_8h_acdd79a1a4f81dd6ee5cddcb21149b951}{Role}} role)
+\begin{DoxyCompactList}\small\item\em adds book character in book \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_publishing_house_ad64a6d2dc32eee411352fb29c600b83f}{erase\+\_\+character\+\_\+from\+\_\+book}} (const character\+\_\+id \&id\+\_\+character, const book\+\_\+id \&id\+\_\+book)
+\begin{DoxyCompactList}\small\item\em erases book character from book \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_book_character}{Book\+Character}}$<$ book\+\_\+id $>$ \mbox{\hyperlink{class_publishing_house_a70512abd610490099b41759f6ea8def1}{get\+\_\+character}} (const character\+\_\+id \&id)
+\begin{DoxyCompactList}\small\item\em access to \mbox{\hyperlink{class_book_character}{Book\+Character}} by its id \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_book}{Book}} \mbox{\hyperlink{class_publishing_house_a920b5a8a39b24e045aa16465cd4acd6a}{get\+\_\+book}} (const book\+\_\+id \&id)
+\begin{DoxyCompactList}\small\item\em access to \mbox{\hyperlink{class_book}{Book}} by its id \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_publishing_house_a5d68c35dca1eb6246a4ddb9f67106f95}{promote\+\_\+role}} (const character\+\_\+id \&id\+\_\+character, const book\+\_\+id \&id\+\_\+book)
+\begin{DoxyCompactList}\small\item\em promotes role of character in some book \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_publishing_house_abcc8894477b4cc5ccc424698a42c94cf}{decrease\+\_\+role}} (const character\+\_\+id \&, const book\+\_\+id \&)
+\begin{DoxyCompactList}\small\item\em decreases role of character in some book \end{DoxyCompactList}\item 
+\mbox{\hyperlink{_book_character_8h_acdd79a1a4f81dd6ee5cddcb21149b951}{Role}} \mbox{\hyperlink{class_publishing_house_a403815644722b94e3a7838cdccc773f3}{get\+\_\+role}} (const character\+\_\+id \&id\+\_\+character, const book\+\_\+id \&id\+\_\+book)
+\begin{DoxyCompactList}\small\item\em access to role of book character in book \end{DoxyCompactList}\item 
+std\+::set$<$ character\+\_\+id $>$ \mbox{\hyperlink{class_publishing_house_ae6c5bb5b33007cb89846f50542fff5a7}{get\+\_\+characters}} (const book\+\_\+id \&id\+\_\+book)
+\begin{DoxyCompactList}\small\item\em access to all characters that are in some book \end{DoxyCompactList}\item 
+std\+::set$<$ character\+\_\+id $>$ \mbox{\hyperlink{class_publishing_house_a93c631255591379fd3a52520e008241f}{get\+\_\+important\+\_\+characters}} (const book\+\_\+id \&id\+\_\+book)
+\begin{DoxyCompactList}\small\item\em access to important characters that are in some book \end{DoxyCompactList}\item 
+std\+::set$<$ book\+\_\+id $>$ \mbox{\hyperlink{class_publishing_house_a4cec85727d255c127e702e5611655f07}{get\+\_\+books}} (const character\+\_\+id \&id\+\_\+character)
+\begin{DoxyCompactList}\small\item\em access to all books of some character \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{class_publishing_house_a4975ed6549662e3dc64601acb037b2b7}\label{class_publishing_house_a4975ed6549662e3dc64601acb037b2b7}} 
+std\+::map$<$ book\+\_\+id, std\+::set$<$ character\+\_\+id $>$ $>$ \mbox{\hyperlink{class_publishing_house_a4975ed6549662e3dc64601acb037b2b7}{books\+\_\+characters}}
+\begin{DoxyCompactList}\small\item\em map of books and all their characters \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_publishing_house_afdd0c68bbe4074c988258eceb9f9f5dc}\label{class_publishing_house_afdd0c68bbe4074c988258eceb9f9f5dc}} 
+std\+::map$<$ book\+\_\+id, std\+::set$<$ character\+\_\+id $>$ $>$ \mbox{\hyperlink{class_publishing_house_afdd0c68bbe4074c988258eceb9f9f5dc}{books\+\_\+important\+\_\+characters}}
+\begin{DoxyCompactList}\small\item\em map of books and their important characters \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_publishing_house_a5f1efe9092ea8d69595fc6764dfad1e9}\label{class_publishing_house_a5f1efe9092ea8d69595fc6764dfad1e9}} 
+std\+::map$<$ book\+\_\+id, \mbox{\hyperlink{class_book}{Book}} $>$ \mbox{\hyperlink{class_publishing_house_a5f1efe9092ea8d69595fc6764dfad1e9}{books}}
+\begin{DoxyCompactList}\small\item\em all books of publishing house \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_publishing_house_a0a607bb43ee9193a2a1d8b558d240d93}\label{class_publishing_house_a0a607bb43ee9193a2a1d8b558d240d93}} 
+std\+::map$<$ character\+\_\+id, \mbox{\hyperlink{class_book_character}{Book\+Character}}$<$ book\+\_\+id $>$ $>$ \mbox{\hyperlink{class_publishing_house_a0a607bb43ee9193a2a1d8b558d240d93}{characters}}
+\begin{DoxyCompactList}\small\item\em all book characters of publishing house \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Friends}
+\begin{DoxyCompactItemize}
+\item 
+bool \mbox{\hyperlink{class_publishing_house_a90336580c7a412356583667517cad4d9}{operator==}} (const \mbox{\hyperlink{class_publishing_house}{Publishing\+House}} \&lhs, const \mbox{\hyperlink{class_publishing_house}{Publishing\+House}} \&rhs)
+\item 
+std\+::ostream \& \mbox{\hyperlink{class_publishing_house_adc00e0793c35e5a54aeff8065c7ce050}{operator$<$$<$}} (std\+::ostream \&, \mbox{\hyperlink{class_publishing_house}{Publishing\+House}} P\+House)
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+class for storing information about books and characters in them 
+
+has information about\+:
+\begin{DoxyItemize}
+\item all Books of publishing house
+\item all Characters of publishing house 
+\end{DoxyItemize}
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{class_publishing_house_a9fc319964ecbd73260b5130aac4920d6}\label{class_publishing_house_a9fc319964ecbd73260b5130aac4920d6}} 
+\index{PublishingHouse@{PublishingHouse}!PublishingHouse@{PublishingHouse}}
+\index{PublishingHouse@{PublishingHouse}!PublishingHouse@{PublishingHouse}}
+\doxysubsubsection{\texorpdfstring{PublishingHouse()}{PublishingHouse()}}
+{\footnotesize\ttfamily Publishing\+House\+::\+Publishing\+House (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+basic constructor of \mbox{\hyperlink{class_book}{Book}}. 
+
+Constructs empty Publishing House 
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{class_publishing_house_ade85ae8ed137c2a25221c5043d28d7af}\label{class_publishing_house_ade85ae8ed137c2a25221c5043d28d7af}} 
+\index{PublishingHouse@{PublishingHouse}!add\_book@{add\_book}}
+\index{add\_book@{add\_book}!PublishingHouse@{PublishingHouse}}
+\doxysubsubsection{\texorpdfstring{add\_book()}{add\_book()}}
+{\footnotesize\ttfamily book\+\_\+id Publishing\+House\+::add\+\_\+book (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{class_book}{Book}} \&}]{book }\end{DoxyParamCaption})}
+
+
+
+adds book 
+
+
+\begin{DoxyParams}{Parameters}
+{\em book} & const reference to added \mbox{\hyperlink{class_book}{Book}} \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+id of added book (std\+::string) 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_publishing_house_a627e8a4ea8f5dbf1e0ed643aa1959ca0}\label{class_publishing_house_a627e8a4ea8f5dbf1e0ed643aa1959ca0}} 
+\index{PublishingHouse@{PublishingHouse}!add\_character@{add\_character}}
+\index{add\_character@{add\_character}!PublishingHouse@{PublishingHouse}}
+\doxysubsubsection{\texorpdfstring{add\_character()}{add\_character()}}
+{\footnotesize\ttfamily character\+\_\+id Publishing\+House\+::add\+\_\+character (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{class_book_character}{Book\+Character}}$<$ book\+\_\+id $>$ \&}]{character }\end{DoxyParamCaption})}
+
+
+
+adds book character 
+
+
+\begin{DoxyParams}{Parameters}
+{\em character} & const reference to added \mbox{\hyperlink{class_book_character}{Book\+Character}} \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+id of added \mbox{\hyperlink{class_book_character}{Book\+Character}} (std\+::string) 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_publishing_house_aaf6f0e90cbd4bc985cb945a4e5212b58}\label{class_publishing_house_aaf6f0e90cbd4bc985cb945a4e5212b58}} 
+\index{PublishingHouse@{PublishingHouse}!add\_character\_in\_book@{add\_character\_in\_book}}
+\index{add\_character\_in\_book@{add\_character\_in\_book}!PublishingHouse@{PublishingHouse}}
+\doxysubsubsection{\texorpdfstring{add\_character\_in\_book()}{add\_character\_in\_book()}}
+{\footnotesize\ttfamily void Publishing\+House\+::add\+\_\+character\+\_\+in\+\_\+book (\begin{DoxyParamCaption}\item[{const character\+\_\+id \&}]{id\+\_\+character,  }\item[{const book\+\_\+id \&}]{id\+\_\+book,  }\item[{\mbox{\hyperlink{_book_character_8h_acdd79a1a4f81dd6ee5cddcb21149b951}{Role}}}]{role }\end{DoxyParamCaption})}
+
+
+
+adds book character in book 
+
+
+\begin{DoxyParams}{Parameters}
+{\em id\+\_\+character} & id of character \\
+\hline
+{\em id\+\_\+book} & id of book \\
+\hline
+{\em role} & Role of character in book \\
+\hline
+\end{DoxyParams}
+
+\begin{DoxyExceptions}{Exceptions}
+{\em throw} & std\+::invalid\+\_\+argument(\char`\"{}incorrect id\char`\"{}) if id\+\_\+character or id\+\_\+book isn\textquotesingle{}t valid \\
+\hline
+\end{DoxyExceptions}
+\mbox{\Hypertarget{class_publishing_house_ae3960e027a8ed29d6a1f92daafa49885}\label{class_publishing_house_ae3960e027a8ed29d6a1f92daafa49885}} 
+\index{PublishingHouse@{PublishingHouse}!ban\_book@{ban\_book}}
+\index{ban\_book@{ban\_book}!PublishingHouse@{PublishingHouse}}
+\doxysubsubsection{\texorpdfstring{ban\_book()}{ban\_book()}}
+{\footnotesize\ttfamily void Publishing\+House\+::ban\+\_\+book (\begin{DoxyParamCaption}\item[{const book\+\_\+id \&}]{id }\end{DoxyParamCaption})}
+
+
+
+erases book 
+
+Erases book with that id from books and characters 
+\begin{DoxyParams}{Parameters}
+{\em id} & id of erased book \\
+\hline
+\end{DoxyParams}
+
+\begin{DoxyExceptions}{Exceptions}
+{\em throw} & std\+::invalid\+\_\+argument(\char`\"{}incorrect id\char`\"{}) if id isn\textquotesingle{}t valid \\
+\hline
+\end{DoxyExceptions}
+\mbox{\Hypertarget{class_publishing_house_ad4d0e3428561c21a036d780e97df7344}\label{class_publishing_house_ad4d0e3428561c21a036d780e97df7344}} 
+\index{PublishingHouse@{PublishingHouse}!ban\_character@{ban\_character}}
+\index{ban\_character@{ban\_character}!PublishingHouse@{PublishingHouse}}
+\doxysubsubsection{\texorpdfstring{ban\_character()}{ban\_character()}}
+{\footnotesize\ttfamily void Publishing\+House\+::ban\+\_\+character (\begin{DoxyParamCaption}\item[{const character\+\_\+id \&}]{id }\end{DoxyParamCaption})}
+
+
+
+erases character 
+
+Erases character with that id 
+\begin{DoxyParams}{Parameters}
+{\em id} & id of erased character \\
+\hline
+\end{DoxyParams}
+
+\begin{DoxyExceptions}{Exceptions}
+{\em throw} & std\+::invalid\+\_\+argument(\char`\"{}incorrect id\char`\"{}) if id isn\textquotesingle{}t valid \\
+\hline
+\end{DoxyExceptions}
+\mbox{\Hypertarget{class_publishing_house_abcc8894477b4cc5ccc424698a42c94cf}\label{class_publishing_house_abcc8894477b4cc5ccc424698a42c94cf}} 
+\index{PublishingHouse@{PublishingHouse}!decrease\_role@{decrease\_role}}
+\index{decrease\_role@{decrease\_role}!PublishingHouse@{PublishingHouse}}
+\doxysubsubsection{\texorpdfstring{decrease\_role()}{decrease\_role()}}
+{\footnotesize\ttfamily void Publishing\+House\+::decrease\+\_\+role (\begin{DoxyParamCaption}\item[{const character\+\_\+id \&}]{id\+\_\+character,  }\item[{const book\+\_\+id \&}]{id\+\_\+book }\end{DoxyParamCaption})}
+
+
+
+decreases role of character in some book 
+
+role can\textquotesingle{}t be lesser than \mbox{\hyperlink{_book_character_8h_acdd79a1a4f81dd6ee5cddcb21149b951afad58de7366495db4650cfefac2fcd61}{Role\+::episodic}} 
+\begin{DoxyParams}{Parameters}
+{\em id\+\_\+character} & id of character \\
+\hline
+{\em id\+\_\+book} & id of book \\
+\hline
+\end{DoxyParams}
+
+\begin{DoxyExceptions}{Exceptions}
+{\em throw} & std\+::invalid\+\_\+argument(\char`\"{}incorrect id\char`\"{}) if id\+\_\+character or id\+\_\+book isn\textquotesingle{}t valid \\
+\hline
+\end{DoxyExceptions}
+\mbox{\Hypertarget{class_publishing_house_ad64a6d2dc32eee411352fb29c600b83f}\label{class_publishing_house_ad64a6d2dc32eee411352fb29c600b83f}} 
+\index{PublishingHouse@{PublishingHouse}!erase\_character\_from\_book@{erase\_character\_from\_book}}
+\index{erase\_character\_from\_book@{erase\_character\_from\_book}!PublishingHouse@{PublishingHouse}}
+\doxysubsubsection{\texorpdfstring{erase\_character\_from\_book()}{erase\_character\_from\_book()}}
+{\footnotesize\ttfamily void Publishing\+House\+::erase\+\_\+character\+\_\+from\+\_\+book (\begin{DoxyParamCaption}\item[{const character\+\_\+id \&}]{id\+\_\+character,  }\item[{const book\+\_\+id \&}]{id\+\_\+book }\end{DoxyParamCaption})}
+
+
+
+erases book character from book 
+
+Character will be deleted from book and will not be deleted from publishing house in general 
+\begin{DoxyParams}{Parameters}
+{\em id\+\_\+character} & id of character \\
+\hline
+{\em id\+\_\+book} & id of book \\
+\hline
+\end{DoxyParams}
+
+\begin{DoxyExceptions}{Exceptions}
+{\em throw} & std\+::invalid\+\_\+argument(\char`\"{}incorrect id\char`\"{}) if id\+\_\+character or id\+\_\+book isn\textquotesingle{}t valid \\
+\hline
+\end{DoxyExceptions}
+\mbox{\Hypertarget{class_publishing_house_a920b5a8a39b24e045aa16465cd4acd6a}\label{class_publishing_house_a920b5a8a39b24e045aa16465cd4acd6a}} 
+\index{PublishingHouse@{PublishingHouse}!get\_book@{get\_book}}
+\index{get\_book@{get\_book}!PublishingHouse@{PublishingHouse}}
+\doxysubsubsection{\texorpdfstring{get\_book()}{get\_book()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{class_book}{Book}} Publishing\+House\+::get\+\_\+book (\begin{DoxyParamCaption}\item[{const book\+\_\+id \&}]{id }\end{DoxyParamCaption})}
+
+
+
+access to \mbox{\hyperlink{class_book}{Book}} by its id 
+
+
+\begin{DoxyParams}{Parameters}
+{\em id} & id of book \\
+\hline
+\end{DoxyParams}
+
+\begin{DoxyExceptions}{Exceptions}
+{\em throw} & std\+::invalid\+\_\+argument(\char`\"{}incorrect id\char`\"{}) if id isn\textquotesingle{}t valid \\
+\hline
+\end{DoxyExceptions}
+\begin{DoxyReturn}{Returns}
+\mbox{\hyperlink{class_book}{Book}} with that id 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_publishing_house_a4cec85727d255c127e702e5611655f07}\label{class_publishing_house_a4cec85727d255c127e702e5611655f07}} 
+\index{PublishingHouse@{PublishingHouse}!get\_books@{get\_books}}
+\index{get\_books@{get\_books}!PublishingHouse@{PublishingHouse}}
+\doxysubsubsection{\texorpdfstring{get\_books()}{get\_books()}}
+{\footnotesize\ttfamily std\+::set$<$ book\+\_\+id $>$ Publishing\+House\+::get\+\_\+books (\begin{DoxyParamCaption}\item[{const character\+\_\+id \&}]{id\+\_\+character }\end{DoxyParamCaption})}
+
+
+
+access to all books of some character 
+
+
+\begin{DoxyParams}{Parameters}
+{\em id\+\_\+character} & id of book character \\
+\hline
+\end{DoxyParams}
+
+\begin{DoxyExceptions}{Exceptions}
+{\em throw} & std\+::invalid\+\_\+argument(\char`\"{}incorrect id\char`\"{}) if id\+\_\+character isn\textquotesingle{}t valid \\
+\hline
+\end{DoxyExceptions}
+\mbox{\Hypertarget{class_publishing_house_a70512abd610490099b41759f6ea8def1}\label{class_publishing_house_a70512abd610490099b41759f6ea8def1}} 
+\index{PublishingHouse@{PublishingHouse}!get\_character@{get\_character}}
+\index{get\_character@{get\_character}!PublishingHouse@{PublishingHouse}}
+\doxysubsubsection{\texorpdfstring{get\_character()}{get\_character()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{class_book_character}{Book\+Character}}$<$ book\+\_\+id $>$ Publishing\+House\+::get\+\_\+character (\begin{DoxyParamCaption}\item[{const character\+\_\+id \&}]{id }\end{DoxyParamCaption})}
+
+
+
+access to \mbox{\hyperlink{class_book_character}{Book\+Character}} by its id 
+
+
+\begin{DoxyParams}{Parameters}
+{\em id} & id of character \\
+\hline
+\end{DoxyParams}
+
+\begin{DoxyExceptions}{Exceptions}
+{\em throw} & std\+::invalid\+\_\+argument(\char`\"{}incorrect id\char`\"{}) if id isn\textquotesingle{}t valid \\
+\hline
+\end{DoxyExceptions}
+\begin{DoxyReturn}{Returns}
+\mbox{\hyperlink{class_book_character}{Book\+Character}} with that id 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_publishing_house_ae6c5bb5b33007cb89846f50542fff5a7}\label{class_publishing_house_ae6c5bb5b33007cb89846f50542fff5a7}} 
+\index{PublishingHouse@{PublishingHouse}!get\_characters@{get\_characters}}
+\index{get\_characters@{get\_characters}!PublishingHouse@{PublishingHouse}}
+\doxysubsubsection{\texorpdfstring{get\_characters()}{get\_characters()}}
+{\footnotesize\ttfamily std\+::set$<$ character\+\_\+id $>$ Publishing\+House\+::get\+\_\+characters (\begin{DoxyParamCaption}\item[{const book\+\_\+id \&}]{id\+\_\+book }\end{DoxyParamCaption})}
+
+
+
+access to all characters that are in some book 
+
+
+\begin{DoxyExceptions}{Exceptions}
+{\em throw} & std\+::invalid\+\_\+argument(\char`\"{}incorrect id\char`\"{}) if id\+\_\+book isn\textquotesingle{}t valid \\
+\hline
+\end{DoxyExceptions}
+\mbox{\Hypertarget{class_publishing_house_a93c631255591379fd3a52520e008241f}\label{class_publishing_house_a93c631255591379fd3a52520e008241f}} 
+\index{PublishingHouse@{PublishingHouse}!get\_important\_characters@{get\_important\_characters}}
+\index{get\_important\_characters@{get\_important\_characters}!PublishingHouse@{PublishingHouse}}
+\doxysubsubsection{\texorpdfstring{get\_important\_characters()}{get\_important\_characters()}}
+{\footnotesize\ttfamily std\+::set$<$ character\+\_\+id $>$ Publishing\+House\+::get\+\_\+important\+\_\+characters (\begin{DoxyParamCaption}\item[{const book\+\_\+id \&}]{id\+\_\+book }\end{DoxyParamCaption})}
+
+
+
+access to important characters that are in some book 
+
+Important characters are characters with Role\+::main or Role\+::secondary roles 
+\begin{DoxyExceptions}{Exceptions}
+{\em throw} & std\+::invalid\+\_\+argument(\char`\"{}incorrect id\char`\"{}) if id\+\_\+book isn\textquotesingle{}t valid \\
+\hline
+\end{DoxyExceptions}
+\mbox{\Hypertarget{class_publishing_house_a403815644722b94e3a7838cdccc773f3}\label{class_publishing_house_a403815644722b94e3a7838cdccc773f3}} 
+\index{PublishingHouse@{PublishingHouse}!get\_role@{get\_role}}
+\index{get\_role@{get\_role}!PublishingHouse@{PublishingHouse}}
+\doxysubsubsection{\texorpdfstring{get\_role()}{get\_role()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{_book_character_8h_acdd79a1a4f81dd6ee5cddcb21149b951}{Role}} Publishing\+House\+::get\+\_\+role (\begin{DoxyParamCaption}\item[{const character\+\_\+id \&}]{id\+\_\+character,  }\item[{const book\+\_\+id \&}]{id\+\_\+book }\end{DoxyParamCaption})}
+
+
+
+access to role of book character in book 
+
+
+\begin{DoxyParams}{Parameters}
+{\em id\+\_\+character} & id of book \\
+\hline
+{\em id\+\_\+book} & id of book \\
+\hline
+\end{DoxyParams}
+
+\begin{DoxyExceptions}{Exceptions}
+{\em throw} & std\+::invalid\+\_\+argument(\char`\"{}incorrect id\char`\"{}) if id\+\_\+character or id\+\_\+book isn\textquotesingle{}t valid \\
+\hline
+\end{DoxyExceptions}
+\begin{DoxyReturn}{Returns}
+Role of character in that book 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_publishing_house_a1a7dbaf6260248aa1063724fa59f6ed4}\label{class_publishing_house_a1a7dbaf6260248aa1063724fa59f6ed4}} 
+\index{PublishingHouse@{PublishingHouse}!get\_series@{get\_series}}
+\index{get\_series@{get\_series}!PublishingHouse@{PublishingHouse}}
+\doxysubsubsection{\texorpdfstring{get\_series()}{get\_series()}}
+{\footnotesize\ttfamily std\+::vector$<$ std\+::vector$<$ \mbox{\hyperlink{class_book}{Book}} $>$ $>$ Publishing\+House\+::get\+\_\+series (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+returns all series of books 
+
+Two books belong to the same series, if they have common main or secondary character. \mbox{\hyperlink{class_book}{Book}} in series are sorted by release dat. \mbox{\Hypertarget{class_publishing_house_a5d68c35dca1eb6246a4ddb9f67106f95}\label{class_publishing_house_a5d68c35dca1eb6246a4ddb9f67106f95}} 
+\index{PublishingHouse@{PublishingHouse}!promote\_role@{promote\_role}}
+\index{promote\_role@{promote\_role}!PublishingHouse@{PublishingHouse}}
+\doxysubsubsection{\texorpdfstring{promote\_role()}{promote\_role()}}
+{\footnotesize\ttfamily void Publishing\+House\+::promote\+\_\+role (\begin{DoxyParamCaption}\item[{const character\+\_\+id \&}]{id\+\_\+character,  }\item[{const book\+\_\+id \&}]{id\+\_\+book }\end{DoxyParamCaption})}
+
+
+
+promotes role of character in some book 
+
+role can\textquotesingle{}t be bigger than Role\+::main 
+\begin{DoxyParams}{Parameters}
+{\em id\+\_\+character} & id of character \\
+\hline
+{\em id\+\_\+book} & id of book \\
+\hline
+\end{DoxyParams}
+
+\begin{DoxyExceptions}{Exceptions}
+{\em throw} & std\+::invalid\+\_\+argument(\char`\"{}incorrect id\char`\"{}) if id\+\_\+character or id\+\_\+book isn\textquotesingle{}t valid \\
+\hline
+\end{DoxyExceptions}
+
+
+\doxysubsection{Friends And Related Function Documentation}
+\mbox{\Hypertarget{class_publishing_house_adc00e0793c35e5a54aeff8065c7ce050}\label{class_publishing_house_adc00e0793c35e5a54aeff8065c7ce050}} 
+\index{PublishingHouse@{PublishingHouse}!operator$<$$<$@{operator$<$$<$}}
+\index{operator$<$$<$@{operator$<$$<$}!PublishingHouse@{PublishingHouse}}
+\doxysubsubsection{\texorpdfstring{operator$<$$<$}{operator<<}}
+{\footnotesize\ttfamily std\+::ostream\& operator$<$$<$ (\begin{DoxyParamCaption}\item[{std\+::ostream \&}]{,  }\item[{\mbox{\hyperlink{class_publishing_house}{Publishing\+House}}}]{P\+House }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [friend]}}
+
+Operator $<$$<$ for Publishing\+Houses in streams \mbox{\Hypertarget{class_publishing_house_a90336580c7a412356583667517cad4d9}\label{class_publishing_house_a90336580c7a412356583667517cad4d9}} 
+\index{PublishingHouse@{PublishingHouse}!operator==@{operator==}}
+\index{operator==@{operator==}!PublishingHouse@{PublishingHouse}}
+\doxysubsubsection{\texorpdfstring{operator==}{operator==}}
+{\footnotesize\ttfamily bool operator== (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{class_publishing_house}{Publishing\+House}} \&}]{lhs,  }\item[{const \mbox{\hyperlink{class_publishing_house}{Publishing\+House}} \&}]{rhs }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [friend]}}
+
+Operator == for Publishing\+Houses 
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+C\+:/\+Users/yegor/\+Documents/\+Git\+Hub/\+O\+O\+P\+\_\+\+Labs\+\_\+3\+\_\+semester/\+Lab1extra5/\mbox{\hyperlink{_publishing_house_8h}{Publishing\+House.\+h}}\item 
+C\+:/\+Users/yegor/\+Documents/\+Git\+Hub/\+O\+O\+P\+\_\+\+Labs\+\_\+3\+\_\+semester/\+Lab1extra5/\mbox{\hyperlink{_publishing_house_8cpp}{Publishing\+House.\+cpp}}\end{DoxyCompactItemize}

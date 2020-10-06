@@ -1,0 +1,62 @@
+\hypertarget{_book_8h}{}\doxysection{C\+:/\+Users/yegor/\+Documents/\+Git\+Hub/\+O\+O\+P\+\_\+\+Labs\+\_\+3\+\_\+semester/\+Lab1extra5/\+Book.h File Reference}
+\label{_book_8h}\index{C:/Users/yegor/Documents/GitHub/OOP\_Labs\_3\_semester/Lab1extra5/Book.h@{C:/Users/yegor/Documents/GitHub/OOP\_Labs\_3\_semester/Lab1extra5/Book.h}}
+
+
+h file of class \mbox{\hyperlink{class_book}{Book}}  
+
+
+{\ttfamily \#include $<$string$>$}\newline
+{\ttfamily \#include $<$set$>$}\newline
+{\ttfamily \#include $<$cstdint$>$}\newline
+{\ttfamily \#include $<$vector$>$}\newline
+{\ttfamily \#include $<$map$>$}\newline
+{\ttfamily \#include $<$iostream$>$}\newline
+{\ttfamily \#include \char`\"{}Date.\+h\char`\"{}}\newline
+\doxysubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+class \mbox{\hyperlink{class_book}{Book}}
+\begin{DoxyCompactList}\small\item\em class for storing information about books \end{DoxyCompactList}\item 
+struct \mbox{\hyperlink{structstd_1_1less_3_01_book_01_4}{std\+::less$<$ Book $>$}}
+\end{DoxyCompactItemize}
+\doxysubsection*{Namespaces}
+\begin{DoxyCompactItemize}
+\item 
+ \mbox{\hyperlink{namespacestd}{std}}
+\begin{DoxyCompactList}\small\item\em supplement namespace std \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+bool \mbox{\hyperlink{_book_8h_aa108cc0b25789ae25ff47fa6ac646a9f}{operator$<$}} (const \mbox{\hyperlink{class_book}{Book}} \&lhs, const \mbox{\hyperlink{class_book}{Book}} \&rhs)
+\item 
+bool \mbox{\hyperlink{_book_8h_a116eb8dbb8114f9e5b00d44bf41774bd}{operator==}} (const \mbox{\hyperlink{class_book}{Book}} \&lhs, const \mbox{\hyperlink{class_book}{Book}} \&rhs)
+\item 
+std\+::ostream \& \mbox{\hyperlink{_book_8h_a0b9d9bfc2bc3d1bb67e25126dae0be2f}{operator$<$$<$}} (std\+::ostream \&os, const \mbox{\hyperlink{class_book}{Book}} \&book)
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+h file of class \mbox{\hyperlink{class_book}{Book}} 
+
+definitions of \mbox{\hyperlink{class_book}{Book}} methods and operators are here, std\+::less for \mbox{\hyperlink{class_book}{Book}} 
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{_book_8h_aa108cc0b25789ae25ff47fa6ac646a9f}\label{_book_8h_aa108cc0b25789ae25ff47fa6ac646a9f}} 
+\index{Book.h@{Book.h}!operator$<$@{operator$<$}}
+\index{operator$<$@{operator$<$}!Book.h@{Book.h}}
+\doxysubsubsection{\texorpdfstring{operator$<$()}{operator<()}}
+{\footnotesize\ttfamily bool operator$<$ (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{class_book}{Book}} \&}]{lhs,  }\item[{const \mbox{\hyperlink{class_book}{Book}} \&}]{rhs }\end{DoxyParamCaption})}
+
+Operator $<$ for Books \mbox{\Hypertarget{_book_8h_a0b9d9bfc2bc3d1bb67e25126dae0be2f}\label{_book_8h_a0b9d9bfc2bc3d1bb67e25126dae0be2f}} 
+\index{Book.h@{Book.h}!operator$<$$<$@{operator$<$$<$}}
+\index{operator$<$$<$@{operator$<$$<$}!Book.h@{Book.h}}
+\doxysubsubsection{\texorpdfstring{operator$<$$<$()}{operator<<()}}
+{\footnotesize\ttfamily std\+::ostream\& operator$<$$<$ (\begin{DoxyParamCaption}\item[{std\+::ostream \&}]{os,  }\item[{const \mbox{\hyperlink{class_book}{Book}} \&}]{book }\end{DoxyParamCaption})}
+
+Operator $<$$<$ for Books in streams \mbox{\Hypertarget{_book_8h_a116eb8dbb8114f9e5b00d44bf41774bd}\label{_book_8h_a116eb8dbb8114f9e5b00d44bf41774bd}} 
+\index{Book.h@{Book.h}!operator==@{operator==}}
+\index{operator==@{operator==}!Book.h@{Book.h}}
+\doxysubsubsection{\texorpdfstring{operator==()}{operator==()}}
+{\footnotesize\ttfamily bool operator== (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{class_book}{Book}} \&}]{lhs,  }\item[{const \mbox{\hyperlink{class_book}{Book}} \&}]{rhs }\end{DoxyParamCaption})}
+
+Operator == for Books 

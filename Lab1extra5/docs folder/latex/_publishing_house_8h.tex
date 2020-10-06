@@ -1,0 +1,100 @@
+\hypertarget{_publishing_house_8h}{}\doxysection{C\+:/\+Users/yegor/\+Documents/\+Git\+Hub/\+O\+O\+P\+\_\+\+Labs\+\_\+3\+\_\+semester/\+Lab1extra5/\+Publishing\+House.h File Reference}
+\label{_publishing_house_8h}\index{C:/Users/yegor/Documents/GitHub/OOP\_Labs\_3\_semester/Lab1extra5/PublishingHouse.h@{C:/Users/yegor/Documents/GitHub/OOP\_Labs\_3\_semester/Lab1extra5/PublishingHouse.h}}
+
+
+h file of class \mbox{\hyperlink{class_publishing_house}{Publishing\+House}}  
+
+
+{\ttfamily \#include \char`\"{}Book.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}Book\+Character.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}Date.\+h\char`\"{}}\newline
+{\ttfamily \#include $<$map$>$}\newline
+{\ttfamily \#include $<$algorithm$>$}\newline
+\doxysubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+class \mbox{\hyperlink{class_publishing_house}{Publishing\+House}}
+\begin{DoxyCompactList}\small\item\em class for storing information about books and characters in them \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{_publishing_house_8h_a189b0623794259649431edf38b9141cf}\label{_publishing_house_8h_a189b0623794259649431edf38b9141cf}} 
+using {\bfseries book\+\_\+id} = std\+::string
+\item 
+\mbox{\Hypertarget{_publishing_house_8h_a354924f0f80621314176338b0b82af3e}\label{_publishing_house_8h_a354924f0f80621314176338b0b82af3e}} 
+using {\bfseries character\+\_\+id} = std\+::string
+\end{DoxyCompactItemize}
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+bool \mbox{\hyperlink{_publishing_house_8h_a90336580c7a412356583667517cad4d9}{operator==}} (const \mbox{\hyperlink{class_publishing_house}{Publishing\+House}} \&lhs, const \mbox{\hyperlink{class_publishing_house}{Publishing\+House}} \&rhs)
+\item 
+std\+::ostream \& \mbox{\hyperlink{_publishing_house_8h_adc00e0793c35e5a54aeff8065c7ce050}{operator$<$$<$}} (std\+::ostream \&, \mbox{\hyperlink{class_publishing_house}{Publishing\+House}} P\+House)
+\item 
+{\footnotesize template$<$typename T $>$ }\\bool \mbox{\hyperlink{_publishing_house_8h_a70a361c7980efbb0306b4c0dc14322a6}{is\+\_\+subset}} (std\+::set$<$ T $>$ lesser, std\+::set$<$ T $>$ bigger)
+\begin{DoxyCompactList}\small\item\em function that checks if is some set subset of another set \end{DoxyCompactList}\item 
+{\footnotesize template$<$typename T $>$ }\\bool \mbox{\hyperlink{_publishing_house_8h_ad0b77e0d54fc7f9f781968664cb34b9d}{is\+\_\+subvector}} (std\+::vector$<$ T $>$ lesser, std\+::vector$<$ T $>$ bigger)
+\begin{DoxyCompactList}\small\item\em function that checks if is some vector subvector of another vector \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+h file of class \mbox{\hyperlink{class_publishing_house}{Publishing\+House}} 
+
+definitions of \mbox{\hyperlink{class_publishing_house}{Publishing\+House}} methods and operators, is\+\_\+subset and is\+\_\+subvector functions are here 
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{_publishing_house_8h_a70a361c7980efbb0306b4c0dc14322a6}\label{_publishing_house_8h_a70a361c7980efbb0306b4c0dc14322a6}} 
+\index{PublishingHouse.h@{PublishingHouse.h}!is\_subset@{is\_subset}}
+\index{is\_subset@{is\_subset}!PublishingHouse.h@{PublishingHouse.h}}
+\doxysubsubsection{\texorpdfstring{is\_subset()}{is\_subset()}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+bool is\+\_\+subset (\begin{DoxyParamCaption}\item[{std\+::set$<$ T $>$}]{lesser,  }\item[{std\+::set$<$ T $>$}]{bigger }\end{DoxyParamCaption})}
+
+
+
+function that checks if is some set subset of another set 
+
+
+\begin{DoxyParams}{Parameters}
+{\em lesser} & lesser set \\
+\hline
+{\em bigger} & bigger set \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+true if all elements of lesser are in bigger and size of lesser $>$ 0 (or both sets are empty) and false otherwise 
+\end{DoxyReturn}
+\mbox{\Hypertarget{_publishing_house_8h_ad0b77e0d54fc7f9f781968664cb34b9d}\label{_publishing_house_8h_ad0b77e0d54fc7f9f781968664cb34b9d}} 
+\index{PublishingHouse.h@{PublishingHouse.h}!is\_subvector@{is\_subvector}}
+\index{is\_subvector@{is\_subvector}!PublishingHouse.h@{PublishingHouse.h}}
+\doxysubsubsection{\texorpdfstring{is\_subvector()}{is\_subvector()}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+bool is\+\_\+subvector (\begin{DoxyParamCaption}\item[{std\+::vector$<$ T $>$}]{lesser,  }\item[{std\+::vector$<$ T $>$}]{bigger }\end{DoxyParamCaption})}
+
+
+
+function that checks if is some vector subvector of another vector 
+
+
+\begin{DoxyParams}{Parameters}
+{\em lesser} & lesser vector \\
+\hline
+{\em bigger} & bigger vector \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+true if all elements of lesser are in bigger and size of lesser $>$ 0 (or both vectors are empty) and false otherwise 
+\end{DoxyReturn}
+\mbox{\Hypertarget{_publishing_house_8h_adc00e0793c35e5a54aeff8065c7ce050}\label{_publishing_house_8h_adc00e0793c35e5a54aeff8065c7ce050}} 
+\index{PublishingHouse.h@{PublishingHouse.h}!operator$<$$<$@{operator$<$$<$}}
+\index{operator$<$$<$@{operator$<$$<$}!PublishingHouse.h@{PublishingHouse.h}}
+\doxysubsubsection{\texorpdfstring{operator$<$$<$()}{operator<<()}}
+{\footnotesize\ttfamily std\+::ostream\& operator$<$$<$ (\begin{DoxyParamCaption}\item[{std\+::ostream \&}]{,  }\item[{\mbox{\hyperlink{class_publishing_house}{Publishing\+House}}}]{P\+House }\end{DoxyParamCaption})}
+
+Operator $<$$<$ for Publishing\+Houses in streams \mbox{\Hypertarget{_publishing_house_8h_a90336580c7a412356583667517cad4d9}\label{_publishing_house_8h_a90336580c7a412356583667517cad4d9}} 
+\index{PublishingHouse.h@{PublishingHouse.h}!operator==@{operator==}}
+\index{operator==@{operator==}!PublishingHouse.h@{PublishingHouse.h}}
+\doxysubsubsection{\texorpdfstring{operator==()}{operator==()}}
+{\footnotesize\ttfamily bool operator== (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{class_publishing_house}{Publishing\+House}} \&}]{lhs,  }\item[{const \mbox{\hyperlink{class_publishing_house}{Publishing\+House}} \&}]{rhs }\end{DoxyParamCaption})}
+
+Operator == for Publishing\+Houses 
