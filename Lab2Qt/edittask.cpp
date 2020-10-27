@@ -27,7 +27,12 @@ EditTask::EditTask(bool exam,bool new_task,const std::set<std::string>& teachers
     }
 
     ui->title_line->setText(QString::fromStdString(title));
-    ui->dateEdit->date().setDate(date.get_year(),date.get_month(),date.get_day());
+    if(new_task){
+        ui->dateEdit->setDate(QDate::currentDate());
+    }
+    else{
+        ui->dateEdit->setDate(QDate(date.get_year(),date.get_month(),date.get_day()));
+    }
     ui->note_line->setText(QString::fromStdString(note));
 
 

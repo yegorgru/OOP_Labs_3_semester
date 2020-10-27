@@ -27,7 +27,7 @@
        <enum>Qt::LeftToRight</enum>
       </property>
       <property name="styleSheet">
-       <string notr="true">width: 115px; height: 30px; color: #000000; font-weight: bold; font-size: 20px;</string>
+       <string notr="true"/>
       </property>
       <property name="tabPosition">
        <enum>QTabWidget::North</enum>
@@ -45,58 +45,76 @@
        <attribute name="title">
         <string>Overview</string>
        </attribute>
-       <widget class="QPushButton" name="add_task_button">
-        <property name="geometry">
-         <rect>
-          <x>1060</x>
-          <y>550</y>
-          <width>124</width>
-          <height>39</height>
-         </rect>
-        </property>
-        <property name="text">
-         <string/>
-        </property>
-       </widget>
-       <widget class="QPushButton" name="add_homework_button">
-        <property name="geometry">
-         <rect>
-          <x>910</x>
-          <y>550</y>
-          <width>124</width>
-          <height>39</height>
-         </rect>
-        </property>
-        <property name="text">
-         <string>Homework</string>
-        </property>
-       </widget>
-       <widget class="QPushButton" name="add_exam_button">
-        <property name="geometry">
-         <rect>
-          <x>760</x>
-          <y>550</y>
-          <width>124</width>
-          <height>39</height>
-         </rect>
-        </property>
-        <property name="text">
-         <string>Exam</string>
-        </property>
-       </widget>
-       <widget class="QLabel" name="last_update_label">
-        <property name="geometry">
-         <rect>
-          <x>770</x>
-          <y>10</y>
-          <width>411</width>
-          <height>16</height>
-         </rect>
-        </property>
-        <property name="text">
-         <string>Last update: </string>
-        </property>
-       </widget>
+       <layout class="QGridLayout" name="gridLayout_7">
+        <item row="1" column="0">
+         <widget class="QLabel" name="label_3">
+          <property name="text">
+           <string>Exams</string>
+          </property>
+         </widget>
+        </item>
+        <item row="5" column="4">
+         <widget class="QPushButton" name="add_homework_button">
+          <property name="text">
+           <string>Homework</string>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="0">
+         <widget class="QLabel" name="label_4">
+          <property name="text">
+           <string>Homeworks</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="2" colspan="4">
+         <widget class="QLabel" name="last_update_label">
+          <property name="text">
+           <string>Last update: </string>
+          </property>
+         </widget>
+        </item>
+        <item row="5" column="5">
+         <widget class="QPushButton" name="add_task_button">
+          <property name="text">
+           <string>Add Task</string>
+          </property>
+         </widget>
+        </item>
+        <item row="5" column="3">
+         <widget class="QPushButton" name="add_exam_button">
+          <property name="text">
+           <string>Exam</string>
+          </property>
+         </widget>
+        </item>
+        <item row="4" column="3" colspan="3">
+         <widget class="QListWidget" name="tomorrow_list"/>
+        </item>
+        <item row="2" column="3" colspan="3">
+         <widget class="QListWidget" name="today_list"/>
+        </item>
+        <item row="3" column="3">
+         <widget class="QLabel" name="label_2">
+          <property name="text">
+           <string>Tomorrow</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="3">
+         <widget class="QLabel" name="label">
+          <property name="text">
+           <string>Today</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="0" colspan="3">
+         <widget class="QCustomPlot" name="exams_plot" native="true"/>
+        </item>
+        <item row="4" column="0" colspan="3">
+         <widget class="QCustomPlot" name="homeworks_plot" native="true"/>
+        </item>
+       </layout>
       </widget>
       <widget class="QWidget" name="tab_4">
        <attribute name="title">
@@ -265,6 +283,14 @@
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>QCustomPlot</class>
+   <extends>QWidget</extends>
+   <header>qcustomplot.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

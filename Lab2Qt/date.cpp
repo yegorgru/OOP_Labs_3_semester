@@ -802,7 +802,7 @@ bool operator<(const Date& lhs, const Date& rhs)
 
 std::ostream& operator<<(std::ostream& os, const Date& date)
 {
-    os<<date.get_seconds()<<':'<<date.get_minutes()<<':'<<date.get_hours()<<' '<< date.get_day() << '.' << date.get_month() << '.' << date.get_year();
+    os<< date.get_day() << '.' << date.get_month() << '.' << date.get_year();
     return os;
 }
 

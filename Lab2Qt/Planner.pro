@@ -21,7 +21,7 @@ SOURCES += \
     exam.cpp \
     main.cpp \
     mainwindow.cpp \
-    qcustomplot-source/qcustomplot.cpp \
+    qcustomplot.cpp \
     subject.cpp \
     subjectedit.cpp \
     task.cpp \
@@ -33,7 +33,7 @@ HEADERS += \
     edittask.h \
     exam.h \
     mainwindow.h \
-    qcustomplot-source/qcustomplot.h \
+    qcustomplot.h \
     subject.h \
     subjectedit.h \
     task.h \
