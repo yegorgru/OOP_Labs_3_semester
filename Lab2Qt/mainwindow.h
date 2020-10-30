@@ -33,6 +33,7 @@
 #include "subjectedit.h"
 #include "task.h"
 #include "edittask.h"
+#include "settings.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -78,14 +79,24 @@ private slots:
 
     void on_tomorrow_list_itemClicked(QListWidgetItem *item);
 
+    void on_archive_list_itemClicked(QListWidgetItem *item);
+
+    void on_clear_archive_button_clicked();
+
+    void on_find_date_button_clicked();
+
+    void on_calendar_list_itemClicked(QListWidgetItem *item);
+
+    void on_apply_settings_button_clicked();
+
 private:
-    void update_homework(const std::string& name, const Date& date,QListWidgetItem *item);
-    void update_exam(const std::string& name, const Date& date,QListWidgetItem *item);
+    void update_homework(const std::string& name, const Date& date);
+    void update_exam(const std::string& name, const Date& date);
 
     void add_homework_content(const Task& new_homework);
     void update_homework_content(const Task& old_homework,const Task& new_homework);
     void delete_homework_content(const Task& homework);
-
+    void delete_archive_content(QListWidgetItem *item);
     void update_current_date();
 
     void add_exam_content(const Exam& new_exam);
@@ -103,6 +114,19 @@ private:
     void delete_homework_overview(const Task& task,bool today);
     void delete_exam_overview(const Exam& exam,bool today);
 
+    void update_calendar_list(const Date& date);
+
+    void set_subjects_timetable();
+    void add_subject_timetable(const Subject& subject);
+    void delete_subject_timetable(const Subject& subject);
+    void update_subjects_visibility_timetable();
+    void set_subject_visible_timetable(int subject,bool visibility);
+
+    void apply_settings();
+    void create_plots();
+
+    void auto_clearing_archive();
+
     Ui::MainWindow *ui;
 
     int HEIGHT;
@@ -116,7 +140,13 @@ private:
     std::map<Date,int>dates_homeworks;
     std::map<Date,int>dates_exams;
 
+    std::set<Task>homeworks_archive;
+    std::set<Exam>exams_archive;
+
+    Settings settings;
+
     Date current_date;
+    Date calendar_date;
     Day day_of_week;
 };
 #endif // MAINWINDOW_H

@@ -30,7 +30,7 @@
    <item row="3" column="0">
     <widget class="QPushButton" name="delete_button">
      <property name="text">
-      <string>Delete</string>
+      <string>Done/Delete</string>
      </property>
     </widget>
    </item>

@@ -31,7 +31,8 @@ namespace std
     {
         bool operator() (const Exam& lhs, const Exam& rhs) const
         {
-            return lhs.get_title()<rhs.get_title();
+            return lhs.get_date()<rhs.get_date() ||
+                    (lhs.get_date()== rhs.get_date() && lhs.get_title()<rhs.get_title());
         }
     };
 }

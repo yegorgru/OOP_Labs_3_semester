@@ -92,7 +92,7 @@ Task EditTask::get_task(){
 void EditTask::on_cancel_button_clicked()
 {
     this->cancel=true;
-
+    this->close();
 }
 
 void EditTask::on_add_task_button_clicked()
