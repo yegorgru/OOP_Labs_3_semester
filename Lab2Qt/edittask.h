@@ -28,6 +28,8 @@ public:
 
     bool is_cancel();
 
+    bool is_printed();
+
     ExamType get_type();
 
     Task get_task();
@@ -41,11 +43,14 @@ private slots:
 
     void on_delete_button_clicked();
 
+    void on_add_to_printer_button_clicked();
+
 private:
     Ui::EditTask *ui;
 
     bool cancel = true;
     bool is_deleted=false;
+    bool printed = false;
 
     Task task;
     ExamType type;

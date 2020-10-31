@@ -12,7 +12,7 @@ public:
     Settings();
 
     Settings(int plot_days,bool auto_clearing,int auto_clearing_days,WorkWeek work_week,
-             int subjects_number);
+             int subjects_number, int saved_in_last);
 
     int get_plot_days();
     void set_plot_days(int plot_days);
@@ -29,12 +29,15 @@ public:
     int get_subjects_number();
     void set_subjects_number(int subjects_number);
 
+    int get_saved_in_last();
+    void set_saved_in_last(int number);
 private:
     int plot_days;
     bool auto_clearing;
     int auto_clearing_days;
     WorkWeek work_week;
     int subjects_number;
+    int saved_in_last;
 };
 
 #endif // SETTINGS_H

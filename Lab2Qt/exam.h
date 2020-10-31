@@ -13,7 +13,7 @@ enum class ExamType{
 class Exam : public Task
 {
 public:
-    explicit Exam(const std::string& title,const Date& date=Date(),const std::string& subject="", const std::string& teacher="",
+    explicit Exam(const std::string& title = "",const Date& date=Date(),const std::string& subject="", const std::string& teacher="",
                   const ExamType type=ExamType::written,const std::string& note = "");
 
     explicit Exam(const Task& Task);

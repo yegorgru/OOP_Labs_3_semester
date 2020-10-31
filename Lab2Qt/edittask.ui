@@ -14,39 +14,39 @@
    <string>Dialog</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="2" column="1">
-    <spacer name="verticalSpacer_2">
+   <item row="4" column="3">
+    <widget class="QPushButton" name="add_task_button">
+     <property name="text">
+      <string>Add</string>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="3">
+    <widget class="QCheckBox" name="important_checkBox">
+     <property name="text">
+      <string>Important</string>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="2">
+    <spacer name="verticalSpacer">
      <property name="orientation">
       <enum>Qt::Vertical</enum>
      </property>
      <property name="sizeHint" stdset="0">
       <size>
        <width>20</width>
-       <height>153</height>
+       <height>154</height>
       </size>
      </property>
     </spacer>
    </item>
-   <item row="3" column="0">
-    <widget class="QPushButton" name="delete_button">
-     <property name="text">
-      <string>Done/Delete</string>
-     </property>
-    </widget>
-   </item>
-   <item row="3" column="1">
-    <widget class="QPushButton" name="cancel_button">
-     <property name="text">
-      <string>Cancel</string>
-     </property>
-    </widget>
-   </item>
-   <item row="1" column="0" colspan="3">
+   <item row="1" column="0" colspan="4">
     <layout class="QFormLayout" name="formLayout">
      <item row="0" column="0">
       <widget class="QLabel" name="label">
        <property name="text">
-        <string>Title</string>
+        <string>Title                      </string>
        </property>
       </widget>
      </item>
@@ -105,30 +105,37 @@
      </item>
     </layout>
    </item>
-   <item row="3" column="2">
-    <widget class="QPushButton" name="add_task_button">
-     <property name="text">
-      <string>Add</string>
-     </property>
-    </widget>
-   </item>
-   <item row="0" column="1">
-    <spacer name="verticalSpacer">
+   <item row="2" column="2">
+    <spacer name="verticalSpacer_2">
      <property name="orientation">
       <enum>Qt::Vertical</enum>
      </property>
      <property name="sizeHint" stdset="0">
       <size>
        <width>20</width>
-       <height>154</height>
+       <height>153</height>
       </size>
      </property>
     </spacer>
    </item>
-   <item row="2" column="2">
-    <widget class="QCheckBox" name="important_checkBox">
+   <item row="4" column="2">
+    <widget class="QPushButton" name="cancel_button">
      <property name="text">
-      <string>Important</string>
+      <string>Cancel</string>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="0">
+    <widget class="QPushButton" name="delete_button">
+     <property name="text">
+      <string>Done/Delete</string>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="1">
+    <widget class="QPushButton" name="add_to_printer_button">
+     <property name="text">
+      <string>Add to printer</string>
      </property>
     </widget>
    </item>

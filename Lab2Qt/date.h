@@ -9,6 +9,7 @@ definitions of Date methods and operators, enum classes MeasureTime and Day are 
 #include <cstdint>
 #include <iostream>
 #include <map>
+#include <fstream>
 
 /**
 \brief class for time measures
@@ -351,3 +352,7 @@ Operator << for Dates in streams
 std::ostream& operator << (std::ostream& os, const Date& date);
 
 std::istream& operator>>(std::istream& is, Date& date);
+
+std::ofstream& operator<<(std::ofstream& fout,const Date& date);
+
+std::ifstream& operator>>(std::ifstream& fout,Date& date);

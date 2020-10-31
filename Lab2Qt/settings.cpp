@@ -6,16 +6,18 @@ Settings::Settings(){
     this->auto_clearing_days = 100;
     this->work_week = WorkWeek::friday;
     this->subjects_number = 5;
+    this->saved_in_last = 10;
 }
 
 Settings::Settings(int plot_days,bool auto_clearing,int auto_clearing_days,WorkWeek work_week,
-                   int subjects_number)
+                   int subjects_number, int saved_in_last)
 {
     this->plot_days = plot_days;
     this->auto_clearing = auto_clearing;
     this->auto_clearing_days = auto_clearing_days;
     this->work_week = work_week;
     this->subjects_number = subjects_number;
+    this->saved_in_last = saved_in_last;
 }
 
 int Settings::get_plot_days(){
@@ -51,4 +53,11 @@ int Settings::get_subjects_number(){
 }
 void Settings::set_subjects_number(int subjects_number){
     this->subjects_number = subjects_number;
+}
+
+int Settings::get_saved_in_last(){
+    return this->saved_in_last;
+}
+void Settings::set_saved_in_last(int number){
+    this->saved_in_last = number;
 }

@@ -44,8 +44,17 @@ void SubjectEdit::on_cancel_button_clicked()
 void SubjectEdit::on_add_subject_button_clicked()
 {
     this->subject.set_name(ui->name_line->text().toStdString());
+    /*if(this->subject.get_name() == ""){
+        this->subject.set_name("Default_name");
+    }*/
     this->subject.set_room(ui->room_line->text().toStdString());
+    /*if(this->subject.get_room() == ""){
+        this->subject.set_room("None");
+    }*/
     this->subject.set_note(ui->note_line->text().toStdString());
+    /*if(this->subject.get_note() == ""){
+        this->subject.set_note("None");
+    }*/
     this->cancel = false;
     this->close();
 }

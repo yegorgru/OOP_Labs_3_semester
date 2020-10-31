@@ -9,11 +9,10 @@ MainWindow::MainWindow(QWidget *parent)
     HEIGHT=this->size().height();
     WIDTH=this->size().width();
 
-    settings.set_plot_days(7);
-    settings.set_work_week(WorkWeek::friday);
-    settings.set_auto_clearing(false);
-    settings.set_subjects_number(5);
-    settings.set_auto_clearing_days(100);
+
+    read_data_from_files();
+
+    ui->last_tasks_settings_spin_box->setValue(settings.get_saved_in_last());
 
     ui->days_plot_spin_box->setValue(settings.get_plot_days());
 
@@ -66,6 +65,9 @@ MainWindow::MainWindow(QWidget *parent)
         else if(task.get_date() == check_tomorrow){
             add_homework_overview(task,false);
         }
+        if(task.get_importance()){
+            ui->important_list->addItem("Home | "+QString::fromStdString(os.str()));
+        }
     }
 
     for(const auto& exam:exams){
@@ -78,6 +80,9 @@ MainWindow::MainWindow(QWidget *parent)
         }
         else if(exam.get_date() == check_tomorrow){
             add_exam_overview(exam,false);
+        }
+        if(exam.get_importance()){
+            ui->important_list->addItem("Exam | "+QString::fromStdString(os.str()));
         }
     }
 
@@ -94,6 +99,7 @@ MainWindow::MainWindow(QWidget *parent)
     }
 
     set_subjects_timetable();
+    set_timetable_from_files();
 
     QPixmap pixmap(":/images/images/plus_image.jpg");
     QIcon ButtonIcon(pixmap);
@@ -126,6 +132,7 @@ MainWindow::MainWindow(QWidget *parent)
 
 MainWindow::~MainWindow()
 {
+    write_data_in_files();
     delete ui;
 }
 
@@ -413,6 +420,16 @@ void MainWindow::add_homework_content(const Task& new_homework){
     if(new_homework.get_date() == calendar_date){
         ui->calendar_list->addItem("Home | "+QString::fromStdString(new_homework.get_title()));
     }
+
+    auto items = ui->last_list->findItems("Home | "+QString::fromStdString(new_os.str()),
+                                               Qt::MatchExactly);
+    if(items.size()==1){
+        delete items.back();
+    }
+    ui->last_list->insertItem(0,"Home | "+QString::fromStdString(new_os.str()));
+    if(ui->last_list->count()>settings.get_saved_in_last()){
+        ui->last_list->takeItem(settings.get_saved_in_last());
+    }
     update_homeworks_plot();
 }
 
@@ -423,14 +440,6 @@ void MainWindow::update_homework_content(const Task& old_homework,const Task& ne
     std::ostringstream new_os;
     new_os<<new_homework.get_date()<<" | "<<new_homework.get_title();
     items.back()->setText(QString::fromStdString(new_os.str()));
-    /*if(old_homework.get_importance() && new_homework.get_importance()){
-        auto items = ui->important_list->findItems("Home | "+QString::fromStdString(old_os.str()),
-                                                   Qt::MatchExactly);
-        items.back()->setText("Home | " + QString::fromStdString(new_os.str()));
-    }
-    else if(!old_homework.get_importance() && new_homework.get_importance()){
-        ui->important_list->addItem("Home | "+QString::fromStdString(new_os.str()));
-    }*/
     if(old_homework.get_importance()){
         auto items = ui->important_list->findItems("Home | "+QString::fromStdString(old_os.str()),
                                                    Qt::MatchExactly);
@@ -462,6 +471,17 @@ void MainWindow::update_homework_content(const Task& old_homework,const Task& ne
     }
     if(new_homework.get_date() == calendar_date){
         ui->calendar_list->addItem("Home | "+QString::fromStdString(new_homework.get_title()));
+    }
+    {
+        auto items = ui->last_list->findItems("Home | "+QString::fromStdString(old_os.str()),
+                                                   Qt::MatchExactly);
+        if(items.size()==1){
+            delete items.back();
+        }
+        ui->last_list->insertItem(0,"Home | "+QString::fromStdString(new_os.str()));
+        if(ui->last_list->count()>settings.get_saved_in_last()){
+            ui->last_list->takeItem(settings.get_saved_in_last());
+        }
     }
     update_homeworks_plot();
 }
@@ -497,6 +517,14 @@ void MainWindow::delete_homework_content(const Task& homework){
     std::ostringstream archive_os;
     archive_os<<"Home | "<<homework.get_date()<<" | "<<homework.get_title();
     ui->archive_list->addItem(QString::fromStdString(archive_os.str()));
+
+    {
+        auto items = ui->last_list->findItems("Home | "+QString::fromStdString(os.str()),
+                                                   Qt::MatchExactly);
+        if(items.size()==1){
+            delete items.back();
+        }
+    }
 }
 
 void MainWindow::add_exam_content(const Exam& new_exam){
@@ -520,6 +548,16 @@ void MainWindow::add_exam_content(const Exam& new_exam){
     if(new_exam.get_date() == calendar_date){
         ui->calendar_list->addItem("Exam | " + QString::fromStdString(new_exam.get_title()));
     }
+
+    auto items = ui->last_list->findItems("Exam | "+QString::fromStdString(new_os.str()),
+                                               Qt::MatchExactly);
+    if(items.size()==1){
+        delete items.back();
+    }
+    ui->last_list->insertItem(0,"Exam | "+QString::fromStdString(new_os.str()));
+    if(ui->last_list->count()>settings.get_saved_in_last()){
+        ui->last_list->takeItem(settings.get_saved_in_last());
+    }
     update_exams_plot();
 }
 
@@ -530,14 +568,6 @@ void MainWindow::update_exam_content(const Exam& old_exam,const Exam& new_exam){
     std::ostringstream new_os;
     new_os<<new_exam.get_date()<<" | "<<new_exam.get_title();
     items.back()->setText(QString::fromStdString(new_os.str()));
-    /*if(old_exam.get_importance() && new_exam.get_importance()){
-        auto items = ui->important_list->findItems("Exam | "+QString::fromStdString(old_os.str()),
-                                                   Qt::MatchExactly);
-        items.back()->setText("Exam | "+QString::fromStdString(new_os.str()));
-    }
-    else if(!old_exam.get_importance() && new_exam.get_importance()){
-        ui->important_list->addItem("Exam | "+QString::fromStdString(new_os.str()));
-    }*/
     if(old_exam.get_importance()){
         auto items = ui->important_list->findItems("Exam | "+QString::fromStdString(old_os.str()),
                                                    Qt::MatchExactly);
@@ -571,6 +601,20 @@ void MainWindow::update_exam_content(const Exam& old_exam,const Exam& new_exam){
     if(new_exam.get_date() == calendar_date){
         ui->calendar_list->addItem("Exam | "+QString::fromStdString(new_exam.get_title()));
     }
+
+    {
+        auto items = ui->last_list->findItems("Exam | "+QString::fromStdString(old_os.str()),
+                                                   Qt::MatchExactly);
+        if(items.size()==1){
+            delete items.back();
+        }
+
+        ui->last_list->insertItem(0,"Exam | "+QString::fromStdString(new_os.str()));
+        if(ui->last_list->count()>settings.get_saved_in_last()){
+            ui->last_list->takeItem(settings.get_saved_in_last());
+        }
+    }
+
     update_exams_plot();
 }
 
@@ -607,6 +651,14 @@ void MainWindow::delete_exam_content(const Exam& exam){
     std::ostringstream archive_os;
     archive_os<<"Exam | "<<exam.get_date()<<" | "<<exam.get_title();
     ui->archive_list->addItem(QString::fromStdString(archive_os.str()));
+
+    {
+        auto items = ui->last_list->findItems("Exam | "+QString::fromStdString(os.str()),
+                                                   Qt::MatchExactly);
+        if(items.size()==1){
+            delete items.back();
+        }
+    }
 }
 
 void MainWindow::on_important_list_itemClicked(QListWidgetItem *item)
@@ -669,6 +721,10 @@ void MainWindow::update_homework(const std::string& name, const Date& date){
             dates_homeworks[old_homework.get_date()]--;
             dates_homeworks[homework.get_date()]++;
             update_homework_content(old_homework,homework);
+            if(homework_window.is_printed()){
+                this->homeworks_print_data.push_back(homework);
+                add_print_content_homework(homework);
+            }
         }
         else{
             QMessageBox::critical(this,"Attention!","Homework with those title and date already exists");
@@ -714,6 +770,10 @@ void MainWindow::update_exam(const std::string& name, const Date& date){
             dates_exams[old_exam.get_date()]--;
             dates_exams[exam.get_date()]++;
             update_exam_content(old_exam,exam);
+            if(exam_window.is_printed()){
+                this->exams_print_data.push_back(exam);
+                add_print_content_homework(exam);
+            }
         }
         else{
             QMessageBox::critical(this,"Attention!","Exam with those title and date already exists");
@@ -1300,6 +1360,10 @@ void MainWindow::apply_settings(){
         ui->auto_clearing_label->setVisible(true);
     }
     update_subjects_visibility_timetable();
+    while(ui->last_list->count()>settings.get_saved_in_last()){
+        ui->last_list->takeItem(settings.get_saved_in_last());
+    }
+    ui->last_list->takeItem(settings.get_saved_in_last());
 }
 
 void MainWindow::create_plots(){
@@ -1471,5 +1535,650 @@ void MainWindow::on_apply_settings_button_clicked()
     this->settings.set_auto_clearing(ui->auto_clearing_check->isChecked());
     this->settings.set_auto_clearing_days(ui->auto_clearing_spin_box->value());
     this->settings.set_subjects_number(ui->lessons_per_day_combo_box->currentText().toInt());
+    this->settings.set_saved_in_last(ui->last_tasks_settings_spin_box->value());
     apply_settings();
+}
+
+void MainWindow::on_last_list_itemClicked(QListWidgetItem *item)
+{
+    std::istringstream is(item->text().toStdString());
+    std::string type;
+    is>>type;
+    is.ignore();
+    is.ignore();
+    is.ignore();
+    Date date;
+    is>>date;
+    is.ignore();
+    is.ignore();
+    is.ignore();
+    std::string str;
+    is>>str;
+    if(type == "Home"){
+        update_homework(str,date);
+    }
+    else{
+        update_exam(str,date);
+    }
+}
+
+void MainWindow::on_clear_printer_data_button_clicked()
+{
+    this->homeworks_print_data.clear();
+    this->exams_print_data.clear();
+    ui->print_list->clear();
+}
+
+void MainWindow::add_print_content_homework(const Task& homework){
+    std::ostringstream os;
+    os<<"Home | "<<homework.get_date()<<" | "<<homework.get_title();
+    ui->print_list->addItem(QString::fromStdString(os.str()));
+}
+
+void MainWindow::add_print_content_exam(const Exam& exam){
+    std::ostringstream os;
+    os<<"Exam | "<<exam.get_date()<<" | "<<exam.get_title();
+    ui->print_list->addItem(QString::fromStdString(os.str()));
+}
+void MainWindow::on_print_button_clicked()
+{
+    QPrinter printer;
+
+    QPrintDialog dialog(&printer,this);
+    if(dialog.exec() == QDialog::Rejected){
+        return;
+    }
+    else{
+        std::ostringstream os;
+        if(this->exams_print_data.size()>0){
+            os<<"EXAMS:"<<std::endl;
+            for(const auto& i:exams_print_data){
+                os<<"Title:\t"<<i.get_title()<<"\n";
+                os<<"Subject:\t"<<i.get_subject()<<"\n";
+                os<<"Teacher:\t"<<i.get_teacher()<<"\n";
+                os<<"Date:\t"<<i.get_date()<<"\n";
+                std::string tmp = i.get_type() == ExamType::written ? "written" : "oral";
+                os<<"Type:\t"<<tmp<<"\n";
+                tmp = i.get_importance() ? "Important" : "Not important";
+                os<<"Status:\t"<<tmp<<"\n";
+                os<<"Note:\t"<<i.get_note()<<std::endl;
+            }
+        }
+        if(this->homeworks_print_data.size()>0){
+            os<<"Homeworks:"<<std::endl;
+            for(const auto& i:homeworks_print_data){
+                os<<"Title:\t"<<i.get_title()<<"\n";
+                os<<"Subject:\t"<<i.get_subject()<<"\n";
+                os<<"Teacher:\t"<<i.get_teacher()<<"\n";
+                os<<"Date:\t"<<i.get_date()<<"\n";
+                std::string tmp = i.get_importance() ? "Important" : "Not important";
+                os<<"Status:\t"<<tmp<<"\n";
+                os<<"Note:\t"<<i.get_note()<<std::endl;
+            }
+        }
+        QTextEdit printed;
+        printed.setText(QString::fromStdString(os.str()));
+        printed.print(&printer);
+    }
+}
+
+void MainWindow::read_data_from_files(){
+    std::ifstream fin("settings.txt");
+    if(!fin.is_open()){
+        fin.close();
+        std::ofstream fout("settings.txt");
+        fout<<7<<" ";
+        fout<<0<<" ";
+        fout<<100<<" ";
+        fout<<5<<" ";
+        fout<<8<<" ";
+        fout<<10;
+        fout.close();
+        fin.open("settings.txt");
+    }
+    int data;
+    fin>>data;
+    this->settings.set_plot_days(data);
+    fin>>data;
+    this->settings.set_auto_clearing(data);
+    fin>>data;
+    this->settings.set_auto_clearing_days(data);
+    fin>>data;
+    WorkWeek type_week = data==5 ? WorkWeek::friday : WorkWeek::saturday;
+    this->settings.set_work_week(type_week);
+    fin>>data;
+    this->settings.set_subjects_number(data);
+    fin>>data;
+    this->settings.set_saved_in_last(data);
+    fin.close();
+
+    fin.open("teachers.txt");
+    if(fin.is_open()){
+        fin.ignore();
+        Teacher new_teacher;
+        std::string data;
+        while(!fin.eof()){
+            std::getline(fin,data);
+            new_teacher.set_name(data);
+            std::getline(fin,data);
+            new_teacher.set_surname(data);
+            std::getline(fin,data);
+            new_teacher.set_phone(data);
+            std::getline(fin,data);
+            new_teacher.set_mail(data);
+            std::getline(fin,data);
+            new_teacher.set_address(data);
+            std::getline(fin,data);
+            new_teacher.set_website(data);
+            this->teachers.insert(new_teacher);
+        }
+        fin.close();
+    }
+    else{
+        std::ofstream fout("teachers.txt");
+        fout<<'k';
+        fout.close();
+    }
+
+    fin.open("subjects.txt");
+    if(fin.is_open()){
+        fin.ignore();
+        Subject new_subject;
+        std::string data;
+        while(!fin.eof()){
+            std::getline(fin,data);
+            new_subject.set_name(data);
+            std::getline(fin,data);
+            new_subject.set_room(data);
+            std::getline(fin,data);
+            new_subject.set_note(data);
+            this->subjects.insert(new_subject);
+        }
+        fin.close();
+    }
+    else{
+        std::ofstream fout("subjects.txt");
+        fout<<'k';
+        fout.close();
+    }
+
+    fin.open("homeworks.txt");
+    if(fin.is_open()){
+        fin.ignore();
+        Task new_homework;
+        std::string data;
+        while(!fin.eof()){
+            std::getline(fin,data);
+            new_homework.set_title(data);
+            std::getline(fin,data);
+            new_homework.set_subject(data);
+            std::getline(fin,data);
+            new_homework.set_teacher(data);
+            Date date;
+            fin>>date;
+            fin.ignore();
+            new_homework.set_date(date);
+            std::getline(fin,data);
+            new_homework.set_note(data);
+            bool imp;
+            fin>>imp;
+            new_homework.set_importance(imp);
+            this->homeworks.insert(new_homework);
+        }
+        fin.close();
+    }
+    else{
+        std::ofstream fout("homeworks.txt");
+        fout<<'k';
+        fout.close();
+    }
+
+    fin.open("exams.txt");
+    if(fin.is_open()){
+        fin.ignore();
+        Exam new_exam;
+        std::string data;
+        while(!fin.eof()){
+            std::getline(fin,data);
+            new_exam.set_title(data);
+            std::getline(fin,data);
+            new_exam.set_subject(data);
+            std::getline(fin,data);
+            new_exam.set_teacher(data);
+            Date date;
+            fin>>date;
+            fin.ignore();
+            new_exam.set_date(date);
+            std::getline(fin,data);
+            new_exam.set_note(data);
+            bool tmp;
+            fin>>tmp;
+            new_exam.set_importance(tmp);
+            fin>>tmp;
+            new_exam.set_type(tmp? ExamType::written : ExamType::oral);
+            this->exams.insert(new_exam);
+        }
+        fin.close();
+    }
+    else{
+        std::ofstream fout("exams.txt");
+        fout<<'k';
+        fout.close();
+    }
+
+    fin.open("homeworksarchive.txt");
+    if(fin.is_open()){
+        fin.ignore();
+        Task new_homework;
+        std::string data;
+        while(!fin.eof()){
+            std::getline(fin,data);
+            new_homework.set_title(data);
+            std::getline(fin,data);
+            new_homework.set_subject(data);
+            std::getline(fin,data);
+            new_homework.set_teacher(data);
+            Date date;
+            fin>>date;
+            new_homework.set_date(date);
+            fin.ignore();
+            std::getline(fin,data);
+            new_homework.set_note(data);
+            bool imp;
+            fin>>imp;
+            new_homework.set_importance(imp);
+            this->homeworks_archive.insert(new_homework);
+        }
+        fin.close();
+    }
+    else{
+        std::ofstream fout("homeworksarchive.txt");
+        fout<<'k';
+        fout.close();
+    }
+
+    fin.open("examsarchive.txt");
+    if(fin.is_open()){
+        fin.ignore();
+        Exam new_exam;
+        std::string data;
+        while(!fin.eof()){
+            std::getline(fin,data);
+            new_exam.set_title(data);
+            std::getline(fin,data);
+            new_exam.set_subject(data);
+            std::getline(fin,data);
+            new_exam.set_teacher(data);
+            Date date;
+            fin>>date;
+            new_exam.set_date(date);
+            fin.ignore();
+            std::getline(fin,data);
+            new_exam.set_note(data);
+            bool tmp;
+            fin>>tmp;
+            new_exam.set_importance(tmp);
+            fin>>tmp;
+            new_exam.set_type(tmp? ExamType::written : ExamType::oral);
+            this->exams_archive.insert(new_exam);
+        }
+        fin.close();
+    }
+    else{
+        std::ofstream fout("examsarchive.txt");
+        fout<<'k';
+        fout.close();
+    }
+}
+
+void MainWindow::write_data_in_files(){
+    std::ofstream fout("settings.txt");
+    fout<<this->settings.get_plot_days()<<" ";
+    fout<<this->settings.is_auto_clearing()<<" ";
+    fout<<this->settings.get_auto_clearing_days()<<" ";
+    int type_week = this->settings.get_work_week()==WorkWeek::friday ? 5 : 6;
+    fout<<type_week<<" ";
+    fout<<this->settings.get_subjects_number()<<" ";
+    fout<<this->settings.get_saved_in_last();
+    fout.close();
+
+    if(this->teachers.size()>0){
+        fout.open("teachers.txt");
+        fout<<'k';
+        for(auto it = teachers.begin();it!=--(teachers.end());it++){
+            fout<<it->get_name()<<"\n";
+            fout<<it->get_surname()<<"\n";
+            fout<<it->get_phone()<<"\n";
+            fout<<it->get_mail()<<"\n";
+            fout<<it->get_address()<<"\n";
+            fout<<it->get_website()<<std::endl;
+        }
+        auto it = --(teachers.end());
+        fout<<it->get_name()<<"\n";
+        fout<<it->get_surname()<<"\n";
+        fout<<it->get_phone()<<"\n";
+        fout<<it->get_mail()<<"\n";
+        fout<<it->get_address()<<"\n";
+        fout<<it->get_website();
+        fout.close();
+    }
+
+    if(this->subjects.size()>0){
+        fout.open("subjects.txt");
+        fout<<'k';
+        for(auto it = subjects.begin();it!=--(subjects.end());it++){
+            fout<<it->get_name()<<"\n";
+            fout<<it->get_room()<<"\n";
+            fout<<it->get_note()<<std::endl;
+        }
+        auto it = --(subjects.end());
+        fout<<it->get_name()<<"\n";
+        fout<<it->get_room()<<"\n";
+        fout<<it->get_note();
+        fout.close();
+    }
+
+    if(this->homeworks.size()>0){
+        fout.open("homeworks.txt");
+        fout<<'k';
+        for(auto it = homeworks.begin();it!=--(homeworks.end());it++){
+            fout<<it->get_title()<<"\n";
+            fout<<it->get_subject()<<"\n";
+            fout<<it->get_teacher()<<"\n";
+            fout<<it->get_date()<<"\n";
+            fout<<it->get_note()<<"\n";
+            fout<<it->get_importance()<<std::endl;
+        }
+        auto it = --(homeworks.end());
+        fout<<it->get_title()<<"\n";
+        fout<<it->get_subject()<<"\n";
+        fout<<it->get_teacher()<<"\n";
+        fout<<it->get_date()<<"\n";
+        fout<<it->get_note()<<"\n";
+        fout<<it->get_importance();
+        fout.close();
+    }
+
+    if(this->exams.size()>0){
+        fout.open("exams.txt");
+        fout<<'k';
+        for(auto it = exams.begin();it!=--(exams.end());it++){
+            fout<<it->get_title()<<"\n";
+            fout<<it->get_subject()<<"\n";
+            fout<<it->get_teacher()<<"\n";
+            fout<<it->get_date()<<"\n";
+            fout<<it->get_note()<<"\n";
+            fout<<it->get_importance()<<"\n";
+            bool is_written = it->get_type()==ExamType::written;
+            fout<<is_written<<std::endl;
+        }
+        auto it =--(exams.end());
+        fout<<it->get_title()<<"\n";
+        fout<<it->get_subject()<<"\n";
+        fout<<it->get_teacher()<<"\n";
+        fout<<it->get_date()<<"\n";
+        fout<<it->get_note()<<"\n";
+        fout<<it->get_importance()<<"\n";
+        bool is_written = it->get_type()==ExamType::written;
+        fout<<is_written;
+        fout.close();
+    }
+
+    if(this->homeworks_archive.size()>0){
+        fout.open("homeworksarchive.txt");
+        fout<<'k';
+        for(auto it = homeworks_archive.begin();it!=--(homeworks_archive.end());it++){
+            fout<<it->get_title()<<"\n";
+            fout<<it->get_subject()<<"\n";
+            fout<<it->get_teacher()<<"\n";
+            fout<<it->get_date()<<"\n";
+            fout<<it->get_note()<<"\n";
+            fout<<it->get_importance()<<std::endl;
+        }
+        auto it = --(homeworks_archive.end());
+        fout<<it->get_title()<<"\n";
+        fout<<it->get_subject()<<"\n";
+        fout<<it->get_teacher()<<"\n";
+        fout<<it->get_date()<<"\n";
+        fout<<it->get_note()<<"\n";
+        fout<<it->get_importance();
+        fout.close();
+    }
+
+    if(this->exams_archive.size()>0){
+        fout.open("examsarchive.txt");
+        fout<<'k';
+        for(auto it = exams_archive.begin();it!=--(exams_archive.end());it++){
+            fout<<it->get_title()<<"\n";
+            fout<<it->get_subject()<<"\n";
+            fout<<it->get_teacher()<<"\n";
+            fout<<it->get_date()<<"\n";
+            fout<<it->get_note()<<"\n";
+            fout<<it->get_importance()<<"\n";
+            bool is_written = it->get_type()==ExamType::written;
+            fout<<is_written<<std::endl;
+        }
+        auto it = --(exams_archive.end());
+        fout<<it->get_title()<<"\n";
+        fout<<it->get_subject()<<"\n";
+        fout<<it->get_teacher()<<"\n";
+        fout<<it->get_date()<<"\n";
+        fout<<it->get_note()<<"\n";
+        fout<<it->get_importance()<<"\n";
+        bool is_written = it->get_type()==ExamType::written;
+        fout<<is_written;
+        fout.close();
+    }
+    fout.open("timetable.txt");
+    fout<<ui->monday_1->currentText().toStdString()<<"\n";
+    fout<<ui->monday_2->currentText().toStdString()<<"\n";
+    fout<<ui->monday_3->currentText().toStdString()<<"\n";
+    fout<<ui->monday_4->currentText().toStdString()<<"\n";
+    fout<<ui->monday_5->currentText().toStdString()<<"\n";
+    fout<<ui->monday_6->currentText().toStdString()<<"\n";
+    fout<<ui->monday_7->currentText().toStdString()<<"\n";
+    fout<<ui->monday_8->currentText().toStdString()<<"\n";
+
+    fout<<ui->tuesday_1->currentText().toStdString()<<"\n";
+    fout<<ui->tuesday_2->currentText().toStdString()<<"\n";
+    fout<<ui->tuesday_3->currentText().toStdString()<<"\n";
+    fout<<ui->tuesday_4->currentText().toStdString()<<"\n";
+    fout<<ui->tuesday_5->currentText().toStdString()<<"\n";
+    fout<<ui->tuesday_6->currentText().toStdString()<<"\n";
+    fout<<ui->tuesday_7->currentText().toStdString()<<"\n";
+    fout<<ui->tuesday_8->currentText().toStdString()<<"\n";
+
+    fout<<ui->wednesday_1->currentText().toStdString()<<"\n";
+    fout<<ui->wednesday_2->currentText().toStdString()<<"\n";
+    fout<<ui->wednesday_3->currentText().toStdString()<<"\n";
+    fout<<ui->wednesday_4->currentText().toStdString()<<"\n";
+    fout<<ui->wednesday_5->currentText().toStdString()<<"\n";
+    fout<<ui->wednesday_6->currentText().toStdString()<<"\n";
+    fout<<ui->wednesday_7->currentText().toStdString()<<"\n";
+    fout<<ui->wednesday_8->currentText().toStdString()<<"\n";
+
+    fout<<ui->thursday_1->currentText().toStdString()<<"\n";
+    fout<<ui->thursday_2->currentText().toStdString()<<"\n";
+    fout<<ui->thursday_3->currentText().toStdString()<<"\n";
+    fout<<ui->thursday_4->currentText().toStdString()<<"\n";
+    fout<<ui->thursday_5->currentText().toStdString()<<"\n";
+    fout<<ui->thursday_6->currentText().toStdString()<<"\n";
+    fout<<ui->thursday_7->currentText().toStdString()<<"\n";
+    fout<<ui->thursday_8->currentText().toStdString()<<"\n";
+
+    fout<<ui->friday_1->currentText().toStdString()<<"\n";
+    fout<<ui->friday_2->currentText().toStdString()<<"\n";
+    fout<<ui->friday_3->currentText().toStdString()<<"\n";
+    fout<<ui->friday_4->currentText().toStdString()<<"\n";
+    fout<<ui->friday_5->currentText().toStdString()<<"\n";
+    fout<<ui->friday_6->currentText().toStdString()<<"\n";
+    fout<<ui->friday_7->currentText().toStdString()<<"\n";
+    fout<<ui->friday_8->currentText().toStdString()<<"\n";
+
+    fout<<ui->saturday_1->currentText().toStdString()<<"\n";
+    fout<<ui->saturday_2->currentText().toStdString()<<"\n";
+    fout<<ui->saturday_3->currentText().toStdString()<<"\n";
+    fout<<ui->saturday_4->currentText().toStdString()<<"\n";
+    fout<<ui->saturday_5->currentText().toStdString()<<"\n";
+    fout<<ui->saturday_6->currentText().toStdString()<<"\n";
+    fout<<ui->saturday_7->currentText().toStdString()<<"\n";
+    fout<<ui->saturday_8->currentText().toStdString();
+    fout.close();
+}
+
+void MainWindow::set_timetable_from_files(){
+    std::ifstream fin("timetable.txt");
+    if(fin.is_open()){
+        std::string name;
+        fin>>name;
+        int item = ui->monday_1->findText(QString::fromStdString(name),Qt::MatchExactly);
+        ui->monday_1->setCurrentIndex(item);
+        fin>>name;
+        item = ui->monday_2->findText(QString::fromStdString(name),Qt::MatchExactly);
+        ui->monday_2->setCurrentIndex(item);
+        fin>>name;
+        item = ui->monday_3->findText(QString::fromStdString(name),Qt::MatchExactly);
+        ui->monday_3->setCurrentIndex(item);
+        fin>>name;
+        item = ui->monday_4->findText(QString::fromStdString(name),Qt::MatchExactly);
+        ui->monday_4->setCurrentIndex(item);
+        fin>>name;
+        item = ui->monday_5->findText(QString::fromStdString(name),Qt::MatchExactly);
+        ui->monday_5->setCurrentIndex(item);
+        fin>>name;
+        item = ui->monday_6->findText(QString::fromStdString(name),Qt::MatchExactly);
+        ui->monday_6->setCurrentIndex(item);
+        fin>>name;
+        item = ui->monday_7->findText(QString::fromStdString(name),Qt::MatchExactly);
+        ui->monday_7->setCurrentIndex(item);
+        fin>>name;
+        item = ui->monday_8->findText(QString::fromStdString(name),Qt::MatchExactly);
+        ui->monday_8->setCurrentIndex(item);
+
+        fin>>name;
+        item = ui->tuesday_1->findText(QString::fromStdString(name),Qt::MatchExactly);
+        ui->tuesday_1->setCurrentIndex(item);
+        fin>>name;
+        item = ui->tuesday_2->findText(QString::fromStdString(name),Qt::MatchExactly);
+        ui->tuesday_2->setCurrentIndex(item);
+        fin>>name;
+        item = ui->tuesday_3->findText(QString::fromStdString(name),Qt::MatchExactly);
+        ui->tuesday_3->setCurrentIndex(item);
+        fin>>name;
+        item = ui->tuesday_4->findText(QString::fromStdString(name),Qt::MatchExactly);
+        ui->tuesday_4->setCurrentIndex(item);
+        fin>>name;
+        item = ui->tuesday_5->findText(QString::fromStdString(name),Qt::MatchExactly);
+        ui->tuesday_5->setCurrentIndex(item);
+        fin>>name;
+        item = ui->tuesday_6->findText(QString::fromStdString(name),Qt::MatchExactly);
+        ui->tuesday_6->setCurrentIndex(item);
+        fin>>name;
+        item = ui->tuesday_7->findText(QString::fromStdString(name),Qt::MatchExactly);
+        ui->tuesday_7->setCurrentIndex(item);
+        fin>>name;
+        item = ui->tuesday_8->findText(QString::fromStdString(name),Qt::MatchExactly);
+        ui->tuesday_8->setCurrentIndex(item);
+
+        fin>>name;
+        item = ui->wednesday_1->findText(QString::fromStdString(name),Qt::MatchExactly);
+        ui->wednesday_1->setCurrentIndex(item);
+        fin>>name;
+        item = ui->wednesday_2->findText(QString::fromStdString(name),Qt::MatchExactly);
+        ui->wednesday_2->setCurrentIndex(item);
+        fin>>name;
+        item = ui->wednesday_3->findText(QString::fromStdString(name),Qt::MatchExactly);
+        ui->wednesday_3->setCurrentIndex(item);
+        fin>>name;
+        item = ui->wednesday_4->findText(QString::fromStdString(name),Qt::MatchExactly);
+        ui->wednesday_4->setCurrentIndex(item);
+        fin>>name;
+        item = ui->wednesday_5->findText(QString::fromStdString(name),Qt::MatchExactly);
+        ui->wednesday_5->setCurrentIndex(item);
+        fin>>name;
+        item = ui->wednesday_6->findText(QString::fromStdString(name),Qt::MatchExactly);
+        ui->wednesday_6->setCurrentIndex(item);
+        fin>>name;
+        item = ui->wednesday_7->findText(QString::fromStdString(name),Qt::MatchExactly);
+        ui->wednesday_7->setCurrentIndex(item);
+        fin>>name;
+        item = ui->wednesday_8->findText(QString::fromStdString(name),Qt::MatchExactly);
+        ui->wednesday_8->setCurrentIndex(item);
+
+        fin>>name;
+        item = ui->thursday_1->findText(QString::fromStdString(name),Qt::MatchExactly);
+        ui->thursday_1->setCurrentIndex(item);
+        fin>>name;
+        item = ui->thursday_2->findText(QString::fromStdString(name),Qt::MatchExactly);
+        ui->thursday_2->setCurrentIndex(item);
+        fin>>name;
+        item = ui->thursday_3->findText(QString::fromStdString(name),Qt::MatchExactly);
+        ui->thursday_3->setCurrentIndex(item);
+        fin>>name;
+        item = ui->thursday_4->findText(QString::fromStdString(name),Qt::MatchExactly);
+        ui->thursday_4->setCurrentIndex(item);
+        fin>>name;
+        item = ui->thursday_5->findText(QString::fromStdString(name),Qt::MatchExactly);
+        ui->thursday_5->setCurrentIndex(item);
+        fin>>name;
+        item = ui->thursday_6->findText(QString::fromStdString(name),Qt::MatchExactly);
+        ui->thursday_6->setCurrentIndex(item);
+        fin>>name;
+        item = ui->thursday_7->findText(QString::fromStdString(name),Qt::MatchExactly);
+        ui->thursday_7->setCurrentIndex(item);
+        fin>>name;
+        item = ui->thursday_8->findText(QString::fromStdString(name),Qt::MatchExactly);
+        ui->thursday_8->setCurrentIndex(item);
+
+        fin>>name;
+        item = ui->friday_1->findText(QString::fromStdString(name),Qt::MatchExactly);
+        ui->friday_1->setCurrentIndex(item);
+        fin>>name;
+        item = ui->friday_2->findText(QString::fromStdString(name),Qt::MatchExactly);
+        ui->friday_2->setCurrentIndex(item);
+        fin>>name;
+        item = ui->friday_3->findText(QString::fromStdString(name),Qt::MatchExactly);
+        ui->friday_3->setCurrentIndex(item);
+        fin>>name;
+        item = ui->friday_4->findText(QString::fromStdString(name),Qt::MatchExactly);
+        ui->friday_4->setCurrentIndex(item);
+        fin>>name;
+        item = ui->friday_5->findText(QString::fromStdString(name),Qt::MatchExactly);
+        ui->friday_5->setCurrentIndex(item);
+        fin>>name;
+        item = ui->friday_6->findText(QString::fromStdString(name),Qt::MatchExactly);
+        ui->friday_6->setCurrentIndex(item);
+        fin>>name;
+        item = ui->friday_7->findText(QString::fromStdString(name),Qt::MatchExactly);
+        ui->friday_7->setCurrentIndex(item);
+        fin>>name;
+        item = ui->friday_8->findText(QString::fromStdString(name),Qt::MatchExactly);
+        ui->friday_8->setCurrentIndex(item);
+
+        fin>>name;
+        item = ui->saturday_1->findText(QString::fromStdString(name),Qt::MatchExactly);
+        ui->saturday_1->setCurrentIndex(item);
+        fin>>name;
+        item = ui->saturday_2->findText(QString::fromStdString(name),Qt::MatchExactly);
+        ui->saturday_2->setCurrentIndex(item);
+        fin>>name;
+        item = ui->saturday_3->findText(QString::fromStdString(name),Qt::MatchExactly);
+        ui->saturday_3->setCurrentIndex(item);
+        fin>>name;
+        item = ui->saturday_4->findText(QString::fromStdString(name),Qt::MatchExactly);
+        ui->saturday_4->setCurrentIndex(item);
+        fin>>name;
+        item = ui->saturday_5->findText(QString::fromStdString(name),Qt::MatchExactly);
+        ui->saturday_5->setCurrentIndex(item);
+        fin>>name;
+        item = ui->saturday_6->findText(QString::fromStdString(name),Qt::MatchExactly);
+        ui->saturday_6->setCurrentIndex(item);
+        fin>>name;
+        item = ui->saturday_7->findText(QString::fromStdString(name),Qt::MatchExactly);
+        ui->saturday_7->setCurrentIndex(item);
+        fin>>name;
+        item = ui->saturday_8->findText(QString::fromStdString(name),Qt::MatchExactly);
+        ui->saturday_8->setCurrentIndex(item);
+        fin.close();
+    }
 }

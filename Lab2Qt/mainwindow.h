@@ -17,6 +17,9 @@
 #include <QDate>
 #include <QTime>
 #include <QVector>
+#include <QPrinter>
+#include <QPrintDialog>
+#include <QTextEdit>
 
 #include <set>
 #include <utility>
@@ -24,6 +27,8 @@
 #include <sstream>
 #include <map>
 #include <exception>
+#include <list>
+#include <fstream>
 
 #include "subject.h"
 #include "teacher.h"
@@ -89,7 +94,17 @@ private slots:
 
     void on_apply_settings_button_clicked();
 
+    void on_last_list_itemClicked(QListWidgetItem *item);
+
+    void on_clear_printer_data_button_clicked();
+
+    void on_print_button_clicked();
+
 private:
+    void set_timetable_from_files();
+    void read_data_from_files();
+    void write_data_in_files();
+
     void update_homework(const std::string& name, const Date& date);
     void update_exam(const std::string& name, const Date& date);
 
@@ -122,6 +137,9 @@ private:
     void update_subjects_visibility_timetable();
     void set_subject_visible_timetable(int subject,bool visibility);
 
+    void add_print_content_homework(const Task& homework);
+    void add_print_content_exam(const Exam& exam);
+
     void apply_settings();
     void create_plots();
 
@@ -144,6 +162,9 @@ private:
     std::set<Exam>exams_archive;
 
     Settings settings;
+
+    std::list<Task>homeworks_print_data;
+    std::list<Exam>exams_print_data;
 
     Date current_date;
     Date calendar_date;

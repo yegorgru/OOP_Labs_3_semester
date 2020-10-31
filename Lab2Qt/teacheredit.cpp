@@ -43,11 +43,29 @@ Teacher TeacherEdit::get_teacher(){
 void TeacherEdit::on_add_teacher_button_clicked()
 {
     this->teacher.set_name(ui->name_line->text().toStdString());
+    /*if(this->teacher.get_name()==""){
+        this->teacher.set_name("Default_name");
+    }*/
     this->teacher.set_surname(ui->surname_line->text().toStdString());
+    /*if(this->teacher.get_surname()==""){
+        this->teacher.set_surname("Default_surname");
+    }*/
     this->teacher.set_phone(ui->phone_line->text().toStdString());
+    /*if(this->teacher.get_phone()==""){
+        this->teacher.set_phone("None");
+    }*/
     this->teacher.set_mail(ui->mail_line->text().toStdString());
+    /*if(this->teacher.get_mail()==""){
+        this->teacher.set_mail("None");
+    }*/
     this->teacher.set_address(ui->address_line->text().toStdString());
+    /*if(this->teacher.get_address()==""){
+        this->teacher.set_address("None");
+    }*/
     this->teacher.set_website(ui->website_line->text().toStdString());
+    /*if(this->teacher.get_website()==""){
+        this->teacher.set_website("None");
+    }*/
     this->cancel = false;
     this->close();
 }

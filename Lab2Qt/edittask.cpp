@@ -64,6 +64,7 @@ EditTask::EditTask(bool exam,bool new_task,const std::set<std::string>& teachers
     }
     else{
         ui->delete_button->setVisible(false);
+        ui->add_to_printer_button->setVisible(false);
     }
 
     if(!exam){
@@ -79,6 +80,10 @@ EditTask::~EditTask()
 
 bool EditTask::is_cancel(){
     return this->cancel;
+}
+
+bool EditTask::is_printed(){
+    return this->printed;
 }
 
 ExamType EditTask::get_type(){
@@ -98,9 +103,21 @@ void EditTask::on_cancel_button_clicked()
 void EditTask::on_add_task_button_clicked()
 {
     this->task.set_title(ui->title_line->text().toStdString());
+    /*if(this->task.get_title()==""){
+        this->task.set_title("Default_title");
+    }*/
     this->task.set_teacher(ui->teacher_box->currentText().toStdString());
-    this->task.set_note(ui->subject_box->currentText().toStdString());
+    /*if(this->task.get_teacher()==""){
+        this->task.set_teacher("None");
+    }*/
+    this->task.set_subject(ui->subject_box->currentText().toStdString());
+    /*if(this->task.get_subject()==""){
+        this->task.set_subject("None");
+    }*/
     this->task.set_note(ui->note_line->text().toStdString());
+    /*if(this->task.get_note()==""){
+        this->task.set_note("None");
+    }*/
     Date date;
     date.set_day(ui->dateEdit->date().day());
     date.set_month(ui->dateEdit->date().month());
@@ -121,4 +138,35 @@ void EditTask::on_delete_button_clicked()
 
 bool EditTask::deleted(){
     return this->is_deleted;
+}
+
+void EditTask::on_add_to_printer_button_clicked()
+{
+    this->task.set_title(ui->title_line->text().toStdString());
+    /*if(this->task.get_title()==""){
+        this->task.set_title("Default_title");
+    }*/
+    this->task.set_teacher(ui->teacher_box->currentText().toStdString());
+    /*if(this->task.get_teacher()==""){
+        this->task.set_teacher("None");
+    }*/
+    this->task.set_subject(ui->subject_box->currentText().toStdString());
+    /*if(this->task.get_subject()==""){
+        this->task.set_subject("None");
+    }*/
+    this->task.set_note(ui->note_line->text().toStdString());
+    /*if(this->task.get_note()==""){
+        this->task.set_note("None");
+    }*/
+    Date date;
+    date.set_day(ui->dateEdit->date().day());
+    date.set_month(ui->dateEdit->date().month());
+    date.set_year(ui->dateEdit->date().year());
+    this->task.set_date(date);
+    this->type=ui->exam_type_box->currentText()=="Written"?ExamType::written : ExamType::oral;
+    cancel = false;
+    bool is_important = ui->important_checkBox->isChecked();
+    this->task.set_importance(is_important);
+    this->printed = true;
+    this->close();
 }

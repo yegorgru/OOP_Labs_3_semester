@@ -5,7 +5,7 @@ implementations of Date methods and operators for it and statistics function imp
 */
 
 
-#include "Date.h"
+#include "date.h"
 
 Date::Date(uint16_t seconds, uint16_t minutes, uint16_t hours, uint16_t day,
     uint16_t month, uint16_t year)
@@ -817,4 +817,20 @@ std::istream& operator>>(std::istream& is, Date& date){
     is>>tmp;
     date.set_year(tmp);
     return is;
+}
+
+std::ofstream& operator<<(std::ofstream& fout,const Date& date){
+    fout<< date.get_day() << ' ' << date.get_month() << ' ' << date.get_year();
+    return fout;
+}
+
+std::ifstream& operator>>(std::ifstream& fin, Date& date){
+    uint16_t tmp;
+    fin>>tmp;
+    date.set_day(tmp);
+    fin>>tmp;
+    date.set_month(tmp);
+    fin>>tmp;
+    date.set_year(tmp);
+    return fin;
 }
