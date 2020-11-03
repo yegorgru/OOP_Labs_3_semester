@@ -975,7 +975,7 @@ void MainWindow::on_today_list_itemClicked(QListWidgetItem *item)
     std::string name;
     is>>name;
     if(type=="Home"){
-         update_homework(name,date);
+        update_homework(name,date);
     }
     else{
         update_exam(name,date);
@@ -1659,6 +1659,9 @@ void MainWindow::read_data_from_files(){
         std::string data;
         while(!fin.eof()){
             std::getline(fin,data);
+            if(data == ""){
+                break;
+            }
             new_teacher.set_name(data);
             std::getline(fin,data);
             new_teacher.set_surname(data);
@@ -1687,6 +1690,9 @@ void MainWindow::read_data_from_files(){
         std::string data;
         while(!fin.eof()){
             std::getline(fin,data);
+            if(data == ""){
+                break;
+            }
             new_subject.set_name(data);
             std::getline(fin,data);
             new_subject.set_room(data);
@@ -1704,11 +1710,14 @@ void MainWindow::read_data_from_files(){
 
     fin.open("homeworks.txt");
     if(fin.is_open()){
-        fin.ignore();
         Task new_homework;
         std::string data;
+        fin.ignore();
         while(!fin.eof()){
             std::getline(fin,data);
+            if(data == ""){
+                break;
+            }
             new_homework.set_title(data);
             std::getline(fin,data);
             new_homework.set_subject(data);
@@ -1722,6 +1731,7 @@ void MainWindow::read_data_from_files(){
             new_homework.set_note(data);
             bool imp;
             fin>>imp;
+            fin.ignore();
             new_homework.set_importance(imp);
             this->homeworks.insert(new_homework);
         }
@@ -1735,11 +1745,14 @@ void MainWindow::read_data_from_files(){
 
     fin.open("exams.txt");
     if(fin.is_open()){
-        fin.ignore();
         Exam new_exam;
         std::string data;
+        fin.ignore();
         while(!fin.eof()){
             std::getline(fin,data);
+            if(data == ""){
+                break;
+            }
             new_exam.set_title(data);
             std::getline(fin,data);
             new_exam.set_subject(data);
@@ -1755,6 +1768,7 @@ void MainWindow::read_data_from_files(){
             fin>>tmp;
             new_exam.set_importance(tmp);
             fin>>tmp;
+            fin.ignore();
             new_exam.set_type(tmp? ExamType::written : ExamType::oral);
             this->exams.insert(new_exam);
         }
@@ -1768,11 +1782,14 @@ void MainWindow::read_data_from_files(){
 
     fin.open("homeworksarchive.txt");
     if(fin.is_open()){
-        fin.ignore();
         Task new_homework;
         std::string data;
+        fin.ignore();
         while(!fin.eof()){
             std::getline(fin,data);
+            if(data == ""){
+                break;
+            }
             new_homework.set_title(data);
             std::getline(fin,data);
             new_homework.set_subject(data);
@@ -1786,6 +1803,7 @@ void MainWindow::read_data_from_files(){
             new_homework.set_note(data);
             bool imp;
             fin>>imp;
+            fin.ignore();
             new_homework.set_importance(imp);
             this->homeworks_archive.insert(new_homework);
         }
@@ -1799,11 +1817,14 @@ void MainWindow::read_data_from_files(){
 
     fin.open("examsarchive.txt");
     if(fin.is_open()){
-        fin.ignore();
         Exam new_exam;
         std::string data;
+        fin.ignore();
         while(!fin.eof()){
             std::getline(fin,data);
+            if(data == ""){
+                break;
+            }
             new_exam.set_title(data);
             std::getline(fin,data);
             new_exam.set_subject(data);
@@ -1819,6 +1840,7 @@ void MainWindow::read_data_from_files(){
             fin>>tmp;
             new_exam.set_importance(tmp);
             fin>>tmp;
+            fin.ignore();
             new_exam.set_type(tmp? ExamType::written : ExamType::oral);
             this->exams_archive.insert(new_exam);
         }
@@ -1842,9 +1864,9 @@ void MainWindow::write_data_in_files(){
     fout<<this->settings.get_saved_in_last();
     fout.close();
 
+    fout.open("teachers.txt");
+    fout<<'k';
     if(this->teachers.size()>0){
-        fout.open("teachers.txt");
-        fout<<'k';
         for(auto it = teachers.begin();it!=--(teachers.end());it++){
             fout<<it->get_name()<<"\n";
             fout<<it->get_surname()<<"\n";
@@ -1860,12 +1882,12 @@ void MainWindow::write_data_in_files(){
         fout<<it->get_mail()<<"\n";
         fout<<it->get_address()<<"\n";
         fout<<it->get_website();
-        fout.close();
     }
+    fout.close();
 
+    fout.open("subjects.txt");
+    fout<<'k';
     if(this->subjects.size()>0){
-        fout.open("subjects.txt");
-        fout<<'k';
         for(auto it = subjects.begin();it!=--(subjects.end());it++){
             fout<<it->get_name()<<"\n";
             fout<<it->get_room()<<"\n";
@@ -1875,12 +1897,12 @@ void MainWindow::write_data_in_files(){
         fout<<it->get_name()<<"\n";
         fout<<it->get_room()<<"\n";
         fout<<it->get_note();
-        fout.close();
     }
+    fout.close();
 
+    fout.open("homeworks.txt");
+    fout<<'k';
     if(this->homeworks.size()>0){
-        fout.open("homeworks.txt");
-        fout<<'k';
         for(auto it = homeworks.begin();it!=--(homeworks.end());it++){
             fout<<it->get_title()<<"\n";
             fout<<it->get_subject()<<"\n";
@@ -1896,12 +1918,12 @@ void MainWindow::write_data_in_files(){
         fout<<it->get_date()<<"\n";
         fout<<it->get_note()<<"\n";
         fout<<it->get_importance();
-        fout.close();
     }
+    fout.close();
 
+    fout.open("exams.txt");
+    fout<<'k';
     if(this->exams.size()>0){
-        fout.open("exams.txt");
-        fout<<'k';
         for(auto it = exams.begin();it!=--(exams.end());it++){
             fout<<it->get_title()<<"\n";
             fout<<it->get_subject()<<"\n";
@@ -1921,12 +1943,12 @@ void MainWindow::write_data_in_files(){
         fout<<it->get_importance()<<"\n";
         bool is_written = it->get_type()==ExamType::written;
         fout<<is_written;
-        fout.close();
     }
+    fout.close();
 
+    fout.open("homeworksarchive.txt");
+    fout<<'k';
     if(this->homeworks_archive.size()>0){
-        fout.open("homeworksarchive.txt");
-        fout<<'k';
         for(auto it = homeworks_archive.begin();it!=--(homeworks_archive.end());it++){
             fout<<it->get_title()<<"\n";
             fout<<it->get_subject()<<"\n";
@@ -1942,12 +1964,12 @@ void MainWindow::write_data_in_files(){
         fout<<it->get_date()<<"\n";
         fout<<it->get_note()<<"\n";
         fout<<it->get_importance();
-        fout.close();
     }
+    fout.close();
 
+    fout.open("examsarchive.txt");
+    fout<<'k';
     if(this->exams_archive.size()>0){
-        fout.open("examsarchive.txt");
-        fout<<'k';
         for(auto it = exams_archive.begin();it!=--(exams_archive.end());it++){
             fout<<it->get_title()<<"\n";
             fout<<it->get_subject()<<"\n";
@@ -1967,8 +1989,8 @@ void MainWindow::write_data_in_files(){
         fout<<it->get_importance()<<"\n";
         bool is_written = it->get_type()==ExamType::written;
         fout<<is_written;
-        fout.close();
     }
+    fout.close();
     fout.open("timetable.txt");
     fout<<ui->monday_1->currentText().toStdString()<<"\n";
     fout<<ui->monday_2->currentText().toStdString()<<"\n";
