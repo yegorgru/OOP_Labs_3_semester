@@ -142,6 +142,7 @@ void MainWindow::on_add_teacher_button_clicked()
     teacher_window.setModal(true);
     teacher_window.setFixedWidth(WIDTH/3);
     teacher_window.setFixedHeight(HEIGHT/3);
+    teacher_window.setWindowTitle("Add teacher");
     teacher_window.exec();
     if(!teacher_window.is_cancel()){
         Teacher teacher = teacher_window.get_teacher();
@@ -190,6 +191,7 @@ void MainWindow::on_teachers_list_itemClicked(QListWidgetItem *item)
     teacher_window.setModal(true);
     teacher_window.setFixedWidth(WIDTH/3);
     teacher_window.setFixedHeight(HEIGHT/3);
+    teacher_window.setWindowTitle("Update teacher");
     teacher_window.exec();
     if(teacher_window.deleted()){
         this->teachers.erase(old_teacher);
@@ -234,6 +236,7 @@ void MainWindow::on_add_subject_button_clicked()
     subject_window.setModal(true);
     subject_window.setFixedWidth(WIDTH/3);
     subject_window.setFixedHeight(HEIGHT/3);
+    subject_window.setWindowTitle("Add subject");
     subject_window.exec();
     if(!subject_window.is_cancel()){
         Subject subject = subject_window.get_subject();
@@ -264,6 +267,7 @@ void MainWindow::on_subjects_list_itemClicked(QListWidgetItem *item)
     subject_window.setModal(true);
     subject_window.setFixedWidth(WIDTH/3);
     subject_window.setFixedHeight(HEIGHT/3);
+    subject_window.setWindowTitle("Update subject");
     subject_window.exec();
     if(subject_window.deleted()){
         this->subjects.erase(old_subject);
@@ -329,6 +333,7 @@ void MainWindow::add_task(bool is_exam){
     task_window.setModal(true);
     task_window.setFixedWidth(WIDTH/3);
     task_window.setFixedHeight(HEIGHT/3);
+    task_window.setWindowTitle("Add task");
     task_window.exec();
     if(!task_window.is_cancel()){
         if(is_exam){
@@ -701,6 +706,7 @@ void MainWindow::update_homework(const std::string& name, const Date& date){
     homework_window.setModal(true);
     homework_window.setFixedWidth(WIDTH/3);
     homework_window.setFixedHeight(HEIGHT/3);
+    homework_window.setWindowTitle("Edit homework");
     homework_window.exec();
     if(homework_window.deleted()){
         dates_homeworks[old_homework.get_date()]--;
@@ -749,6 +755,7 @@ void MainWindow::update_exam(const std::string& name, const Date& date){
     exam_window.setModal(true);
     exam_window.setFixedWidth(WIDTH/3);
     exam_window.setFixedHeight(HEIGHT/3);
+    exam_window.setWindowTitle("Edit exam");
     exam_window.exec();
     if(exam_window.deleted()){
         dates_exams[old_exam.get_date()]--;
