@@ -102,6 +102,8 @@ private slots:
 
     void on_save_timetable_button_clicked();
 
+    void on_auto_clearing_check_clicked();
+
 private:
     void set_timetable_from_files();
     void read_data_from_files();

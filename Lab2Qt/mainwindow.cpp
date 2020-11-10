@@ -2264,3 +2264,15 @@ void MainWindow::on_save_timetable_button_clicked()
 {
     write_timetable_in_file();
 }
+
+void MainWindow::on_auto_clearing_check_clicked()
+{
+    if(ui->auto_clearing_check->isChecked()){
+        ui->auto_clearing_spin_box->setVisible(true);
+        ui->auto_clearing_label->setVisible(true);
+    }
+    else{
+        ui->auto_clearing_spin_box->setVisible(false);
+        ui->auto_clearing_label->setVisible(false);
+    }
+}
