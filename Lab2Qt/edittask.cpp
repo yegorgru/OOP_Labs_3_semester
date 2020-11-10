@@ -102,22 +102,21 @@ void EditTask::on_cancel_button_clicked()
 
 void EditTask::on_add_task_button_clicked()
 {
-    this->task.set_title(ui->title_line->text().toStdString());
-    /*if(this->task.get_title()==""){
-        this->task.set_title("Default_title");
-    }*/
+    QString qs = ui->title_line->text();
+    if(qs.size()>0){
+        size_t pos = qs.size()-1;
+        while(pos!=0 && qs[pos]==' '){
+            pos--;
+        }
+        qs.resize(pos+1);
+    }
+    this->task.set_title(qs.toStdString());
     this->task.set_teacher(ui->teacher_box->currentText().toStdString());
-    /*if(this->task.get_teacher()==""){
+    if(this->task.get_teacher()==""){
         this->task.set_teacher("None");
-    }*/
+    }
     this->task.set_subject(ui->subject_box->currentText().toStdString());
-    /*if(this->task.get_subject()==""){
-        this->task.set_subject("None");
-    }*/
     this->task.set_note(ui->note_line->text().toStdString());
-    /*if(this->task.get_note()==""){
-        this->task.set_note("None");
-    }*/
     Date date;
     date.set_day(ui->dateEdit->date().day());
     date.set_month(ui->dateEdit->date().month());
