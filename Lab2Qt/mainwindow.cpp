@@ -167,6 +167,7 @@ void MainWindow::on_add_teacher_button_clicked()
         if(this->teachers.find(teacher)==end(this->teachers)){
             ui->teachers_list->addItem(QString::fromStdString(teacher.get_name()+" "+teacher.get_surname()));
             this->teachers.insert(std::move(teacher));
+            write_teachers_in_file();
         }
         else{
             QMessageBox::critical(this,"Attention!","Teacher with that name already exists");
@@ -195,6 +196,7 @@ void MainWindow::on_teachers_list_itemClicked(QListWidgetItem *item)
     teacher_window.exec();
     if(teacher_window.deleted()){
         this->teachers.erase(old_teacher);
+        write_teachers_in_file();
         delete item;
         return;
     }
@@ -223,6 +225,7 @@ void MainWindow::on_teachers_list_itemClicked(QListWidgetItem *item)
             this->teachers.erase(old_teacher);
             item->setText(QString::fromStdString(teacher.get_name()+" "+teacher.get_surname()));
             this->teachers.insert(std::move(teacher));
+            write_teachers_in_file();
         }
         else{
             QMessageBox::critical(this,"Attention!","Teacher with that name already exists");
@@ -250,6 +253,7 @@ void MainWindow::on_add_subject_button_clicked()
             ui->subjects_list->addItem(QString::fromStdString(subject.get_name()));
             add_subject_timetable(subject);
             this->subjects.insert(std::move(subject));
+            write_subjects_in_file();
         }
         else{
             QMessageBox::critical(this,"Attention!","Subject with that name already exists");
@@ -271,6 +275,7 @@ void MainWindow::on_subjects_list_itemClicked(QListWidgetItem *item)
     subject_window.exec();
     if(subject_window.deleted()){
         this->subjects.erase(old_subject);
+        write_subjects_in_file();
         delete_subject_timetable(old_subject);
         delete item;
         return;
@@ -290,6 +295,7 @@ void MainWindow::on_subjects_list_itemClicked(QListWidgetItem *item)
             add_subject_timetable(subject);
             item->setText(QString::fromStdString(subject.get_name()));
             this->subjects.insert(std::move(subject));
+            write_subjects_in_file();
         }
         else{
             QMessageBox::critical(this,"Attention!","Subject with that name already exists");
@@ -345,6 +351,7 @@ void MainWindow::add_task(bool is_exam){
             if(this->exams.find(exam)==end(this->exams)){
                 dates_exams[exam.get_date()]++;
                 this->exams.insert(exam);
+                write_exams_in_file();
                 add_exam_content(exam);
             }
             else{
@@ -353,7 +360,6 @@ void MainWindow::add_task(bool is_exam){
         }
         else{
             Task homework = task_window.get_task();
-
             if(homework.get_title()==""){
                 homework.set_title("default_title");
             }
@@ -361,6 +367,7 @@ void MainWindow::add_task(bool is_exam){
                 dates_homeworks[homework.get_date()]++;
                 this->homeworks.insert(homework);
                 add_homework_content(homework);
+                write_homeworks_in_file();
             }
             else{
                 QMessageBox::critical(this,"Attention!","Homework with those name and date already exists");
@@ -712,6 +719,8 @@ void MainWindow::update_homework(const std::string& name, const Date& date){
         dates_homeworks[old_homework.get_date()]--;
         this->homeworks.erase(old_homework);
         this->homeworks_archive.insert(old_homework);
+        write_homeworks_in_file();
+        write_homeworks_archive_in_file();
         delete_homework_content(old_homework);
         return;
     }
@@ -731,6 +740,7 @@ void MainWindow::update_homework(const std::string& name, const Date& date){
                 this->homeworks_print_data.push_back(homework);
                 add_print_content_homework(homework);
             }
+            write_homeworks_in_file();
         }
         else{
             QMessageBox::critical(this,"Attention!","Homework with those title and date already exists");
@@ -761,6 +771,8 @@ void MainWindow::update_exam(const std::string& name, const Date& date){
         dates_exams[old_exam.get_date()]--;
         this->exams.erase(old_exam);
         this->exams_archive.insert(old_exam);
+        write_exams_in_file();
+        write_exams_archive_in_file();
         delete_exam_content(old_exam);
         return;
     }
@@ -781,6 +793,7 @@ void MainWindow::update_exam(const std::string& name, const Date& date){
                 this->exams_print_data.push_back(exam);
                 add_print_content_homework(exam);
             }
+            write_exams_in_file();
         }
         else{
             QMessageBox::critical(this,"Attention!","Exam with those title and date already exists");
@@ -1046,6 +1059,8 @@ void MainWindow::on_archive_list_itemClicked(QListWidgetItem *item)
                 homeworks.insert(restored);
                 add_homework_content(restored);
                 delete_archive_content(item);
+                write_homeworks_in_file();
+                write_homeworks_archive_in_file();
             }
             else{
                 QMessageBox::critical(this,"Attention!","Homework with that name and date already exists");
@@ -1060,6 +1075,8 @@ void MainWindow::on_archive_list_itemClicked(QListWidgetItem *item)
                 exams.insert(restored);
                 add_exam_content(restored);
                 delete_archive_content(item);
+                write_exams_in_file();
+                write_exams_archive_in_file();
             }
             else{
                 QMessageBox::critical(this,"Attention!","Exam with that name and date already exists");
@@ -1077,6 +1094,8 @@ void MainWindow::on_clear_archive_button_clicked()
     ui->archive_list->clear();
     this->homeworks_archive.clear();
     this->exams_archive.clear();
+    write_exams_archive_in_file();
+    write_homeworks_archive_in_file();
 }
 
 void MainWindow::update_calendar_list(const Date& date){
@@ -1371,6 +1390,7 @@ void MainWindow::apply_settings(){
         ui->last_list->takeItem(settings.get_saved_in_last());
     }
     ui->last_list->takeItem(settings.get_saved_in_last());
+    write_settings_in_file();
 }
 
 void MainWindow::create_plots(){
@@ -1455,6 +1475,8 @@ void MainWindow::auto_clearing_archive(){
             delete items.back();
         }
         homeworks_archive.erase(homeworks_archive.begin(),homeworks_top_it);
+        write_homeworks_archive_in_file();
+        write_exams_archive_in_file();
     }
 }
 
@@ -1861,6 +1883,17 @@ void MainWindow::read_data_from_files(){
 }
 
 void MainWindow::write_data_in_files(){
+    write_exams_in_file();
+    write_homeworks_in_file();
+    write_homeworks_archive_in_file();
+    write_exams_archive_in_file();
+    write_subjects_in_file();
+    write_teachers_in_file();
+    write_timetable_in_file();
+    write_settings_in_file();
+}
+
+void MainWindow::write_settings_in_file(){
     std::ofstream fout("settings.txt");
     fout<<this->settings.get_plot_days()<<" ";
     fout<<this->settings.is_auto_clearing()<<" ";
@@ -1870,8 +1903,10 @@ void MainWindow::write_data_in_files(){
     fout<<this->settings.get_subjects_number()<<" ";
     fout<<this->settings.get_saved_in_last();
     fout.close();
+}
 
-    fout.open("teachers.txt");
+void MainWindow::write_teachers_in_file(){
+    std::ofstream fout("teachers.txt");
     fout<<'k';
     if(this->teachers.size()>0){
         for(auto it = teachers.begin();it!=--(teachers.end());it++){
@@ -1891,8 +1926,10 @@ void MainWindow::write_data_in_files(){
         fout<<it->get_website();
     }
     fout.close();
+}
 
-    fout.open("subjects.txt");
+void MainWindow::write_subjects_in_file(){
+    std::ofstream fout("subjects.txt");
     fout<<'k';
     if(this->subjects.size()>0){
         for(auto it = subjects.begin();it!=--(subjects.end());it++){
@@ -1906,8 +1943,10 @@ void MainWindow::write_data_in_files(){
         fout<<it->get_note();
     }
     fout.close();
+}
 
-    fout.open("homeworks.txt");
+void MainWindow::write_homeworks_in_file(){
+    std::ofstream fout("homeworks.txt");
     fout<<'k';
     if(this->homeworks.size()>0){
         for(auto it = homeworks.begin();it!=--(homeworks.end());it++){
@@ -1927,8 +1966,10 @@ void MainWindow::write_data_in_files(){
         fout<<it->get_importance();
     }
     fout.close();
+}
 
-    fout.open("exams.txt");
+void MainWindow::write_exams_in_file(){
+    std::ofstream fout("exams.txt");
     fout<<'k';
     if(this->exams.size()>0){
         for(auto it = exams.begin();it!=--(exams.end());it++){
@@ -1952,8 +1993,10 @@ void MainWindow::write_data_in_files(){
         fout<<is_written;
     }
     fout.close();
+}
 
-    fout.open("homeworksarchive.txt");
+void MainWindow::write_homeworks_archive_in_file(){
+    std::ofstream fout("homeworksarchive.txt");
     fout<<'k';
     if(this->homeworks_archive.size()>0){
         for(auto it = homeworks_archive.begin();it!=--(homeworks_archive.end());it++){
@@ -1973,8 +2016,10 @@ void MainWindow::write_data_in_files(){
         fout<<it->get_importance();
     }
     fout.close();
+}
 
-    fout.open("examsarchive.txt");
+void MainWindow::write_exams_archive_in_file(){
+    std::ofstream fout("examsarchive.txt");
     fout<<'k';
     if(this->exams_archive.size()>0){
         for(auto it = exams_archive.begin();it!=--(exams_archive.end());it++){
@@ -1998,7 +2043,10 @@ void MainWindow::write_data_in_files(){
         fout<<is_written;
     }
     fout.close();
-    fout.open("timetable.txt");
+}
+
+void MainWindow::write_timetable_in_file(){
+    std::ofstream fout("timetable.txt");
     fout<<ui->monday_1->currentText().toStdString()<<"\n";
     fout<<ui->monday_2->currentText().toStdString()<<"\n";
     fout<<ui->monday_3->currentText().toStdString()<<"\n";
@@ -2210,4 +2258,9 @@ void MainWindow::set_timetable_from_files(){
         ui->saturday_8->setCurrentIndex(item);
         fin.close();
     }
+}
+
+void MainWindow::on_save_timetable_button_clicked()
+{
+    write_timetable_in_file();
 }

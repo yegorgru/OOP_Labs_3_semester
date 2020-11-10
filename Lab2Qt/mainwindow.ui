@@ -36,7 +36,7 @@
        <enum>QTabWidget::Rounded</enum>
       </property>
       <property name="currentIndex">
-       <number>7</number>
+       <number>6</number>
       </property>
       <property name="elideMode">
        <enum>Qt::ElideNone</enum>
@@ -214,6 +214,83 @@
         <string>Timetable</string>
        </attribute>
        <layout class="QGridLayout" name="gridLayout_10">
+        <item row="1" column="0">
+         <layout class="QVBoxLayout" name="verticalLayout_4">
+          <item>
+           <widget class="QLabel" name="label_8">
+            <property name="text">
+             <string>Tuesday</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QComboBox" name="tuesday_1"/>
+          </item>
+          <item>
+           <widget class="QComboBox" name="tuesday_2"/>
+          </item>
+          <item>
+           <widget class="QComboBox" name="tuesday_3"/>
+          </item>
+          <item>
+           <widget class="QComboBox" name="tuesday_4"/>
+          </item>
+          <item>
+           <widget class="QComboBox" name="tuesday_5"/>
+          </item>
+          <item>
+           <widget class="QComboBox" name="tuesday_6"/>
+          </item>
+          <item>
+           <widget class="QComboBox" name="tuesday_7"/>
+          </item>
+          <item>
+           <widget class="QComboBox" name="tuesday_8"/>
+          </item>
+         </layout>
+        </item>
+        <item row="0" column="2">
+         <layout class="QVBoxLayout" name="verticalLayout_3">
+          <item>
+           <widget class="QLabel" name="label_7">
+            <property name="text">
+             <string>Friday</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QComboBox" name="friday_1"/>
+          </item>
+          <item>
+           <widget class="QComboBox" name="friday_2"/>
+          </item>
+          <item>
+           <widget class="QComboBox" name="friday_3"/>
+          </item>
+          <item>
+           <widget class="QComboBox" name="friday_4"/>
+          </item>
+          <item>
+           <widget class="QComboBox" name="friday_5"/>
+          </item>
+          <item>
+           <widget class="QComboBox" name="friday_6"/>
+          </item>
+          <item>
+           <widget class="QComboBox" name="friday_7"/>
+          </item>
+          <item>
+           <widget class="QComboBox" name="friday_8"/>
+          </item>
+         </layout>
+        </item>
+        <item row="2" column="1">
+         <widget class="QPushButton" name="save_timetable_button">
+          <property name="text">
+           <string>Save</string>
+          </property>
+         </widget>
+        </item>
         <item row="0" column="0">
          <layout class="QVBoxLayout" name="verticalLayout">
           <item>
@@ -281,76 +358,6 @@
           </item>
           <item>
            <widget class="QComboBox" name="wednesday_8"/>
-          </item>
-         </layout>
-        </item>
-        <item row="0" column="2">
-         <layout class="QVBoxLayout" name="verticalLayout_3">
-          <item>
-           <widget class="QLabel" name="label_7">
-            <property name="text">
-             <string>Friday</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QComboBox" name="friday_1"/>
-          </item>
-          <item>
-           <widget class="QComboBox" name="friday_2"/>
-          </item>
-          <item>
-           <widget class="QComboBox" name="friday_3"/>
-          </item>
-          <item>
-           <widget class="QComboBox" name="friday_4"/>
-          </item>
-          <item>
-           <widget class="QComboBox" name="friday_5"/>
-          </item>
-          <item>
-           <widget class="QComboBox" name="friday_6"/>
-          </item>
-          <item>
-           <widget class="QComboBox" name="friday_7"/>
-          </item>
-          <item>
-           <widget class="QComboBox" name="friday_8"/>
-          </item>
-         </layout>
-        </item>
-        <item row="1" column="0">
-         <layout class="QVBoxLayout" name="verticalLayout_4">
-          <item>
-           <widget class="QLabel" name="label_8">
-            <property name="text">
-             <string>Tuesday</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QComboBox" name="tuesday_1"/>
-          </item>
-          <item>
-           <widget class="QComboBox" name="tuesday_2"/>
-          </item>
-          <item>
-           <widget class="QComboBox" name="tuesday_3"/>
-          </item>
-          <item>
-           <widget class="QComboBox" name="tuesday_4"/>
-          </item>
-          <item>
-           <widget class="QComboBox" name="tuesday_5"/>
-          </item>
-          <item>
-           <widget class="QComboBox" name="tuesday_6"/>
-          </item>
-          <item>
-           <widget class="QComboBox" name="tuesday_7"/>
-          </item>
-          <item>
-           <widget class="QComboBox" name="tuesday_8"/>
           </item>
          </layout>
         </item>

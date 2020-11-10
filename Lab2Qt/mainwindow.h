@@ -100,10 +100,20 @@ private slots:
 
     void on_print_button_clicked();
 
+    void on_save_timetable_button_clicked();
+
 private:
     void set_timetable_from_files();
     void read_data_from_files();
     void write_data_in_files();
+    void write_exams_in_file();
+    void write_homeworks_in_file();
+    void write_homeworks_archive_in_file();
+    void write_exams_archive_in_file();
+    void write_subjects_in_file();
+    void write_teachers_in_file();
+    void write_timetable_in_file();
+    void write_settings_in_file();
 
     void update_homework(const std::string& name, const Date& date);
     void update_exam(const std::string& name, const Date& date);
