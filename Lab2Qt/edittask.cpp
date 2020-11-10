@@ -110,6 +110,11 @@ void EditTask::on_add_task_button_clicked()
         }
         qs.resize(pos+1);
     }
+    for(auto& ch:qs){
+        if(ch == '\n'){
+            ch = ' ';
+        }
+    }
     this->task.set_title(qs.toStdString());
     this->task.set_teacher(ui->teacher_box->currentText().toStdString());
     if(this->task.get_teacher()==""){

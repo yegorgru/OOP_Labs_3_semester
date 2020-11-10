@@ -9,7 +9,6 @@ MainWindow::MainWindow(QWidget *parent)
     HEIGHT=this->size().height();
     WIDTH=this->size().width();
 
-
     read_data_from_files();
 
     ui->last_tasks_settings_spin_box->setValue(settings.get_saved_in_last());
