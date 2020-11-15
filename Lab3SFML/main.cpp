@@ -2,6 +2,11 @@
 #include "GameController.h"
 #include "GameRender.h"
 
+//Використав:
+//https://habr.com/ru/post/449596/
+//https://habr.com/ru/post/480710/
+//https://ravesli.com/uroki-po-sfml/
+
 int main(){
 	GameModel game;
 	GameRender render(game);
