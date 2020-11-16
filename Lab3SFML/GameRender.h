@@ -26,7 +26,8 @@ private:
 
 	sf::Font font;
 
-	sf::Text up_text;
+	sf::Text up_text1;
+	sf::Text up_text2;
 	sf::Text red_won;
 	sf::Text blue_won;
 	int w;

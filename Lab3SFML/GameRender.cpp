@@ -9,8 +9,10 @@ GameRender::GameRender(GameModel& game):
 	background_sprite.setTexture(background_texture);
 	w = 80;
 	font.loadFromFile("sansation.ttf");
-	up_text = sf::Text("N - New Game", font, 20);
-	up_text.setPosition(20, 10);
+	up_text1 = sf::Text("N - New Game,     mouse click - choose block,     Arrow Keys - move", font, 20);
+	up_text1.setPosition(5, 2);
+	up_text2 = sf::Text("Close the enemy or connect all your blocks!", font, 20);
+	up_text2.setPosition(5, 25);
 
 	red_won = sf::Text("Red player win!", font, 90);
 	red_won.setFillColor(sf::Color::Red);
@@ -28,7 +30,8 @@ void GameRender::draw()
 	m_window.clear(sf::Color::Black);
 	background_sprite.setPosition(0, 50);
 	m_window.draw(background_sprite);
-	m_window.draw(up_text);
+	m_window.draw(up_text1);
+	m_window.draw(up_text2);
 	for (int i = 0; i < 8; i++) {
 		for (int j = 0; j < 8; j++)
 		{
