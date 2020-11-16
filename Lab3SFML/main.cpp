@@ -2,7 +2,7 @@
 #include "GameController.h"
 #include "GameRender.h"
 
-//Використав:
+//Used:
 //https://habr.com/ru/post/449596/
 //https://habr.com/ru/post/480710/
 //https://ravesli.com/uroki-po-sfml/
