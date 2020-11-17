@@ -1,7 +1,7 @@
 #include "GameRender.h"
 
 GameRender::GameRender(GameModel& game):
-	m_game(game), m_window(sf::VideoMode(640, 690), "Docking")
+	m_game(game), m_window(sf::VideoMode(640, 690), "Docking",sf::Style::Titlebar|sf::Style::Close)
 {
 	texture.loadFromFile("texture.png");
 	background_texture.loadFromFile("background.jpg");
