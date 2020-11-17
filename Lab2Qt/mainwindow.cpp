@@ -118,7 +118,6 @@ MainWindow::MainWindow(QWidget *parent)
     ui->add_exam_button_page->setIconSize(QSize(HEIGHT/10, HEIGHT/10));
     ui->add_exam_button_page->setFixedSize(QSize(HEIGHT/10, HEIGHT/10));
 
-
     ui->add_exam_button->setVisible(false);
     ui->add_homework_button->setVisible(false);
 
@@ -992,7 +991,7 @@ void MainWindow::on_today_list_itemClicked(QListWidgetItem *item)
     is.ignore();
     is.ignore();
     std::string name;
-    is>>name;
+    std::getline(is,name);
     if(type=="Home"){
         update_homework(name,date);
     }
